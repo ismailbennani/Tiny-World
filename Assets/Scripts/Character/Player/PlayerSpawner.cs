@@ -19,7 +19,7 @@ namespace Character.Player
             
             Ready = false;
             
-            PlayerState player = GameState.Current.player;
+            PlayerState player = GameStateManager.Current.player;
             PlayerConfig config = player.config;
         
             ThirdPersonController controller = Instantiate(config.prefab, player.position, Quaternion.identity, transform);

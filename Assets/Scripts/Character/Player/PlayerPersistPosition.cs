@@ -7,7 +7,12 @@ namespace Character.Player
     {
         private void FixedUpdate()
         {
-            GameState.Current.player.position = transform.position;
+            if (!GameStateManager.Current)
+            {
+                return;
+            }
+            
+            GameStateManager.Current.player.position = transform.position;
         }
     }
 }

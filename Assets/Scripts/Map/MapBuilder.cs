@@ -18,21 +18,18 @@ namespace Map
         {
             Ready = false;
 
-            MapState map = GameState.Current.map;
+            MapState map = GameStateManager.Current.map;
             MapConfig config = map.config;
-            
+
             if (!config.baseTile)
             {
                 throw new InvalidOperationException("Base tile not set");
             }
-            
+
             _tiles = new MapTile[config.mapSize.x * config.mapSize.y];
 
             int nTiles = config.mapSize.x * config.mapSize.y;
             Vector2 tileAndGap = config.tileSize + config.gap;
-            Vector2 worldSize = tileAndGap * config.mapSize - config.gap;
-            Vector2 worldHalfSize = worldSize / 2;
-
 
             double maxTimeUsedInThisFrame = Time.fixedDeltaTime * 0.9;
             double yieldAfter = 0;
@@ -47,11 +44,11 @@ namespace Map
                     yieldAfter = Time.fixedTime + maxTimeUsedInThisFrame;
                 }
 
-                Vector3 position = new(x * tileAndGap.x - worldHalfSize.x, 0, y * tileAndGap.y - worldHalfSize.y);
+                Vector3 position = map.mapOrigin + new Vector3(x * tileAndGap.x, 0, y * tileAndGap.y);
 
                 MapTile newTile = Instantiate(config.baseTile, position, Quaternion.identity, transform);
 
-                TileConfig tileConfig = map.GetTileAt(x, y);
+                TileConfig tileConfig = map.GetTileConfig(x, y);
                 newTile.SetConfig(tileConfig);
 
                 _tiles[MyMath.GetIndex(x, y, config.mapSize)] = newTile;
@@ -62,7 +59,7 @@ namespace Map
 
         public Vector3 GetTileCenterPosition(Vector2Int tilePosition)
         {
-            int index = MyMath.GetIndex(tilePosition, GameState.Current.map.config.mapSize);
+            int index = MyMath.GetIndex(tilePosition, GameStateManager.Current.map.config.mapSize);
             return _tiles[index].transform.position;
         }
     }

@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections;
-using Character;
 using Character.Player;
-using MackySoft.Choice;
 using Map;
-using Map.Tile;
 using State;
 using UnityEngine;
-using Utils;
 
 public class GameInitializer : MonoBehaviour
 {
@@ -19,44 +15,25 @@ public class GameInitializer : MonoBehaviour
 
     void Start()
     {
-        StartCoroutine(CreateNewGame());
+        if (GameStateManager.Current == null)
+        {
+            throw new InvalidOperationException("Could not find game state");
+        }
+        
+        // TODO: move this elsewhere
+        StartCoroutine(GameStateManager.CreateNewGame(mapConfig, playerConfig));
+        
+        StartCoroutine(LoadGame());
     }
 
-    private IEnumerator CreateNewGame()
+    private IEnumerator LoadGame()
     {
-        Debug.Log("Initializing state...");
-        
-        GameState state = GameState.Initialize();
-
-        if (mapConfig.mapSize.x == 0 || mapConfig.mapSize.y == 0)
+        while (!GameStateManager.Ready)
         {
-            throw new InvalidOperationException("Invalid map size");
-        }
-
-        state.map.config = mapConfig;
-
-        int nTiles = mapConfig.mapSize.x * mapConfig.mapSize.y;
-        state.map.tiles = new TileConfig[nTiles];
-        
-        Debug.Log("Done.");
-
-        Debug.Log("Generating tiles...");
-
-        if (mapConfig.tiles.Length == 0)
-        {
-            throw new InvalidOperationException("No tiles provided");
+            yield return null;
         }
         
-        for (int x = 0; x < mapConfig.mapSize.x; x++)
-        for (int y = 0; y < mapConfig.mapSize.y; y++)
-        {
-            TileConfig tileConfig = mapConfig.tiles.ToWeightedSelector(t => t.weight).SelectItemWithUnityRandom().tileConfig;
-            
-            int index = MyMath.GetIndex(x, y, mapConfig.mapSize);
-            state.map.tiles[index] = tileConfig;
-        }
-        
-        Debug.Log("Done.");
+        GameState state = GameStateManager.Current;
 
         Debug.Log("Spawning map...");
         
@@ -68,7 +45,7 @@ public class GameInitializer : MonoBehaviour
             Debug.Log($"Progress {_mapBuilder.Progress:P2}");
             yield return null;
         }
-        
+
         Debug.Log("Done.");
         
         Debug.Log("Spawning player...");

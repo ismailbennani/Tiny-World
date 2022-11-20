@@ -1025,7 +1025,7 @@ MonoBehaviour:
   moveSpeed: 2
   sprintSpeed: 5.335
   rotationSmoothTime: 0.05
-  speedChangeRate: 10
+  speedChangeRate: 20
   landingAudioClip: {fileID: 8300000, guid: ac300c5b1d663024ebc6f8898529ed40, type: 3}
   footstepAudioClips:
   - {fileID: 8300000, guid: 92cd433124a143f4c8a84e568957a945, type: 3}

@@ -10,25 +10,26 @@ namespace EditorUtils
     {
         #if UNITY_EDITOR
         
-        public bool map;
-        public bool player;
+        [Header("Gizmos")]
+        public bool showMap;
+        public bool showPlayer;
 
         private void OnDrawGizmosSelected()
         {
-            GameState state = GameState.Current;
-            if (state == null)
+            GameState gameState = GameStateManager.Current;
+            if (!gameState)
             {
                 return;
             }
 
-            if (map)
+            if (showMap)
             {
-                DrawMapState(state.map);
+                DrawMapState(gameState.map);
             }
 
-            if (player)
+            if (showPlayer)
             {
-                DrawPlayerState(state.player);
+                DrawPlayerState(gameState.map, gameState.player);
             }
         }
 
@@ -39,15 +40,10 @@ namespace EditorUtils
                 return;
             }
 
-            Vector2 tileAndGap = state.config.tileSize + state.config.gap;
-            Vector2 halfTileSize = state.config.tileSize / 2;
-            Vector2 mapSize = (state.config.tileSize + state.config.gap) * state.config.mapSize - state.config.gap;
-            Vector2 halfSize = mapSize / 2;
-
             for (int x = 0; x < state.config.mapSize.x; x++)
             for (int y = 0; y < state.config.mapSize.y; y++)
             {
-                Vector3 position = new(x * tileAndGap.x - halfSize.x, 0, y * tileAndGap.y - halfSize.y);
+                Vector3 position = GetTilePosition(state, new Vector2Int(x, y));
 
                 int index = MyMath.GetIndex(x, y, state.config.mapSize);
                 Gizmos.color = GetColorFromTileType(state.tiles[index].type);
@@ -57,7 +53,7 @@ namespace EditorUtils
             }
         }
 
-        private void DrawPlayerState(PlayerState state)
+        private void DrawPlayerState(MapState map, PlayerState state)
         {
             if (state == null)
             {
@@ -66,9 +62,12 @@ namespace EditorUtils
 
             Gizmos.color = Color.blue;
             Gizmos.DrawSphere(state.position, 0.2f);
+
+            Vector3 playerTilePosition = GetTilePosition(map, state.playerTile);
+            Gizmos.DrawWireCube(playerTilePosition, new Vector3(map.config.tileSize.x * 0.9f, 0, map.config.tileSize.y * 0.9f));
         }
 
-        private Color GetColorFromTileType(TileType type)
+        private static Color GetColorFromTileType(TileType type)
         {
             return type switch
             {
@@ -76,6 +75,11 @@ namespace EditorUtils
                 TileType.Stone => Color.gray,
                 _ => Color.clear,
             };
+        }
+
+        private static Vector3 GetTilePosition(MapState map, Vector2Int tile)
+        {
+            return map.mapOrigin + new Vector3(tile.x * (map.config.tileSize.x + map.config.gap.x), 0, tile.y * (map.config.tileSize.y + map.config.gap.y));
         }
 
         #endif
