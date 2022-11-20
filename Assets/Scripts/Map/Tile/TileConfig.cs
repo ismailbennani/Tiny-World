@@ -1,9 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
 
 namespace Map.Tile
 {
-    [CreateAssetMenu(menuName = "Custom/Tile config")]
-    public class TileConfig: ScriptableObject
+    [Serializable]
+    public class TileConfig
     {
         public TileType type;
     }

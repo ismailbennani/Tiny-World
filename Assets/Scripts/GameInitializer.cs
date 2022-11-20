@@ -7,22 +7,16 @@ using UnityEngine;
 
 public class GameInitializer : MonoBehaviour
 {
-    public MapConfig mapConfig;
-    public PlayerConfig playerConfig;
-
     private MapBuilder _mapBuilder;
     private PlayerSpawner _playerSpawner;
 
-    void Start()
+    void OnEnable()
     {
         if (GameStateManager.Current == null)
         {
             throw new InvalidOperationException("Could not find game state");
         }
-        
-        // TODO: move this elsewhere
-        StartCoroutine(GameStateManager.CreateNewGame(mapConfig, playerConfig));
-        
+
         StartCoroutine(LoadGame());
     }
 
@@ -32,8 +26,6 @@ public class GameInitializer : MonoBehaviour
         {
             yield return null;
         }
-        
-        GameState state = GameStateManager.Current;
 
         Debug.Log("Spawning map...");
         
@@ -49,9 +41,6 @@ public class GameInitializer : MonoBehaviour
         Debug.Log("Done.");
         
         Debug.Log("Spawning player...");
-
-        state.player.config = playerConfig;
-        state.player.position = _mapBuilder.GetTileCenterPosition(playerConfig.spawnTile);
         
         _playerSpawner = GetOrCreate<PlayerSpawner>("Player");
         StartCoroutine(_playerSpawner.Spawn());

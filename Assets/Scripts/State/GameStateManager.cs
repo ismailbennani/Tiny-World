@@ -13,16 +13,31 @@ namespace State
     public class GameStateManager: MonoBehaviour
     {
         public static GameStateManager Instance { get; private set; }
-        public static GameState Current => Instance ? Instance.current : null;
+        public static GameState Current => Instance ? Instance.currentState : null;
         public static bool Ready => Instance && Instance.ready;
 
-        public GameState current;
+        public GameConfig gameConfig;
+        public GameState currentState;
         public bool ready;
 
         void OnEnable()
         {
             Instance = this;
-            current ??= ScriptableObject.CreateInstance<GameState>();
+            ready = false;
+
+            if (!currentState || !currentState.IsValid)
+            {
+                if (!currentState)
+                {
+                    currentState = ScriptableObject.CreateInstance<GameState>(); 
+                }
+                
+                StartCoroutine(CreateNewGame(gameConfig));
+            }
+            else
+            {
+                ready = true;
+            }
         }
 
         void Update()
@@ -35,48 +50,54 @@ namespace State
             Current.player?.Update();
         }
 
-        public static IEnumerator CreateNewGame(MapConfig mapConfig, PlayerConfig playerConfig)
+        public static IEnumerator CreateNewGame(GameConfig gameConfig)
         {
+            GameState currentState = Instance.currentState;
+            
             Instance.ready = false;
             
             Debug.Log("Creating new game...");
 
-            if (mapConfig.mapSize.x == 0 || mapConfig.mapSize.y == 0)
+            if (gameConfig.map.mapSize.x == 0 || gameConfig.map.mapSize.y == 0)
             {
                 throw new InvalidOperationException("Invalid map size");
             }
 
-            Current.map = new MapState
+            int nTiles = gameConfig.map.mapSize.x * gameConfig.map.mapSize.y;
+            
+            currentState.map = new MapState
             {
-                config = mapConfig
+                config = gameConfig.map,
+                tiles = new TileConfig[nTiles],
+                mapOrigin = Vector3.zero
             };
-
-            int nTiles = mapConfig.mapSize.x * mapConfig.mapSize.y;
-            Current.map.tiles = new TileConfig[nTiles];
-            Current.map.mapOrigin = Vector3.zero;
 
             Debug.Log("Generating tiles...");
 
-            if (mapConfig.tiles.Length == 0)
+            if (gameConfig.map.tiles.Length == 0)
             {
                 throw new InvalidOperationException("No tiles provided");
             }
         
-            for (int x = 0; x < mapConfig.mapSize.x; x++)
-            for (int y = 0; y < mapConfig.mapSize.y; y++)
+            for (int x = 0; x < gameConfig.map.mapSize.x; x++)
+            for (int y = 0; y < gameConfig.map.mapSize.y; y++)
             {
-                TileConfig tileConfig = mapConfig.tiles.ToWeightedSelector(t => t.weight).SelectItemWithUnityRandom().tileConfig;
+                TileConfig tileConfig = gameConfig.map.tiles.ToWeightedSelector(t => t.weight).SelectItemWithUnityRandom().tileConfig;
             
-                int index = MyMath.GetIndex(x, y, mapConfig.mapSize);
-                Current.map.tiles[index] = tileConfig;
+                int index = MyMath.GetIndex(x, y, gameConfig.map.mapSize);
+                currentState.map.tiles[index] = tileConfig;
             }
         
             Debug.Log("Done.");
 
             Debug.Log("Initializing player state...");
             
-            Current.player = new PlayerState();
-            
+            currentState.player = new PlayerState
+            {
+                config = gameConfig.player,
+                position = currentState.map.GetTileCenterPosition(gameConfig.player.spawnTile)
+            };
+
             Debug.Log("Done.");
             
             Instance.ready = true;

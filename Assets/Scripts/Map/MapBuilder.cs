@@ -16,6 +16,14 @@ namespace Map
 
         public IEnumerator Spawn()
         {
+            if (_tiles != null)
+            {
+                foreach (MapTile tile in _tiles)
+                {
+                    Destroy(tile.gameObject);
+                }
+            }
+            
             Ready = false;
 
             MapState map = GameStateManager.Current.map;
@@ -29,7 +37,6 @@ namespace Map
             _tiles = new MapTile[config.mapSize.x * config.mapSize.y];
 
             int nTiles = config.mapSize.x * config.mapSize.y;
-            Vector2 tileAndGap = config.tileSize + config.gap;
 
             double maxTimeUsedInThisFrame = Time.fixedDeltaTime * 0.9;
             double yieldAfter = 0;
@@ -44,8 +51,7 @@ namespace Map
                     yieldAfter = Time.fixedTime + maxTimeUsedInThisFrame;
                 }
 
-                Vector3 position = map.mapOrigin + new Vector3(x * tileAndGap.x, 0, y * tileAndGap.y);
-
+                Vector3 position = map.GetTileCenterPosition(x, y);
                 MapTile newTile = Instantiate(config.baseTile, position, Quaternion.identity, transform);
 
                 TileConfig tileConfig = map.GetTileConfig(x, y);
@@ -55,12 +61,6 @@ namespace Map
             }
 
             Ready = true;
-        }
-
-        public Vector3 GetTileCenterPosition(Vector2Int tilePosition)
-        {
-            int index = MyMath.GetIndex(tilePosition, GameStateManager.Current.map.config.mapSize);
-            return _tiles[index].transform.position;
         }
     }
 }

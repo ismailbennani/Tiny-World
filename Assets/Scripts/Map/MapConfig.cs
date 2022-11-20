@@ -1,10 +1,11 @@
-﻿using Map.Tile;
+﻿using System;
+using Map.Tile;
 using UnityEngine;
 
 namespace Map
 {
-    [CreateAssetMenu(menuName = "Custom/Map config")]
-    public class MapConfig: ScriptableObject
+    [Serializable]
+    public class MapConfig
     {
         public MapTile baseTile;
 

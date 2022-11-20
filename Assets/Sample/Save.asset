@@ -1,0 +1,135 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 332334502aa84a489a60bfcef482b148, type: 3}
+  m_Name: Save
+  m_EditorClassIdentifier: 
+  map:
+    config:
+      baseTile: {fileID: 1500428027516698341, guid: 3612d7d2dd1298745b5b3c1d9b19f7c2, type: 3}
+      tiles:
+      - tileConfig:
+          type: 0
+        weight: 5
+      - tileConfig:
+          type: 1
+        weight: 1
+      tileSize: {x: 4, y: 4}
+      gap: {x: 0.1, y: 0.1}
+      mapSize: {x: 10, y: 10}
+    tiles:
+    - type: 0
+    - type: 1
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 1
+    - type: 0
+    - type: 1
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 1
+    - type: 0
+    - type: 0
+    - type: 1
+    - type: 0
+    - type: 0
+    - type: 1
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 1
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 1
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 1
+    - type: 1
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 1
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 1
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 1
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 1
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    - type: 0
+    mapOrigin: {x: 0, y: 0, z: 0}
+  player:
+    config:
+      prefab: {fileID: 384902992063006323, guid: 6bf3c41e8827c90449b243c1c78de49f, type: 3}
+      spawnTile: {x: 3, y: 4}
+    position: {x: 7.5963473, y: 0.025099874, z: 18.771421}
+    playerTile: {x: 2, y: 5}

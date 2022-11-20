@@ -381,8 +381,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ba537846d4e43c39327f6bcd184b633, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapConfig: {fileID: 11400000, guid: 20f888c9b9e937e42a8d1bf84d2aeb4c, type: 2}
-  playerConfig: {fileID: 11400000, guid: d10689892558461438ada75684d4e7c8, type: 2}
 --- !u!114 &1654901620
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -395,6 +393,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52ff2b59da8d47d0a6837b662d8dd6eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameConfig: {fileID: 11400000, guid: 3f6580f6a58e20d41a2a8d62956db781, type: 2}
+  currentState: {fileID: 11400000, guid: 012c8a5c00cb96b428fcbec675bc15ac, type: 2}
+  ready: 0
 --- !u!1 &1685384482
 GameObject:
   m_ObjectHideFlags: 0

@@ -12,25 +12,30 @@ namespace Character.Player
         public CinemachineVirtualCamera mainCamera;
 
         public bool Ready { get; private set; }
+        
+        private ThirdPersonController player;
 
         public IEnumerator Spawn()
         {
             mainCamera = FindObjectOfType<CinemachineVirtualCamera>() ?? throw new InvalidOperationException("No camera found");
             
             Ready = false;
-            
-            PlayerState player = GameStateManager.Current.player;
-            PlayerConfig config = player.config;
-        
-            ThirdPersonController controller = Instantiate(config.prefab, player.position, Quaternion.identity, transform);
+
+            if (!player)
+            {
+                PlayerState playerState = GameStateManager.Current.player;
+                PlayerConfig config = playerState.config;
+
+                player = Instantiate(config.prefab, playerState.position, Quaternion.identity, transform);
+            }
 
             if (!mainCamera)
             {
                 throw new InvalidOperationException("Please set camera");
             }
 
-            mainCamera.Follow = controller.cameraTarget;
-            mainCamera.LookAt = controller.cameraTarget;
+            mainCamera.Follow = player.cameraTarget;
+            mainCamera.LookAt = player.cameraTarget;
         
             Ready = true;
 

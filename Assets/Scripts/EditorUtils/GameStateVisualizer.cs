@@ -35,7 +35,7 @@ namespace EditorUtils
 
         private void DrawMapState(MapState state)
         {
-            if (state == null || !state.config)
+            if (state?.config == null)
             {
                 return;
             }

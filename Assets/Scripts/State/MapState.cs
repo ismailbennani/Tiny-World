@@ -29,5 +29,15 @@ namespace State
 
             return new Vector2Int(Mathf.FloorToInt(delta.x / tileAndGap.x), Mathf.FloorToInt(delta.z / tileAndGap.y));
         }
+
+        public Vector3 GetTileCenterPosition(Vector2Int tile)
+        {
+            return GetTileCenterPosition(tile.x, tile.y);
+        }
+        
+        public Vector3 GetTileCenterPosition(int x, int y)
+        {
+            return new Vector3(x * (config.tileSize.x + config.gap.x), 0, y * (config.tileSize.y + config.gap.y));
+        }
     }
 }
