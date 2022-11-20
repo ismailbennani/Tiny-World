@@ -7,6 +7,13 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.mackysoft.choice": {
+      "version": "https://github.com/mackysoft/Choice.git?path=Assets/MackySoft/MackySoft.Choice",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "181d439dae13eb415f88b9b1100466f0196c02af"
+    },
     "com.unity.animation.rigging": {
       "version": "1.1.1",
       "depth": 1,

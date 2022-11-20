@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections;
 using Cinemachine;
 using UnityEngine;
 
-public class PlayerSpawner: MonoBehaviour
+public class PlayerSpawner : MonoBehaviour
 {
     public ThirdPersonController playerPrefab;
     public Vector2 spawnPosition;
@@ -10,26 +11,33 @@ public class PlayerSpawner: MonoBehaviour
     [Header("Camera")]
     public CinemachineVirtualCamera mainCamera;
 
-    void Start()
+    public bool Ready { get; private set; }
+    
+    public IEnumerator Spawn()
     {
-        Spawn();
+        IEnumerator spawn = Spawn(spawnPosition);
+        while (spawn.MoveNext())
+        {
+            yield return spawn.Current;
+        }
     }
 
-    void Spawn()
+    public IEnumerator Spawn(Vector2 position)
     {
-        Spawn(spawnPosition);
-    }
-
-    void Spawn(Vector2 position)
-    {
-        ThirdPersonController player = Instantiate(playerPrefab, position, Quaternion.identity, transform);
+        Ready = false;
         
+        ThirdPersonController player = Instantiate(playerPrefab, position, Quaternion.identity, transform);
+
         if (!mainCamera)
         {
             throw new InvalidOperationException("Please set camera");
         }
-        
+
         mainCamera.Follow = player.cameraTarget;
         mainCamera.LookAt = player.cameraTarget;
+        
+        Ready = true;
+
+        yield break;
     }
 }

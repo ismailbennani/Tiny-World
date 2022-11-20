@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.mackysoft.choice": "https://github.com/mackysoft/Choice.git?path=Assets/MackySoft/MackySoft.Choice",
     "com.unity.cinemachine": "2.8.9",
     "com.unity.collab-proxy": "1.17.2",
     "com.unity.feature.characters-animation": "1.0.0",
