@@ -1023,7 +1023,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 2
   sprintSpeed: 5.335
-  rotationSmoothTime: 0.12
+  rotationSmoothTime: 0.05
   speedChangeRate: 10
   landingAudioClip: {fileID: 0}
   footstepAudioClips: []
@@ -1056,12 +1056,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   move: {x: 0, y: 0}
-  look: {x: 0, y: 0}
   jump: 0
   sprint: 0
   analogMovement: 0
-  cursorLocked: 1
-  cursorInputForLook: 1
 --- !u!1 &2904285140388480064
 GameObject:
   m_ObjectHideFlags: 0
