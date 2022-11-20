@@ -12,11 +12,6 @@ public class GameInitializer : MonoBehaviour
 
     void OnEnable()
     {
-        if (GameStateManager.Current == null)
-        {
-            throw new InvalidOperationException("Could not find game state");
-        }
-
         StartCoroutine(LoadGame());
     }
 

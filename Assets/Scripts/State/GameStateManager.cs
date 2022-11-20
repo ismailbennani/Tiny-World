@@ -32,7 +32,7 @@ namespace State
                     currentState = ScriptableObject.CreateInstance<GameState>(); 
                 }
                 
-                StartCoroutine(CreateNewGame(gameConfig));
+                StartCoroutine(CreateNewGame(this));
             }
             else
             {
@@ -50,41 +50,41 @@ namespace State
             Current.player?.Update();
         }
 
-        public static IEnumerator CreateNewGame(GameConfig gameConfig)
+        public static IEnumerator CreateNewGame(GameStateManager manager)
         {
-            GameState currentState = Instance.currentState;
+            GameState currentState = manager.currentState;
             
-            Instance.ready = false;
+            manager.ready = false;
             
             Debug.Log("Creating new game...");
 
-            if (gameConfig.map.mapSize.x == 0 || gameConfig.map.mapSize.y == 0)
+            if (manager.gameConfig.map.mapSize.x == 0 || manager.gameConfig.map.mapSize.y == 0)
             {
                 throw new InvalidOperationException("Invalid map size");
             }
 
-            int nTiles = gameConfig.map.mapSize.x * gameConfig.map.mapSize.y;
+            int nTiles = manager.gameConfig.map.mapSize.x * manager.gameConfig.map.mapSize.y;
             
             currentState.map = new MapState
             {
-                config = gameConfig.map,
+                config = manager.gameConfig.map,
                 tiles = new TileConfig[nTiles],
                 mapOrigin = Vector3.zero
             };
 
             Debug.Log("Generating tiles...");
 
-            if (gameConfig.map.tiles.Length == 0)
+            if (manager.gameConfig.map.tiles.Length == 0)
             {
                 throw new InvalidOperationException("No tiles provided");
             }
         
-            for (int x = 0; x < gameConfig.map.mapSize.x; x++)
-            for (int y = 0; y < gameConfig.map.mapSize.y; y++)
+            for (int x = 0; x < manager.gameConfig.map.mapSize.x; x++)
+            for (int y = 0; y < manager.gameConfig.map.mapSize.y; y++)
             {
-                TileConfig tileConfig = gameConfig.map.tiles.ToWeightedSelector(t => t.weight).SelectItemWithUnityRandom().tileConfig;
+                TileConfig tileConfig = manager.gameConfig.map.tiles.ToWeightedSelector(t => t.weight).SelectItemWithUnityRandom().tileConfig;
             
-                int index = MyMath.GetIndex(x, y, gameConfig.map.mapSize);
+                int index = MyMath.GetIndex(x, y, manager.gameConfig.map.mapSize);
                 currentState.map.tiles[index] = tileConfig;
             }
         
@@ -94,13 +94,13 @@ namespace State
             
             currentState.player = new PlayerState
             {
-                config = gameConfig.player,
-                position = currentState.map.GetTileCenterPosition(gameConfig.player.spawnTile)
+                config = manager.gameConfig.player,
+                position = currentState.map.GetTileCenterPosition(manager.gameConfig.player.spawnTile)
             };
 
             Debug.Log("Done.");
             
-            Instance.ready = true;
+            manager.ready = true;
             Debug.Log("Game state READY");
             
             yield break;
@@ -112,6 +112,21 @@ namespace State
             PlayerController controller = FindObjectOfType<PlayerController>();
 
             controller.transform.position = state.map.GetTileCenterPosition(state.player.config.spawnTile);
+        }
+
+        public static void ResetState()
+        {
+            GameStateManager manager = Instance;
+            if (!manager)
+            {
+                manager = FindObjectOfType<GameStateManager>();
+            }
+            
+            IEnumerator coroutine = CreateNewGame(manager);
+            while (coroutine.MoveNext())
+            {
+                //
+            }
         }
     }
     
@@ -129,6 +144,11 @@ namespace State
             if (GUILayout.Button("Reset player position"))
             {
                 GameStateManager.ResetPlayerPosition();
+            }
+
+            if (GUILayout.Button("Reset state"))
+            {
+                GameStateManager.ResetState();
             }
         }
     }

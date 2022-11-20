@@ -35,8 +35,8 @@ MonoBehaviour:
         type: 2
         resource: 2
       weight: 1
-    tileSize: {x: 4, y: 4}
-    gap: {x: 0.1, y: 0.1}
+    tileSize: {x: 10, y: 10}
+    gap: {x: 0, y: 0}
     mapSize: {x: 20, y: 20}
   player:
     prefab: {fileID: 4151355903617304371, guid: 6bf3c41e8827c90449b243c1c78de49f, type: 3}
