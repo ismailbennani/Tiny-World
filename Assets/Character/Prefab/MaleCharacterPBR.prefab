@@ -1022,8 +1022,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bb4c3c3ba59455aa2a91f76d704aacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
-  sprintSpeed: 5.335
+  moveSpeed: 4
+  sprintSpeed: 10.67
   rotationSmoothTime: 0.12
   speedChangeRate: 20
   landingAudioClip: {fileID: 8300000, guid: ac300c5b1d663024ebc6f8898529ed40, type: 3}

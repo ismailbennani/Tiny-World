@@ -6,12 +6,23 @@ namespace Map.Tile
 {
     public class MapTilePlatform: MonoBehaviour
     {
+        private TileState _state;
+        
         void OnEnable()
         {
-            StartCoroutine(SetSizeWhenReady());
+            if (_state != null)
+            {
+                StartCoroutine(UpdateWhenGameStateReady());
+            }
         }
 
-        private IEnumerator SetSizeWhenReady()
+        public void SetTile(TileState state)
+        {
+            _state = state;
+            StartCoroutine(UpdateWhenGameStateReady());
+        }
+
+        private IEnumerator UpdateWhenGameStateReady()
         {
             while (!GameStateManager.Current)
             {

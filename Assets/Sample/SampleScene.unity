@@ -395,7 +395,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameConfig: {fileID: 11400000, guid: 3f6580f6a58e20d41a2a8d62956db781, type: 2}
   currentState: {fileID: 11400000, guid: 012c8a5c00cb96b428fcbec675bc15ac, type: 2}
-  ready: 0
+  ready: 1
 --- !u!1 &1685384482
 GameObject:
   m_ObjectHideFlags: 0
@@ -496,7 +496,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f403d2e327da4854873c6d7d0ed6b0e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  showMap: 0
+  showMap: 1
   showPlayer: 0
 --- !u!4 &1693850814
 Transform:

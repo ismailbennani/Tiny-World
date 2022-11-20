@@ -16,10 +16,6 @@ MonoBehaviour:
     baseTile: {fileID: 1500428027516698341, guid: 3612d7d2dd1298745b5b3c1d9b19f7c2, type: 3}
     tiles:
     - tileConfig:
-        type: 0
-        resource: 0
-      weight: 0.5
-    - tileConfig:
         type: 1
         resource: 0
       weight: 5
@@ -38,6 +34,7 @@ MonoBehaviour:
     tileSize: {x: 10, y: 10}
     gap: {x: 0, y: 0}
     mapSize: {x: 20, y: 20}
+    resourceScale: 10
   player:
     prefab: {fileID: 4151355903617304371, guid: 6bf3c41e8827c90449b243c1c78de49f, type: 3}
     spawnTile: {x: 3, y: 4}

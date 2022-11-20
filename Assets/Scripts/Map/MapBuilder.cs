@@ -33,31 +33,29 @@ namespace Map
             {
                 throw new InvalidOperationException("Base tile not set");
             }
-
-            _tiles = new MapTile[config.mapSize.x * config.mapSize.y];
-
-            int nTiles = config.mapSize.x * config.mapSize.y;
+            
+            int nTiles = (config.mapSize.x + 2) * (config.mapSize.y + 2);
+            _tiles = new MapTile[nTiles];
 
             double maxTimeUsedInThisFrame = Time.fixedDeltaTime * 0.9;
             double yieldAfter = 0;
 
-            for (int x = 0; x < config.mapSize.x; x++)
-            for (int y = 0; y < config.mapSize.y; y++)
+            for (int index = 0; index < map.tiles.Length; index++)
             {
                 if (Time.time > yieldAfter)
                 {
-                    Progress = (float)(x * config.mapSize.y + y) / nTiles;
+                    Progress = (float)index / nTiles;
                     yield return new WaitForFixedUpdate();
                     yieldAfter = Time.fixedTime + maxTimeUsedInThisFrame;
                 }
 
-                Vector3 position = map.GetTileCenterPosition(x, y);
+                Vector3 position = map.GetTileCenterPosition(index);
                 MapTile newTile = Instantiate(config.baseTile, position, Quaternion.identity, transform);
 
-                TileConfig tileConfig = map.GetTileConfig(x, y);
-                newTile.SetConfig(tileConfig);
+                TileState tileState = map.tiles[index];
+                newTile.SetConfig(tileState);
 
-                _tiles[MyMath.GetIndex(x, y, config.mapSize)] = newTile;
+                _tiles[index] = newTile;
             }
 
             Ready = true;

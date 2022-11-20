@@ -11,8 +11,9 @@ namespace Map
 
         [Header("Map config")]
         public TileWithWeight[] tiles;
-        public Vector2 tileSize;
-        public Vector2 gap;
-        public Vector2Int mapSize;
+        public Vector2 tileSize = Vector2.one;
+        public Vector2 gap = Vector2.zero;
+        public Vector2Int mapSize = Vector2Int.one;
+        public float resourceScale = 1;
     }
 }

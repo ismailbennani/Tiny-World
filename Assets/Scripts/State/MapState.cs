@@ -10,13 +10,18 @@ namespace State
     public class MapState
     {
         public MapConfig config;
-        public TileConfig[] tiles;
+        public TileState[] tiles;
 
         public Vector3 mapOrigin;
 
-        public TileConfig GetTileConfig(int x, int y)
+        public TileState GetTile(int x, int y)
         {
             return tiles[MyMath.GetIndex(x, y, config.mapSize)];
+        }
+        
+        public TileState GetTile(Vector2Int tile)
+        {
+            return GetTile(tile.x, tile.y);
         }
 
         public Vector2Int GetTileAt(Vector3 position)
@@ -38,6 +43,11 @@ namespace State
         public Vector3 GetTileCenterPosition(int x, int y)
         {
             return new Vector3(x * (config.tileSize.x + config.gap.x), 0, y * (config.tileSize.y + config.gap.y));
+        }
+
+        public Vector3 GetTileCenterPosition(int index)
+        {
+            return GetTileCenterPosition(tiles[index].position);
         }
     }
 }

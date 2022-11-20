@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using State;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,14 +13,15 @@ namespace Map.Tile
         public List<PrefabForResourceType> resourcePrefabs;
 
         [Space(10)]
-        public TileConfig config;
+        public TileState state;
 
         private MapTilePlatform _platform;
         private MapTileResource _resource;
+        private Vector2Int _tilePosition;
 
-        public void SetConfig(TileConfig tileConfig)
+        public void SetConfig(TileState tileConfig)
         {
-            config = tileConfig;
+            state = tileConfig;
 
             SpawnPlatform();
             SpawnResource();
@@ -32,10 +34,11 @@ namespace Map.Tile
                 DestroyGameObject(_platform);
             }
 
-            MapTilePlatform prefab = platformPrefabs.SingleOrDefault(m => m.type == config.type)?.prefab;
+            MapTilePlatform prefab = platformPrefabs.SingleOrDefault(m => m.type == state.config.type)?.prefab;
             if (prefab)
             {
                 _platform = Instantiate(prefab, transform);
+                _platform.SetTile(state);
             }
         }
 
@@ -46,10 +49,11 @@ namespace Map.Tile
                 DestroyGameObject(_resource);
             }
 
-            MapTileResource prefab = resourcePrefabs.SingleOrDefault(m => m.type == config.resource)?.prefab;
+            MapTileResource prefab = resourcePrefabs.SingleOrDefault(m => m.type == state.config.resource)?.prefab;
             if (prefab)
             {
                 _resource = Instantiate(prefab, transform);
+                _resource.SetTile(state);
             }
         }
 
@@ -83,7 +87,7 @@ namespace Map.Tile
             {
                 MapTile mapTile = target as MapTile;
 
-                mapTile.SetConfig(mapTile.config);
+                mapTile.SetConfig(mapTile.state);
             }
         }
     }

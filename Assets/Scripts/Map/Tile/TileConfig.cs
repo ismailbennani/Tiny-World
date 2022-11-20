@@ -7,5 +7,7 @@ namespace Map.Tile
     {
         public TileType type;
         public ResourceType resource;
+        
+        public static TileConfig Empty => new();
     }
 }

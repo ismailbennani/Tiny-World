@@ -6,11 +6,12 @@ using Map.Tile;
 using UnityEditor;
 using UnityEngine;
 using Utils;
+using Random = UnityEngine.Random;
 
 namespace State
 {
     [Serializable]
-    public class GameStateManager: MonoBehaviour
+    public class GameStateManager : MonoBehaviour
     {
         public static GameStateManager Instance { get; private set; }
         public static GameState Current => Instance ? Instance.currentState : null;
@@ -29,9 +30,9 @@ namespace State
             {
                 if (!currentState)
                 {
-                    currentState = ScriptableObject.CreateInstance<GameState>(); 
+                    currentState = ScriptableObject.CreateInstance<GameState>();
                 }
-                
+
                 StartCoroutine(CreateNewGame(this));
             }
             else
@@ -46,16 +47,16 @@ namespace State
             {
                 return;
             }
-            
+
             Current.player?.Update();
         }
 
         public static IEnumerator CreateNewGame(GameStateManager manager)
         {
             GameState currentState = manager.currentState;
-            
+
             manager.ready = false;
-            
+
             Debug.Log("Creating new game...");
 
             if (manager.gameConfig.map.mapSize.x == 0 || manager.gameConfig.map.mapSize.y == 0)
@@ -63,12 +64,12 @@ namespace State
                 throw new InvalidOperationException("Invalid map size");
             }
 
-            int nTiles = manager.gameConfig.map.mapSize.x * manager.gameConfig.map.mapSize.y;
-            
+            int nTiles = (manager.gameConfig.map.mapSize.x + 2) * (manager.gameConfig.map.mapSize.y + 2);
+
             currentState.map = new MapState
             {
                 config = manager.gameConfig.map,
-                tiles = new TileConfig[nTiles],
+                tiles = new TileState[nTiles],
                 mapOrigin = Vector3.zero
             };
 
@@ -78,20 +79,29 @@ namespace State
             {
                 throw new InvalidOperationException("No tiles provided");
             }
-        
-            for (int x = 0; x < manager.gameConfig.map.mapSize.x; x++)
-            for (int y = 0; y < manager.gameConfig.map.mapSize.y; y++)
+
+            Vector2Int sizeWithBorders = manager.gameConfig.map.mapSize + 2 * Vector2Int.one;
+
+            for (int x = 0; x < sizeWithBorders.x; x++)
+            for (int y = 0; y < sizeWithBorders.y; y++)
             {
-                TileConfig tileConfig = manager.gameConfig.map.tiles.ToWeightedSelector(t => t.weight).SelectItemWithUnityRandom().tileConfig;
-            
-                int index = MyMath.GetIndex(x, y, manager.gameConfig.map.mapSize);
-                currentState.map.tiles[index] = tileConfig;
+                TileConfig tileConfig = x == 0 || y == 0 || x == sizeWithBorders.x - 1 || y == sizeWithBorders.y - 1
+                    ? TileConfig.Empty
+                    : manager.gameConfig.map.tiles.ToWeightedSelector(t => t.weight).SelectItemWithUnityRandom().tileConfig;
+
+                int index = MyMath.GetIndex(x, y, sizeWithBorders);
+                currentState.map.tiles[index] = new TileState
+                {
+                    config = tileConfig,
+                    position = new Vector2Int(x, y),
+                    rotation = Random.Range(0, 4),
+                };
             }
-        
+
             Debug.Log("Done.");
 
             Debug.Log("Initializing player state...");
-            
+
             currentState.player = new PlayerState
             {
                 config = manager.gameConfig.player,
@@ -99,10 +109,10 @@ namespace State
             };
 
             Debug.Log("Done.");
-            
+
             manager.ready = true;
             Debug.Log("Game state READY");
-            
+
             yield break;
         }
 
@@ -121,7 +131,7 @@ namespace State
             {
                 manager = FindObjectOfType<GameStateManager>();
             }
-            
+
             IEnumerator coroutine = CreateNewGame(manager);
             while (coroutine.MoveNext())
             {
@@ -129,7 +139,7 @@ namespace State
             }
         }
     }
-    
+
     #if UNITY_EDITOR
 
     [CustomEditor(typeof(GameStateManager))]
