@@ -1,7 +1,7 @@
 ﻿using State;
 using UnityEngine;
 
-namespace Character
+namespace Character.Player
 {
     public class PlayerPersistPosition: MonoBehaviour
     {

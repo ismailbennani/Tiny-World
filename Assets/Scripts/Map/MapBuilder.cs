@@ -59,5 +59,11 @@ namespace Map
 
             Ready = true;
         }
+
+        public Vector3 GetTileCenterPosition(Vector2Int tilePosition)
+        {
+            int index = MyMath.GetIndex(tilePosition, GameState.Current.map.config.mapSize);
+            return _tiles[index].transform.position;
+        }
     }
 }

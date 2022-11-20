@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections;
+using Character;
+using Character.Player;
 using MackySoft.Choice;
 using Map;
 using Map.Tile;
@@ -7,9 +9,10 @@ using State;
 using UnityEngine;
 using Utils;
 
-public class GameManager : MonoBehaviour
+public class GameInitializer : MonoBehaviour
 {
     public MapConfig mapConfig;
+    public PlayerConfig playerConfig;
 
     private MapBuilder _mapBuilder;
     private PlayerSpawner _playerSpawner;
@@ -70,7 +73,10 @@ public class GameManager : MonoBehaviour
         
         Debug.Log("Spawning player...");
 
-        _playerSpawner = FindObjectOfType<PlayerSpawner>() ?? throw new InvalidOperationException($"Please instantiate a {nameof(PlayerSpawner)}");
+        state.player.config = playerConfig;
+        state.player.position = _mapBuilder.GetTileCenterPosition(playerConfig.spawnTile);
+        
+        _playerSpawner = GetOrCreate<PlayerSpawner>("Player");
         StartCoroutine(_playerSpawner.Spawn());
 
         while (!_playerSpawner.Ready)
@@ -90,6 +96,7 @@ public class GameManager : MonoBehaviour
         if (result == null)
         {
             GameObject obj = new(gameObjectName, typeof(T));
+            obj.transform.SetParent(transform);
             result = obj.GetComponent<T>();
         }
 

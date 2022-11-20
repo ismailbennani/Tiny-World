@@ -4,6 +4,11 @@ namespace Utils
 {
     public static class MyMath
     {
+        public static int GetIndex(Vector2Int position, Vector2Int size)
+        {
+            return GetIndex(position.x, position.y, size);
+        }
+
         public static int GetIndex(int x, int y, Vector2Int size)
         {
             return GetIndex(x, y, size.x, size.y);
