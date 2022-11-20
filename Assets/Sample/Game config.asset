@@ -25,5 +25,5 @@ MonoBehaviour:
     gap: {x: 0.1, y: 0.1}
     mapSize: {x: 10, y: 10}
   player:
-    prefab: {fileID: 384902992063006323, guid: 6bf3c41e8827c90449b243c1c78de49f, type: 3}
+    prefab: {fileID: 4151355903617304371, guid: 6bf3c41e8827c90449b243c1c78de49f, type: 3}
     spawnTile: {x: 3, y: 4}

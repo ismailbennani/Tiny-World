@@ -2,8 +2,8 @@
 using System.Collections;
 using Character.Player;
 using MackySoft.Choice;
-using Map;
 using Map.Tile;
+using UnityEditor;
 using UnityEngine;
 using Utils;
 
@@ -105,5 +105,33 @@ namespace State
             
             yield break;
         }
+
+        public static void ResetPlayerPosition()
+        {
+            GameState state = Current;
+            PlayerController controller = FindObjectOfType<PlayerController>();
+
+            controller.transform.position = state.map.GetTileCenterPosition(state.player.config.spawnTile);
+        }
     }
+    
+    #if UNITY_EDITOR
+
+    [CustomEditor(typeof(GameStateManager))]
+    public class GameStateManagerEditor : Editor
+    {
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+
+            GUILayout.Space(10);
+
+            if (GUILayout.Button("Reset player position"))
+            {
+                GameStateManager.ResetPlayerPosition();
+            }
+        }
+    }
+
+    #endif
 }

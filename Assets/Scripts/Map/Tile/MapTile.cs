@@ -7,44 +7,55 @@ namespace Map.Tile
 {
     public class MapTile : MonoBehaviour
     {
-        public MeshRenderer tileRenderer;
-
         [Header("Config")]
-        public List<MaterialForTileType> materials;
-        
+        public List<PlatformForTileType> prefabs;
+
         [Space(10)]
         public TileConfig config;
+
+        public MapTilePlatform _tilePrefab;
 
         public void SetConfig(TileConfig tileConfig)
         {
             config = tileConfig;
-            
-            UpdateMaterial();
+
+            SpawnCorrectPrefab();
         }
 
-        private void UpdateMaterial()
+        private void SpawnCorrectPrefab()
         {
-            Material material = materials.SingleOrDefault(m => m.type == config.type)?.material;
-            tileRenderer.material = material;
+            if (_tilePrefab)
+            {
+                if (Application.isEditor)
+                {
+                    DestroyImmediate(_tilePrefab.gameObject);
+                }
+                else
+                {
+                    Destroy(_tilePrefab.gameObject);
+                }
+            }
+
+            MapTilePlatform prefab = prefabs.SingleOrDefault(m => m.type == config.type)?.prefab;
+            _tilePrefab = Instantiate(prefab, transform);
         }
     }
 
     #if UNITY_EDITOR
 
     [CustomEditor(typeof(MapTile))]
-    // ^ This is the script we are making a custom editor for.
-    public class YourScriptEditor : Editor
+    public class MapTileEditor : Editor
     {
         public override void OnInspectorGUI()
         {
             DrawDefaultInspector();
 
             GUILayout.Space(10);
-            
+
             if (GUILayout.Button("Set config"))
             {
                 MapTile mapTile = target as MapTile;
-                
+
                 mapTile.SetConfig(mapTile.config);
             }
         }

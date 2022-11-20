@@ -4,9 +4,9 @@ using UnityEngine;
 namespace Map.Tile
 {
     [Serializable]
-    public class MaterialForTileType
+    public class PlatformForTileType
     {
         public TileType type;
-        public Material material;
+        public MapTilePlatform prefab;
     }
 }
