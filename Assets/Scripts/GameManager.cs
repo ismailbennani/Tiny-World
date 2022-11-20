@@ -1,26 +1,69 @@
 ﻿using System;
 using System.Collections;
+using MackySoft.Choice;
+using Map;
+using Map.Tile;
 using UnityEngine;
+using Utils;
 
-public class GameManager: MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     public MapConfig mapConfig;
-    
-    private TerrainSpawner _terrainSpawner;
+
+    private MapBuilder _mapBuilder;
     private PlayerSpawner _playerSpawner;
 
     IEnumerator Start()
     {
-        _terrainSpawner = GetOrCreate<TerrainSpawner>("Terrain");
-        _terrainSpawner.mapConfig = mapConfig;
+        Debug.Log("Initializing state...");
         
-        StartCoroutine(_terrainSpawner.Spawn());
+        GameState state = GameState.Initialize();
 
-        while (!_terrainSpawner.Ready)
+        if (mapConfig.mapSize.x == 0 || mapConfig.mapSize.y == 0)
         {
+            throw new InvalidOperationException("Invalid map size");
+        }
+
+        state.mapConfig = mapConfig;
+
+        int nTiles = mapConfig.mapSize.x * mapConfig.mapSize.y;
+        state.tiles = new TileConfig[nTiles];
+        
+        Debug.Log("Done.");
+
+        Debug.Log("Generating tiles...");
+
+        if (mapConfig.tiles.Length == 0)
+        {
+            throw new InvalidOperationException("No tiles provided");
+        }
+        
+        for (int x = 0; x < mapConfig.mapSize.x; x++)
+        for (int y = 0; y < mapConfig.mapSize.y; y++)
+        {
+            TileConfig tileConfig = mapConfig.tiles.ToWeightedSelector(t => t.weight).SelectItemWithUnityRandom().tileConfig;
+            
+            int index = MyMath.GetIndex(x, y, mapConfig.mapSize);
+            state.tiles[index] = tileConfig;
+        }
+        
+        Debug.Log("Done.");
+
+        Debug.Log("Spawning map...");
+        
+        _mapBuilder = GetOrCreate<MapBuilder>("Terrain");
+        StartCoroutine(_mapBuilder.Spawn());
+
+        while (!_mapBuilder.Ready)
+        {
+            Debug.Log($"Progress {_mapBuilder.Progress:P2}");
             yield return null;
         }
         
+        Debug.Log("Done.");
+        
+        Debug.Log("Spawning player...");
+
         _playerSpawner = FindObjectOfType<PlayerSpawner>() ?? throw new InvalidOperationException($"Please instantiate a {nameof(PlayerSpawner)}");
         StartCoroutine(_playerSpawner.Spawn());
 
@@ -28,6 +71,10 @@ public class GameManager: MonoBehaviour
         {
             yield return null;
         }
+        
+        Debug.Log("Done.");
+        
+        Debug.Log("Game READY");
     }
 
     private T GetOrCreate<T>(string gameObjectName) where T: Component
@@ -36,7 +83,7 @@ public class GameManager: MonoBehaviour
 
         if (result == null)
         {
-            GameObject obj = new GameObject(gameObjectName, typeof(T));
+            GameObject obj = new(gameObjectName, typeof(T));
             result = obj.GetComponent<T>();
         }
 

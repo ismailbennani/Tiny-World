@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efba56a9792040a0b3bbd18a4e03b9d4, type: 3}
   m_Name: Sample map
   m_EditorClassIdentifier: 
-  terrains:
-  - prefab: {fileID: 5905714611190989310, guid: a4f5dd7c1688857439283f5e1ca6521c, type: 3}
+  baseTile: {fileID: 1500428027516698341, guid: 3612d7d2dd1298745b5b3c1d9b19f7c2, type: 3}
+  tiles:
+  - tileConfig: {fileID: 11400000, guid: 30c37c4a2894abb42a1aeb3a78ce35f4, type: 2}
     weight: 5
-  - prefab: {fileID: 5905714611190989310, guid: d7daeab2bb3df7544b27ac5ff4306563, type: 3}
+  - tileConfig: {fileID: 11400000, guid: ab5d6ebf95ca9e9458a9b9994844f269, type: 2}
     weight: 1
   tileSize: {x: 4, y: 4}
   gap: {x: 0.1, y: 0.1}
-  desiredMapSize: {x: 50, y: 50}
+  mapSize: {x: 10, y: 10}
