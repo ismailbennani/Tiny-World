@@ -284,6 +284,9 @@ public class ThirdPersonController : MonoBehaviour
         Gizmos.DrawSphere(new Vector3(position.x, position.y - groundedOffset, position.z), groundedRadius);
     }
 
+    /// <remarks>
+    /// Called by animation event
+    /// </remarks>
     private void OnFootstep(AnimationEvent animationEvent)
     {
         if (!(animationEvent.animatorClipInfo.weight > 0.5f))
@@ -300,6 +303,9 @@ public class ThirdPersonController : MonoBehaviour
         AudioSource.PlayClipAtPoint(footstepAudioClips[index], transform.TransformPoint(_controller.center), footstepAudioVolume);
     }
 
+    /// <remarks>
+    /// Called by animation event
+    /// </remarks>
     private void OnLand(AnimationEvent animationEvent)
     {
         if (animationEvent.animatorClipInfo.weight > 0.5f)

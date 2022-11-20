@@ -954,7 +954,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: e4bc6a2755bfc2a488174312285aafc4, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -1038,11 +1038,6 @@ MonoBehaviour:
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
-  cinemachineCameraTarget: {fileID: 6965668487648110178}
-  topClamp: 70
-  bottomClamp: -30
-  cameraAngleOverride: 0
-  lockCameraPosition: 0
 --- !u!114 &1531707133698989256
 MonoBehaviour:
   m_ObjectHideFlags: 0
