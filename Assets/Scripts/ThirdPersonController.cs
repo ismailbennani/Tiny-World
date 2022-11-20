@@ -54,9 +54,9 @@ public class ThirdPersonController : MonoBehaviour
     [Tooltip("What layers the character uses as ground")]
     public LayerMask groundLayers;
 
-    // cinemachine
-    private float _cinemachineTargetPitch;
-
+    [Header("Camera")]
+    public Transform cameraTarget;
+    
     // player
     private float _speed;
     private float _animationBlend;

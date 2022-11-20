@@ -1006,7 +1006,7 @@ CharacterController:
   m_Radius: 0.35
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.01
+  m_SkinWidth: 0.0001
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.6, z: 0}
 --- !u!114 &384902992063006323
@@ -1025,19 +1025,30 @@ MonoBehaviour:
   sprintSpeed: 5.335
   rotationSmoothTime: 0.05
   speedChangeRate: 10
-  landingAudioClip: {fileID: 0}
-  footstepAudioClips: []
+  landingAudioClip: {fileID: 8300000, guid: ac300c5b1d663024ebc6f8898529ed40, type: 3}
+  footstepAudioClips:
+  - {fileID: 8300000, guid: 92cd433124a143f4c8a84e568957a945, type: 3}
+  - {fileID: 8300000, guid: 6891181444c17c544b1cff16b2eb2828, type: 3}
+  - {fileID: 8300000, guid: 4fca79a302bcbc64abaa7cb7c2a78bd8, type: 3}
+  - {fileID: 8300000, guid: 8893ea87002dbd9488a7a3f8e529f647, type: 3}
+  - {fileID: 8300000, guid: ee9e91452f209ae4aae6b27f7d831779, type: 3}
+  - {fileID: 8300000, guid: 485ce9d6c973527488a8601a226efd3d, type: 3}
+  - {fileID: 8300000, guid: b95c8a5e49a1b9542bc6a3c30b3983cb, type: 3}
+  - {fileID: 8300000, guid: c211cb289b9fd624a9d09955f09ab0be, type: 3}
+  - {fileID: 8300000, guid: e2251cf86e16ea74db3db43bcebb93c4, type: 3}
+  - {fileID: 8300000, guid: 8abb6302b39924b4480a547bcd341f48, type: 3}
   footstepAudioVolume: 0.5
   jumpHeight: 1.2
   gravity: -15
   jumpTimeout: 0.5
   fallTimeout: 0.15
   grounded: 1
-  groundedOffset: -0.14
+  groundedOffset: 0
   groundedRadius: 0.28
   groundLayers:
     serializedVersion: 2
     m_Bits: 64
+  cameraTarget: {fileID: 8085402067943711189}
 --- !u!114 &1531707133698989256
 MonoBehaviour:
   m_ObjectHideFlags: 0
