@@ -7,7 +7,7 @@ namespace Map.Tile
 {
     public class MapTile : MonoBehaviour
     {
-        public MeshRenderer renderer;
+        public MeshRenderer tileRenderer;
 
         [Header("Config")]
         public List<MaterialForTileType> materials;
@@ -25,7 +25,7 @@ namespace Map.Tile
         private void UpdateMaterial()
         {
             Material material = materials.SingleOrDefault(m => m.type == config.type)?.material;
-            renderer.material = material;
+            tileRenderer.material = material;
         }
     }
 

@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a23f100cd0e4b60818aa2b6cd0c045a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  renderer: {fileID: 8665490762900720171}
+  tileRenderer: {fileID: 8665490762900720171}
   materials:
   - type: 0
     material: {fileID: 2100000, guid: 746f9f63ae973c941bf6a6a05818f43b, type: 2}

@@ -3,6 +3,7 @@ using System.Collections;
 using MackySoft.Choice;
 using Map;
 using Map.Tile;
+using State;
 using UnityEngine;
 using Utils;
 
@@ -13,7 +14,12 @@ public class GameManager : MonoBehaviour
     private MapBuilder _mapBuilder;
     private PlayerSpawner _playerSpawner;
 
-    IEnumerator Start()
+    void Start()
+    {
+        StartCoroutine(CreateNewGame());
+    }
+
+    private IEnumerator CreateNewGame()
     {
         Debug.Log("Initializing state...");
         
@@ -24,10 +30,10 @@ public class GameManager : MonoBehaviour
             throw new InvalidOperationException("Invalid map size");
         }
 
-        state.mapConfig = mapConfig;
+        state.map.config = mapConfig;
 
         int nTiles = mapConfig.mapSize.x * mapConfig.mapSize.y;
-        state.tiles = new TileConfig[nTiles];
+        state.map.tiles = new TileConfig[nTiles];
         
         Debug.Log("Done.");
 
@@ -44,7 +50,7 @@ public class GameManager : MonoBehaviour
             TileConfig tileConfig = mapConfig.tiles.ToWeightedSelector(t => t.weight).SelectItemWithUnityRandom().tileConfig;
             
             int index = MyMath.GetIndex(x, y, mapConfig.mapSize);
-            state.tiles[index] = tileConfig;
+            state.map.tiles[index] = tileConfig;
         }
         
         Debug.Log("Done.");
