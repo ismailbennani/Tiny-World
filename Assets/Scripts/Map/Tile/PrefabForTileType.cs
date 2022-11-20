@@ -1,10 +1,9 @@
 ﻿using System;
-using UnityEngine;
 
 namespace Map.Tile
 {
     [Serializable]
-    public class PlatformForTileType
+    public class PrefabForTileType
     {
         public TileType type;
         public MapTilePlatform prefab;

@@ -6,5 +6,6 @@ namespace Map.Tile
     public class TileConfig
     {
         public TileType type;
+        public ResourceType resource;
     }
 }

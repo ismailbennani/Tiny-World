@@ -72,7 +72,7 @@ namespace EditorUtils
             return type switch
             {
                 TileType.Grass => Color.green,
-                TileType.Stone => Color.gray,
+                TileType.Gravel => Color.gray,
                 _ => Color.clear,
             };
         }

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3161063549770753353}
   - component: {fileID: 3107741431747107348}
   m_Layer: 0
-  m_Name: Stone Platform
+  m_Name: Gravel Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
