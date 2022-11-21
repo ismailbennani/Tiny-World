@@ -94,10 +94,19 @@ public class GameStateManager : MonoBehaviour
 
     public static void ResetPlayerPosition()
     {
-        GameState state = Current;
-        PlayerController controller = FindObjectOfType<PlayerController>();
+        GameStateManager manager = Instance;
+        if (!manager)
+        {
+            manager = FindObjectOfType<GameStateManager>();
+        }
+        
+        manager.currentState.player.position = manager.currentState.map.GetTileCenterPosition(manager.currentState.player.config.spawnTile);
 
-        controller.transform.position = state.map.GetTileCenterPosition(state.player.config.spawnTile);
+        PlayerController controller = FindObjectOfType<PlayerController>();
+        if (controller)
+        {
+            controller.transform.position = manager.currentState.map.GetTileCenterPosition(manager.currentState.player.config.spawnTile);
+        }
     }
 
     public static void ResetState()

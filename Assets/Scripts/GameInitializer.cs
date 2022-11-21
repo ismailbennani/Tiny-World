@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameInitializer : MonoBehaviour
 {
-    private MapBuilder _mapBuilder;
+    private Map.GameMap _gameMap;
     private PlayerSpawner _playerSpawner;
 
     void OnEnable()
@@ -22,8 +22,8 @@ public class GameInitializer : MonoBehaviour
 
         Debug.Log("Spawning map...");
         
-        _mapBuilder = GetOrCreate<MapBuilder>("Terrain");
-        _mapBuilder.Initialize();
+        _gameMap = GetOrCreate<GameMap>("Terrain");
+        _gameMap.Initialize();
 
         Debug.Log("Done.");
         
