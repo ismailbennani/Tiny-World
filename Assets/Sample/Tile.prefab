@@ -57,7 +57,10 @@ MonoBehaviour:
   - type: 1
     prefab: {fileID: 6724582270491821290, guid: cbcb020fe17c5374587e77ec29113673, type: 3}
   - type: 2
-    prefab: {fileID: 0}
-  config:
-    type: 1
-    resource: 1
+    prefab: {fileID: 8628220915447311663, guid: 42f96111dab7708488135c473bf834f5, type: 3}
+  state:
+    config:
+      type: 0
+      resource: 0
+    position: {x: 0, y: 0}
+    rotation: 0
