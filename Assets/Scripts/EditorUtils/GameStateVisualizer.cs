@@ -1,7 +1,6 @@
 ﻿using Character.Player;
 using Map;
 using Map.Tile;
-using UnityEditor;
 using UnityEngine;
 
 namespace EditorUtils
@@ -35,19 +34,9 @@ namespace EditorUtils
 
         private void DrawMapState(MapState state)
         {
-            if (state?.config == null)
+            if (state?.initialConfig == null)
             {
                 return;
-            }
-
-            for (int index = 0; index < state.tiles.Length; index++)
-            {
-                Vector3 position = state.GetTileCenterPosition(index);
-                
-                Gizmos.color = GetColorFromTileType(state.tiles[index].config.type);
-                Gizmos.DrawWireCube(position, new Vector3(state.config.tileSize.x, 0, state.config.tileSize.y));
-
-                Handles.Label(position, index.ToString());
             }
         }
 
@@ -62,7 +51,7 @@ namespace EditorUtils
             Gizmos.DrawSphere(state.position, 0.2f);
 
             Vector3 playerTilePosition = map.GetTileCenterPosition(state.playerTile);
-            Gizmos.DrawWireCube(playerTilePosition, new Vector3(map.config.tileSize.x * 0.9f, 0, map.config.tileSize.y * 0.9f));
+            Gizmos.DrawWireCube(playerTilePosition, new Vector3(map.runtimeConfig.tileSize.x * 0.9f, 0, map.runtimeConfig.tileSize.y * 0.9f));
         }
 
         private static Color GetColorFromTileType(TileType type)

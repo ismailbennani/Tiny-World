@@ -10,6 +10,6 @@ public class GameState: ScriptableObject
 
     public bool IsValid => MapIsValid && PlayerIsValid;
 
-    private bool MapIsValid => map?.config != null && map.tiles.Length > 0;
+    private bool MapIsValid => map?.IsValid ?? false;
     private bool PlayerIsValid => player?.config != null && player.config.prefab;
 }

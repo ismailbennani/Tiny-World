@@ -10,6 +10,7 @@ namespace Character.Player
         public Vector3 position;
 
         [Header("Computed state")]
+        public Vector2Int playerChunk;
         public Vector2Int playerTile;
 
         public void Update()
@@ -20,6 +21,7 @@ namespace Character.Player
                 return;
             }
             
+            playerChunk = state.map.GetChunkAt(position);
             playerTile = state.map.GetTileAt(position);
         }
     }

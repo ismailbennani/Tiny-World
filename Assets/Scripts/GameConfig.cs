@@ -5,6 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Custom/Game config")]
 public class GameConfig: ScriptableObject
 {
-    public MapConfig map;
+    public MapInitialConfig mapInitialConfig;
+    public MapRuntimeConfig mapRuntimeConfig;
     public PlayerConfig player;
 }

@@ -2,11 +2,8 @@
 using System.Collections;
 using Character.Player;
 using Map;
-using Map.Generation;
-using Map.Tile;
 using UnityEditor;
 using UnityEngine;
-using Utils;
 
 [Serializable]
 public class GameStateManager : MonoBehaviour
@@ -35,6 +32,8 @@ public class GameStateManager : MonoBehaviour
         }
         else
         {
+            currentState.map.runtimeConfig = gameConfig.mapRuntimeConfig;
+            
             ready = true;
         }
     }
@@ -57,49 +56,25 @@ public class GameStateManager : MonoBehaviour
 
         Debug.Log("Creating new game...");
 
-        if (manager.gameConfig.map.mapSize.x == 0 || manager.gameConfig.map.mapSize.y == 0)
+        if (manager.gameConfig.mapInitialConfig.chunkSize.x == 0 || manager.gameConfig.mapInitialConfig.chunkSize.y == 0)
         {
-            throw new InvalidOperationException("Invalid map size");
+            throw new InvalidOperationException("Invalid chunk size");
         }
 
-        int nTiles = (manager.gameConfig.map.mapSize.x + 2) * (manager.gameConfig.map.mapSize.y + 2);
+        currentState.map = new MapState(manager.gameConfig);
 
-        currentState.map = new MapState
+        if (manager.gameConfig.mapInitialConfig.initialChunks.x != 0 && manager.gameConfig.mapInitialConfig.initialChunks.y != 0)
         {
-            config = manager.gameConfig.map,
-            tiles = new TileState[nTiles],
-            mapOrigin = Vector3.zero
-        };
+            Debug.Log("Generating initial tiles...");
 
-        Debug.Log("Generating tiles...");
-
-        if (manager.gameConfig.map.tiles.Length == 0)
-        {
-            throw new InvalidOperationException("No tiles provided");
-        }
-
-        Vector2Int sizeWithBorders = manager.gameConfig.map.mapSize + 2 * Vector2Int.one;
-
-        IMapGenerator mapGenerator = new RandomMapGenerator();
-        mapGenerator.SetConfiguration(manager.gameConfig.map);
-
-        for (int x = 0; x < sizeWithBorders.x; x++)
-        for (int y = 0; y < sizeWithBorders.y; y++)
-        {
-            TileConfig tileConfig = x == 0 || y == 0 || x == sizeWithBorders.x - 1 || y == sizeWithBorders.y - 1
-                ? TileConfig.Empty
-                : mapGenerator.GenerateTile(x, y);
-
-            int index = MyMath.GetIndex(x, y, sizeWithBorders);
-            currentState.map.tiles[index] = new TileState
+            for (int x = 0; x < manager.gameConfig.mapInitialConfig.initialChunks.x; x++)
+            for (int y = 0; y < manager.gameConfig.mapInitialConfig.initialChunks.y; y++)
             {
-                config = tileConfig,
-                position = new Vector2Int(x, y),
-                rotation = UnityEngine.Random.Range(0, 4),
-            };
+                currentState.map.PrepareChunk(x, y);
+            }
+            
+            Debug.Log("Done.");
         }
-
-        Debug.Log("Done.");
 
         Debug.Log("Initializing player state...");
 
@@ -148,7 +123,7 @@ public class GameStateManager : MonoBehaviour
             manager = FindObjectOfType<GameStateManager>();
         }
 
-        manager.gameConfig.map.seed = new System.Random().Next();
+        manager.gameConfig.mapInitialConfig.seed = new System.Random().Next();
 
         ResetState();
     }

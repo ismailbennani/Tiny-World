@@ -9,7 +9,7 @@ namespace Map.Generation
         private Random _random;
         private IWeightedSelector<TileWithWeight> _selector;
 
-        public void SetConfiguration(MapConfig config)
+        public void SetConfiguration(MapInitialConfig config)
         {
             if (config == null)
             {

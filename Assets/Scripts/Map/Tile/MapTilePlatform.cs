@@ -28,7 +28,7 @@ namespace Map.Tile
                 yield return null;
             }
             
-            SetSize(GameStateManager.Current.map.config.tileSize);
+            SetSize(GameStateManager.Current.map.runtimeConfig.tileSize);
         }
 
         private void SetSize(Vector2 size)

@@ -23,13 +23,7 @@ public class GameInitializer : MonoBehaviour
         Debug.Log("Spawning map...");
         
         _mapBuilder = GetOrCreate<MapBuilder>("Terrain");
-        StartCoroutine(_mapBuilder.Spawn());
-
-        while (!_mapBuilder.Ready)
-        {
-            Debug.Log($"Progress {_mapBuilder.Progress:P2}");
-            yield return null;
-        }
+        _mapBuilder.Initialize();
 
         Debug.Log("Done.");
         

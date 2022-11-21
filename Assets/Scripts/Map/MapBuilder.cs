@@ -1,62 +1,67 @@
-﻿using System;
-using System.Collections;
-using Map.Tile;
+﻿using System.Collections.Generic;
+using Character.Player;
+using Map.Chunk;
 using UnityEngine;
+using Utils;
 
 namespace Map
 {
     public class MapBuilder : MonoBehaviour
     {
-        public float Progress { get; private set; }
-        public bool Ready { get; private set; }
+        [SerializeField]
+        private List<MapChunk> chunks;
 
-        private MapTile[] _tiles;
+        [SerializeField]
+        private Vector2Int centerChunkPosition;
 
-        public IEnumerator Spawn()
+        public void Initialize()
         {
-            if (_tiles != null)
+            UpdateChunks(GameStateManager.Current.map, GameStateManager.Current.player);
+        }
+
+        public void Update()
+        {
+            if (GameStateManager.Current.player.playerChunk != centerChunkPosition)
             {
-                foreach (MapTile tile in _tiles)
-                {
-                    Destroy(tile.gameObject);
-                }
+                UpdateChunks(GameStateManager.Current.map, GameStateManager.Current.player);
+            }
+        }
+
+        private void UpdateChunks(MapState map, PlayerState player)
+        {
+            centerChunkPosition = player.playerChunk;
+
+            Vector2Int loadedChunksDim = 2 * map.runtimeConfig.chunkRange + Vector2Int.one;
+
+            int nChunks = loadedChunksDim.x * loadedChunksDim.y;
+
+            if (chunks == null)
+            {
+                chunks = new List<MapChunk>();
             }
             
-            Ready = false;
-
-            MapState map = GameStateManager.Current.map;
-            MapConfig config = map.config;
-
-            if (!config.baseTile)
+            for (int i = chunks.Count; i < nChunks; i++)
             {
-                throw new InvalidOperationException("Base tile not set");
-            }
-            
-            int nTiles = (config.mapSize.x + 2) * (config.mapSize.y + 2);
-            _tiles = new MapTile[nTiles];
-
-            double maxTimeUsedInThisFrame = Time.fixedDeltaTime * 0.9;
-            double yieldAfter = 0;
-
-            for (int index = 0; index < map.tiles.Length; index++)
-            {
-                if (Time.time > yieldAfter)
-                {
-                    Progress = (float)index / nTiles;
-                    yield return new WaitForFixedUpdate();
-                    yieldAfter = Time.fixedTime + maxTimeUsedInThisFrame;
-                }
-
-                Vector3 position = map.GetTileCenterPosition(index);
-                MapTile newTile = Instantiate(config.baseTile, position, Quaternion.identity, transform);
-
-                TileState tileState = map.tiles[index];
-                newTile.SetConfig(tileState);
-
-                _tiles[index] = newTile;
+                MapChunk newChunk = Instantiate(map.runtimeConfig.baseChunk, transform);
+                chunks.Add(newChunk);
             }
 
-            Ready = true;
+            for (int index = 0; index < nChunks; index++)
+            {
+                MapChunk chunk = chunks[index];
+                chunk.gameObject.SetActive(true);
+
+                (int x, int y) = MyMath.GetCoords(index, loadedChunksDim);
+
+                Vector2Int chunkPosition = new Vector2Int(x, y) - map.runtimeConfig.chunkRange + centerChunkPosition;
+
+                chunk.Set(map, chunkPosition);
+            }
+
+            for (int index = nChunks; index < chunks.Count; index++)
+            {
+                chunks[index].gameObject.SetActive(false);
+            }
         }
     }
 }

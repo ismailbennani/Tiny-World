@@ -30,7 +30,7 @@ namespace Map.Tile
 
             MapState map = GameStateManager.Current.map;
             
-            SetSize(map.config.resourceScale);
+            SetSize(map.runtimeConfig.resourceScale);
             transform.rotation = Quaternion.Euler(0, 90 * _state.rotation, 0);
         }
 
