@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections;
 using Character.Player;
-using MackySoft.Choice;
+using Map.Generation;
 using Map.Tile;
 using UnityEditor;
 using UnityEngine;
 using Utils;
-using Random = UnityEngine.Random;
 
 namespace State
 {
@@ -82,19 +81,22 @@ namespace State
 
             Vector2Int sizeWithBorders = manager.gameConfig.map.mapSize + 2 * Vector2Int.one;
 
+            IMapGenerator mapGenerator = new RandomMapGenerator();
+            mapGenerator.SetConfiguration(manager.gameConfig.map);
+
             for (int x = 0; x < sizeWithBorders.x; x++)
             for (int y = 0; y < sizeWithBorders.y; y++)
             {
                 TileConfig tileConfig = x == 0 || y == 0 || x == sizeWithBorders.x - 1 || y == sizeWithBorders.y - 1
                     ? TileConfig.Empty
-                    : manager.gameConfig.map.tiles.ToWeightedSelector(t => t.weight).SelectItemWithUnityRandom().tileConfig;
+                    : mapGenerator.GenerateTile(x, y);
 
                 int index = MyMath.GetIndex(x, y, sizeWithBorders);
                 currentState.map.tiles[index] = new TileState
                 {
                     config = tileConfig,
                     position = new Vector2Int(x, y),
-                    rotation = Random.Range(0, 4),
+                    rotation = UnityEngine.Random.Range(0, 4),
                 };
             }
 
@@ -138,6 +140,19 @@ namespace State
                 //
             }
         }
+
+        public static void ResetStateWithNewSeed()
+        {
+            GameStateManager manager = Instance;
+            if (!manager)
+            {
+                manager = FindObjectOfType<GameStateManager>();
+            }
+
+            manager.gameConfig.map.seed = new System.Random().Next();
+
+            ResetState();
+        }
     }
 
     #if UNITY_EDITOR
@@ -156,9 +171,14 @@ namespace State
                 GameStateManager.ResetPlayerPosition();
             }
 
-            if (GUILayout.Button("Reset state"))
+            if (GUILayout.Button("Reset state (same seed)"))
             {
                 GameStateManager.ResetState();
+            }
+
+            if (GUILayout.Button("Reset state (new seed)"))
+            {
+                GameStateManager.ResetStateWithNewSeed();
             }
         }
     }
