@@ -1,5 +1,6 @@
 ﻿using Character.Player;
 using Map;
+using Map.Chunk;
 using Map.Tile;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ namespace EditorUtils
 
             if (showMap)
             {
-                DrawMapState(gameState.map);
+                DrawMapState(gameState.map, gameState.player);
             }
 
             if (showPlayer)
@@ -32,12 +33,21 @@ namespace EditorUtils
             }
         }
 
-        private void DrawMapState(MapState state)
+        private void DrawMapState(MapState map, PlayerState player)
         {
-            if (state?.initialConfig == null)
+            if (map?.initialConfig == null)
             {
                 return;
             }
+
+            Vector2Int chunkPosition = player.playerChunk;
+            ChunkState chunk = map.GetChunk(chunkPosition);
+
+            Vector3 center = map.GetTileCenterPosition(chunk.gridPosition + chunk.size / 2);
+            Vector2 size = chunk.size * map.runtimeConfig.tileSize;
+            
+            Gizmos.color = Color.white;
+            Gizmos.DrawWireCube(center, new Vector3(size.x, 0, size.y));
         }
 
         private void DrawPlayerState(MapState map, PlayerState state)

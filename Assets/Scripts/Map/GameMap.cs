@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Character.Player;
 using Map.Chunk;
@@ -8,29 +9,33 @@ namespace Map
 {
     public class GameMap : MonoBehaviour
     {
+        public bool Ready { get; private set; }
+        
         [SerializeField]
         private List<MapChunk> chunks;
 
         [SerializeField]
         private Vector2Int centerChunkPosition;
+        
+        private Coroutine _updateCoroutine;
 
         public void Initialize()
         {
-            UpdateChunks(GameStateManager.Current.map, GameStateManager.Current.player);
+            Ready = false;
+            
+            _updateCoroutine = StartCoroutine(UpdateChunks(GameStateManager.Current.map, GameStateManager.Current.player));
         }
 
         public void Update()
         {
-            if (GameStateManager.Current.player.playerChunk != centerChunkPosition)
+            if (_updateCoroutine == null && GameStateManager.Current.player.playerChunk != centerChunkPosition)
             {
-                UpdateChunks(GameStateManager.Current.map, GameStateManager.Current.player);
+                _updateCoroutine = StartCoroutine(UpdateChunks(GameStateManager.Current.map, GameStateManager.Current.player));
             }
         }
 
-        private void UpdateChunks(MapState map, PlayerState player)
+        private IEnumerator UpdateChunks(MapState map, PlayerState player)
         {
-            Debug.Log("UPDATE");
-            
             centerChunkPosition = player.playerChunk;
 
             Vector2Int loadedChunksDim = 2 * map.runtimeConfig.chunkRange + Vector2Int.one;
@@ -41,7 +46,7 @@ namespace Map
             for (int x = 0; x < loadedChunksDim.x; x++)
             for (int y = 0; y < loadedChunksDim.y; y++)
             {
-                needsRendering.Add(new Vector2Int(x, y) - map.runtimeConfig.chunkRange - Vector2Int.one + centerChunkPosition);
+                needsRendering.Add(new Vector2Int(x, y) - map.runtimeConfig.chunkRange + centerChunkPosition);
             }
 
             chunks ??= new List<MapChunk>();
@@ -63,8 +68,11 @@ namespace Map
 
                 Vector2Int positionForCurrentChunk = needsRendering.First();
                 needsRendering.Remove(positionForCurrentChunk);
+                toBeSkipped.Add(positionForCurrentChunk);
 
                 newChunk.Set(map, positionForCurrentChunk);
+                
+                yield return null;
             }
 
             foreach (MapChunk chunk in chunks)
@@ -86,7 +94,12 @@ namespace Map
                 needsRendering.Remove(positionForCurrentChunk);
 
                 chunk.Set(map, positionForCurrentChunk);
+
+                yield return null;
             }
+
+            _updateCoroutine = null;
+            Ready = true;
         }
     }
 }

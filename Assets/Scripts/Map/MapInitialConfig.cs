@@ -1,7 +1,6 @@
 ﻿using System;
 using Map.Generation;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Map
 {
@@ -16,7 +15,7 @@ namespace Map
         public Vector2Int initialChunks = 5 * Vector2Int.one;
 
         [Tooltip("Random seed")]
-        public int seed = Mathf.FloorToInt(Random.value * int.MaxValue);
+        public int seed;
 
         [Tooltip("Tile configs to sample from")]
         public TileWithWeight[] tiles;

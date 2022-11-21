@@ -99,7 +99,20 @@ namespace Map
         public Vector2Int GetChunkAt(Vector3 position)
         {
             Vector2Int tile = GetTileAt(position);
-            return new Vector2Int(tile.x / initialConfig.chunkSize.x, tile.y / initialConfig.chunkSize.y);
+
+            int x = tile.x / initialConfig.chunkSize.x;
+            if (tile.x < 0)
+            {
+                x--;
+            }
+            
+            int y = tile.y / initialConfig.chunkSize.y;
+            if (tile.y < 0)
+            {
+                y--;
+            }
+            
+            return new Vector2Int(x, y);
         }
 
         public Vector3 GetTileCenterPosition(int x, int y)

@@ -25,6 +25,11 @@ public class GameInitializer : MonoBehaviour
         _gameMap = GetOrCreate<GameMap>("Terrain");
         _gameMap.Initialize();
 
+        while (!_gameMap.Ready)
+        {
+            yield return null;
+        }
+
         Debug.Log("Done.");
         
         Debug.Log("Spawning player...");
