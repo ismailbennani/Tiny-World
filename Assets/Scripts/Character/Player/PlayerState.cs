@@ -1,8 +1,7 @@
 ﻿using System;
-using Character.Player;
 using UnityEngine;
 
-namespace State
+namespace Character.Player
 {
     [Serializable]
     public class PlayerState

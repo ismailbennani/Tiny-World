@@ -1,10 +1,9 @@
 ﻿using System;
-using Map;
 using Map.Tile;
 using UnityEngine;
 using Utils;
 
-namespace State
+namespace Map
 {
     [Serializable]
     public class MapState

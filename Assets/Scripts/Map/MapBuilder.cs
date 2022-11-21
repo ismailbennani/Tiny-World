@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Map.Tile;
-using State;
 using UnityEngine;
-using Utils;
 
 namespace Map
 {

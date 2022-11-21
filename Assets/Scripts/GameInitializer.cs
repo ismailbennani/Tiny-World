@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using Character.Player;
 using Map;
-using State;
 using UnityEngine;
 
 public class GameInitializer : MonoBehaviour

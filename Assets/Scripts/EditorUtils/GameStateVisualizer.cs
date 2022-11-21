@@ -1,8 +1,8 @@
-﻿using Map.Tile;
-using State;
+﻿using Character.Player;
+using Map;
+using Map.Tile;
 using UnityEditor;
 using UnityEngine;
-using Utils;
 
 namespace EditorUtils
 {

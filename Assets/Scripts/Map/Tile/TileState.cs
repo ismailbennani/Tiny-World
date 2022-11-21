@@ -1,8 +1,7 @@
 ﻿using System;
-using Map.Tile;
 using UnityEngine;
 
-namespace State
+namespace Map.Tile
 {
     [Serializable]
     public class TileState
