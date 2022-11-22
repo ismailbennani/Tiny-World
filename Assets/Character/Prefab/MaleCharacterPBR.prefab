@@ -914,6 +914,8 @@ GameObject:
   - component: {fileID: 4151355903617304371}
   - component: {fileID: 1531707133698989256}
   - component: {fileID: 7938802212277382612}
+  - component: {fileID: 3715273478418978869}
+  - component: {fileID: 6140264540849444956}
   m_Layer: 0
   m_Name: MaleCharacterPBR
   m_TagString: Untagged
@@ -1076,6 +1078,34 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 734c2f9aa1f34eed840da1084e21ea56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3715273478418978869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2884381706308074633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8678b99bdf441478897d0621a217865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onCallbackChange:
+    m_PersistentCalls:
+      m_Calls: []
+  callbacks: []
+--- !u!114 &6140264540849444956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2884381706308074633}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c64e9ec6c0f6454f86f81ed5667cb678, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2904285140388480064
