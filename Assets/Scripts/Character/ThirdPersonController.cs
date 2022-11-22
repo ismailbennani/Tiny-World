@@ -81,7 +81,7 @@ namespace Character
 
         private Animator _animator;
         private CharacterController _controller;
-        private PlayerInputSource _playerInputSource;
+        private PlayerControllerInputSource _playerControllerInputSource;
         private GameObject _mainCamera;
 
         private bool _hasAnimator;
@@ -100,7 +100,7 @@ namespace Character
 
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
-            _playerInputSource = GetComponent<PlayerInputSource>();
+            _playerControllerInputSource = GetComponent<PlayerControllerInputSource>();
             GetComponent<PlayerInput>();
 
             AssignAnimationIDs();
@@ -145,20 +145,20 @@ namespace Character
         private void Move()
         {
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _playerInputSource.sprint ? sprintSpeed : moveSpeed;
+            float targetSpeed = _playerControllerInputSource.sprint ? sprintSpeed : moveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (_playerInputSource.move == Vector2.zero) targetSpeed = 0.0f;
+            if (_playerControllerInputSource.move == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
             Vector3 velocity = _controller.velocity;
             float currentHorizontalSpeed = new Vector3(velocity.x, 0.0f, velocity.z).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = _playerInputSource.analogMovement ? _playerInputSource.move.magnitude : 1f;
+            float inputMagnitude = _playerControllerInputSource.analogMovement ? _playerControllerInputSource.move.magnitude : 1f;
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
@@ -179,11 +179,11 @@ namespace Character
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(_playerInputSource.move.x, 0.0f, _playerInputSource.move.y).normalized;
+            Vector3 inputDirection = new Vector3(_playerControllerInputSource.move.x, 0.0f, _playerControllerInputSource.move.y).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (_playerInputSource.move != Vector2.zero)
+            if (_playerControllerInputSource.move != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
 
@@ -227,7 +227,7 @@ namespace Character
                 }
 
                 // Jump
-                if (_playerInputSource.jump && _jumpTimeoutDelta <= 0.0f)
+                if (_playerControllerInputSource.jump && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
@@ -265,7 +265,7 @@ namespace Character
                 }
 
                 // if we are not grounded, do not jump
-                _playerInputSource.jump = false;
+                _playerControllerInputSource.jump = false;
             }
 
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)

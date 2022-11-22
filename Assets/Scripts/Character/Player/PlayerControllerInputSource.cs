@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace Character.Player
 {
-	public class PlayerInputSource : MonoBehaviour
+	public class PlayerControllerInputSource : MonoBehaviour
 	{
 		[Header("Character Input Values")]
 		public Vector2 move;
