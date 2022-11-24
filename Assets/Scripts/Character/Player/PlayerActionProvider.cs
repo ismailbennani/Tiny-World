@@ -2,13 +2,14 @@
 using Input;
 using Map;
 using Map.Tile;
+using Resource;
 using UnityEngine;
 
 namespace Character.Player
 {
     public class PlayerActionProvider : MonoBehaviour
     {
-        private Vector2Int? _lastKnownPlayerPosition;
+        private TileState _lastKnownPlayerTile;
 
         private GatherResourceController _playerGatherResourceController;
 
@@ -33,27 +34,40 @@ namespace Character.Player
         private void AddInteractCallback(GameState state)
         {
             Vector2Int playerPosition = state.player.playerTile;
-            if (playerPosition == _lastKnownPlayerPosition)
+            if (playerPosition == _lastKnownPlayerTile?.position)
             {
                 return;
             }
 
-            _lastKnownPlayerPosition = playerPosition;
             TileState tile = state.map.GetTile(playerPosition);
 
             if (tile.HasResource)
             {
-                GameInputCallback callback = GetCollectResourceCallback(tile);
-                
-                if (callback != null)
-                {
-                    GameInputCallbackManager.Instance.Register(GameInputType.Interact, this, callback);
-                }
+                Register(tile);
             }
             else
             {
-                GameInputCallbackManager.Instance.Unregister(GameInputType.Interact, this);
+                Unregister();
             }
+            
+            _lastKnownPlayerTile = tile;
+        }
+
+        private void Register(TileState tile)
+        {
+            GameInputCallback callback = GetCollectResourceCallback(tile);
+
+            if (callback != null)
+            {
+                GameInputCallbackManager.Instance.Register(GameInputType.Interact, this, callback);
+                tile.onDepleted.AddListener(Unregister);
+            }
+        }
+
+        private void Unregister()
+        {
+            _lastKnownPlayerTile?.onDepleted.RemoveListener(Unregister);
+            GameInputCallbackManager.Instance.Unregister(GameInputType.Interact, this);
         }
 
         private GameInputCallback GetCollectResourceCallback(TileState tile)

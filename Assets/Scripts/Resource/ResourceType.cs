@@ -1,4 +1,4 @@
-﻿namespace Map.Tile
+﻿namespace Resource
 {
     public enum ResourceType
     {

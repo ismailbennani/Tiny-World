@@ -25,6 +25,14 @@ namespace Map.Tile
             SpawnResource();
         }
 
+        void Update()
+        {
+            if (!state.HasResource && _resource)
+            {
+                DestroyResource();
+            }
+        }
+
         private void SpawnPlatform()
         {
             if (_platform)
@@ -42,16 +50,21 @@ namespace Map.Tile
 
         private void SpawnResource()
         {
-            if (_resource)
-            {
-                DestroyGameObject(_resource);
-            }
+            DestroyResource();
 
             MapTileResource prefab = resourcePrefabs.SingleOrDefault(m => m.type == state.config.resource)?.prefab;
             if (prefab)
             {
                 _resource = Instantiate(prefab, transform);
                 _resource.SetTile(state);
+            }
+        }
+
+        private void DestroyResource()
+        {
+            if (_resource)
+            {
+                DestroyGameObject(_resource);
             }
         }
 

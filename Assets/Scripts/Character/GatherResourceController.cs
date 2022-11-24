@@ -1,4 +1,6 @@
-﻿using Map.Tile;
+﻿using Map;
+using Map.Tile;
+using Resource;
 using UnityEngine;
 
 namespace Character
@@ -31,12 +33,37 @@ namespace Character
 
         public void Mine()
         {
+            GameState state = GameStateManager.Current;
+            if (state == null)
+            {
+                return;
+            }
+            
+            TileState tile = state.map.GetTile(state.player.playerTile);
+            if (tile.config.resource != ResourceType.Stone || !tile.HasResource)
+            {
+                return;
+            }
+            
             _currentResource = ResourceType.Stone;
             _animator.SetBool(_animIDMine, true);
+            
         }
         
         public void Chop()
         {
+            GameState state = GameStateManager.Current;
+            if (state == null)
+            {
+                return;
+            }
+            
+            TileState tile = state.map.GetTile(state.player.playerTile);
+            if (tile.config.resource != ResourceType.Wood || !tile.HasResource)
+            {
+                return;
+            }
+            
             _currentResource = ResourceType.Wood;
             _animator.SetBool(_animIDMine, true);
         }
@@ -61,7 +88,15 @@ namespace Character
                 return;
             }
 
-            Debug.Log($"GATHER {_currentResource} on {state.player.playerTile}");
+            TileState tile = state.map.GetTile(state.player.playerTile);
+            
+            int actualConsumption = tile.ConsumeResource(1);
+            state.resource.Produce(_currentResource, actualConsumption);
+
+            if (!tile.HasResource)
+            {
+                CancelGather();
+            }
         }
     }
 }
