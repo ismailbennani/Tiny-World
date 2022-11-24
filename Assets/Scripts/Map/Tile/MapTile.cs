@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Input;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Map.Tile
 {
@@ -19,46 +17,12 @@ namespace Map.Tile
         private MapTilePlatform _platform;
         private MapTileResource _resource;
 
-        private bool _callbackIsRegistered;
-
-        public void OnEnable()
-        {
-            _callbackIsRegistered = false; // callbacks are not serialized
-        }
-
         public void SetConfig(TileState tileConfig)
         {
             state = tileConfig;
 
             SpawnPlatform();
             SpawnResource();
-        }
-
-        void Update()
-        {
-            if (GameStateManager.Current.player.playerTile == state.position)
-            {
-                if (!_callbackIsRegistered)
-                {
-                    UnityEvent callback = new();
-                    callback.AddListener(OnPing);
-                    GameInputCallbackManager.Instance.Register(GameInputType.Interact, this, new GameInputCallback("Ping", OnPing));
-
-                    _callbackIsRegistered = true;
-                }
-            }
-            else
-            {
-                if (_callbackIsRegistered)
-                {
-                    GameInputCallbackManager.Instance.UnregisterAll(this);
-                }
-            }
-        }
-
-        private void OnPing()
-        {
-            Debug.Log($"PING from {state.position}!!");
         }
 
         private void SpawnPlatform()
