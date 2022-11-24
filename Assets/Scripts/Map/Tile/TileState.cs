@@ -13,6 +13,8 @@ namespace Map.Tile
         [Range(0, 3)]
         public int rotation;
 
+        public bool HasResource => config.resource != ResourceType.None;
+
         public TileState(TileConfig config, Vector2Int position, int rotation)
         {
             this.config = config;

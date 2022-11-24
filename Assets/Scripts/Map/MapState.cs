@@ -32,11 +32,29 @@ namespace Map
         public TileState GetTile(int x, int y)
         {
             int chunkX = x / initialConfig.chunkSize.x;
+            int tileX;
+            if (chunkX < 0)
+            {
+                tileX = x - (chunkX - 1) * initialConfig.chunkSize.x - 1;
+            }
+            else
+            {
+                tileX = x - chunkX * initialConfig.chunkSize.x;
+            }
+
             int chunkY = y / initialConfig.chunkSize.y;
+            int tileY;
+            if (chunkY < 0)
+            {
+                tileY = y - (chunkY - 1) * initialConfig.chunkSize.y - 1;
+            }
+            else
+            {
+                tileY = y - chunkY * initialConfig.chunkSize.y;
+            }
 
             ChunkState chunk = GetChunk(chunkX, chunkY);
-
-            return chunk.GetTile(x, y);
+            return chunk.GetTile(tileX, tileY);
         }
 
         public void PrepareChunk(int chunkX, int chunkY)

@@ -15,8 +15,16 @@ namespace Character.Player
 
         public void Update()
         {
+            PlayerController controller = PlayerController.Instance;
+            if (!controller)
+            {
+                return;
+            }
+
+            position = controller.transform.position;
+            
             GameState state = GameStateManager.Current;
-            if (state.map == null)
+            if (!state || state.map == null)
             {
                 return;
             }
