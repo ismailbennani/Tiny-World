@@ -10,6 +10,15 @@ namespace Character.Player
     {
         private Vector2Int? _lastKnownPlayerPosition;
 
+        private GatherResourceController _playerGatherResourceController;
+
+        void Start()
+        {
+            PlayerController playerController = PlayerController.Instance;
+            
+            playerController.gameObject.TryGetComponent(out _playerGatherResourceController);
+        }
+
         void Update()
         {
             GameState state = GameStateManager.Current;
@@ -34,8 +43,12 @@ namespace Character.Player
 
             if (tile.HasResource)
             {
-                GameInputCallback callback = GetMineResourceCallback(tile);
-                GameInputCallbackManager.Instance.Register(GameInputType.Interact, this, callback);
+                GameInputCallback callback = GetCollectResourceCallback(tile);
+                
+                if (callback != null)
+                {
+                    GameInputCallbackManager.Instance.Register(GameInputType.Interact, this, callback);
+                }
             }
             else
             {
@@ -43,17 +56,25 @@ namespace Character.Player
             }
         }
 
-        private GameInputCallback GetMineResourceCallback(TileState tile)
+        private GameInputCallback GetCollectResourceCallback(TileState tile)
         {
-            string name = tile.config.resource switch
+            if (!_playerGatherResourceController)
             {
-                ResourceType.None => throw new InvalidOperationException("Cannot mine tile with no resource"),
-                ResourceType.Wood => "Chop",
-                ResourceType.Stone => "Mine",
-                _ => throw new ArgumentOutOfRangeException(nameof(tile.config.resource), tile.config.resource, null)
-            };
-
-            return new GameInputCallback(name, () => Debug.Log($"MINE at {tile.position}"));
+                return null;
+            }
+            
+            switch (tile.config.resource)
+            {
+                case ResourceType.None:
+                    Debug.LogWarning("Cannot mine tile with no resource");
+                    return null;
+                case ResourceType.Wood:
+                    return _playerGatherResourceController.allowChop ? new GameInputCallback("Chop", _playerGatherResourceController.Chop) : null;
+                case ResourceType.Stone:
+                    return _playerGatherResourceController.allowMine ? new GameInputCallback("Mine", _playerGatherResourceController.Mine) : null;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(tile.config.resource), tile.config.resource, null);
+            }
         }
     }
 }

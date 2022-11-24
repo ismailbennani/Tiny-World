@@ -1,5 +1,6 @@
 ﻿using Character.Player;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -59,6 +60,10 @@ namespace Character
 
         [Header("Camera")]
         public Transform cameraTarget;
+
+        [Header("Events")]
+        public UnityEvent onMoveStart = new();
+        public UnityEvent onMoveEnd = new();
     
         // player
         private float _speed;
@@ -85,19 +90,16 @@ namespace Character
         private GameObject _mainCamera;
 
         private bool _hasAnimator;
+        private bool _moving;
 
-        private void Awake()
+        void Start()
         {
             // get a reference to our main camera
             if (_mainCamera == null)
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
-        }
-
-        private void Start()
-        {
-
+            
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _playerControllerInputSource = GetComponent<PlayerControllerInputSource>();
@@ -190,8 +192,23 @@ namespace Character
                 float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, rotationSmoothTime);
 
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
-            }
 
+                if (!_moving)
+                {
+                    onMoveStart?.Invoke();
+                }
+                
+                _moving = true;
+            }
+            else
+            {
+                if (_moving)
+                {
+                    onMoveEnd?.Invoke();
+                }
+                
+                _moving = false;
+            }
 
             Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
