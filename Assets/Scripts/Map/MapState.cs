@@ -31,18 +31,18 @@ namespace Map
 
         public TileState GetTile(int x, int y)
         {
-            int chunkX = (x+1) / initialConfig.chunkSize.x;
+            int chunkX = (x < 0 ? x + 1 : x) / initialConfig.chunkSize.x;
             if (x < 0)
             {
                 chunkX--;
             }
-            
-            int chunkY = (y+1) / initialConfig.chunkSize.y;
+
+            int chunkY = (y < 0 ? y + 1 : y) / initialConfig.chunkSize.y;
             if (y < 0)
             {
                 chunkY--;
             }
-            
+
             int tileX = x - chunkX * initialConfig.chunkSize.x;
             int tileY = y - chunkY * initialConfig.chunkSize.y;
 
@@ -116,13 +116,13 @@ namespace Map
             {
                 x--;
             }
-            
+
             int y = tile.y / initialConfig.chunkSize.y;
             if (tile.y < 0)
             {
                 y--;
             }
-            
+
             return new Vector2Int(x, y);
         }
 

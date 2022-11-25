@@ -60,11 +60,15 @@ namespace Character
 
         [Header("Camera")]
         public Transform cameraTarget;
+        public float cameraRotationSmoothTime = 0.1f;
+        public float cameraAngle;
+        public float zoomSpeed = 0.1f;
+        public float zoomLevel;
 
         [Header("Events")]
         public UnityEvent onMoveStart = new();
         public UnityEvent onMoveEnd = new();
-    
+
         // player
         private float _speed;
         private float _animationBlend;
@@ -72,6 +76,7 @@ namespace Character
         private float _rotationVelocity;
         private float _verticalVelocity;
         private float _terminalVelocity = 53.0f;
+        private float _cameraRotationVelocity;
 
         // timeout delta time
         private float _jumpTimeoutDelta;
@@ -99,7 +104,7 @@ namespace Character
             {
                 _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
             }
-            
+
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _playerControllerInputSource = GetComponent<PlayerControllerInputSource>();
@@ -119,6 +124,7 @@ namespace Character
             JumpAndGravity();
             GroundedCheck();
             Move();
+            UpdateCamera();
         }
 
         private void AssignAnimationIDs()
@@ -197,7 +203,7 @@ namespace Character
                 {
                     onMoveStart?.Invoke();
                 }
-                
+
                 _moving = true;
             }
             else
@@ -206,7 +212,7 @@ namespace Character
                 {
                     onMoveEnd?.Invoke();
                 }
-                
+
                 _moving = false;
             }
 
@@ -292,6 +298,20 @@ namespace Character
             }
         }
 
+        private void UpdateCamera()
+        {
+            cameraAngle = Mathf.SmoothDampAngle(
+                              cameraAngle,
+                              cameraAngle + _playerControllerInputSource.look * 10,
+                              ref _cameraRotationVelocity,
+                              cameraRotationSmoothTime
+                          )
+                          % 360;
+
+            float targetZoom = _playerControllerInputSource.zoom > 0.5 ? 1 : _playerControllerInputSource.zoom < -0.5 ? 0 : zoomLevel;
+            zoomLevel = Mathf.SmoothStep(zoomLevel, targetZoom, zoomSpeed);
+        }
+
         private void OnDrawGizmosSelected()
         {
             Color transparentGreen = new(0.0f, 1.0f, 0.0f, 0.35f);
@@ -318,7 +338,7 @@ namespace Character
             {
                 return;
             }
-        
+
             int index = Random.Range(0, footstepAudioClips.Length);
             AudioSource.PlayClipAtPoint(footstepAudioClips[index], transform.TransformPoint(_controller.center), footstepAudioVolume);
         }

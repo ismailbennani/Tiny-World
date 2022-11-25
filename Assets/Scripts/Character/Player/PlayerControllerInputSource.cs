@@ -9,6 +9,8 @@ namespace Character.Player
 		public Vector2 move;
 		public bool jump;
 		public bool sprint;
+		public float look;
+		public float zoom;
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
@@ -28,6 +30,16 @@ namespace Character.Player
 			SprintInput(value.isPressed);
 		}
 
+		public void OnLook(InputValue value)
+		{
+			LookInput(value.Get<float>());
+		}
+
+		public void OnZoom(InputValue value)
+		{
+			ZoomInput(value.Get<float>());
+		}
+
 		public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
@@ -41,6 +53,16 @@ namespace Character.Player
 		public void SprintInput(bool newSprintState)
 		{
 			sprint = newSprintState;
+		}
+
+		private void LookInput(float delta)
+		{
+			look = delta;
+		}
+
+		private void ZoomInput(float delta)
+		{
+			zoom = delta;
 		}
 	}
 }
