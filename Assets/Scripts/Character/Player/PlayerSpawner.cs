@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections;
-using Cinemachine;
+﻿using System.Collections;
 using UnityEngine;
 
 namespace Character.Player
 {
     public class PlayerSpawner : MonoBehaviour
     {
-        [Header("Camera")]
-        public CinemachineVirtualCamera mainCamera;
-
         public bool Ready { get; private set; }
         
         private ThirdPersonController player;
 
         public IEnumerator Spawn()
         {
-            mainCamera = FindObjectOfType<CinemachineVirtualCamera>() ?? throw new InvalidOperationException("No camera found");
-            
             Ready = false;
 
             if (!player)
@@ -27,14 +20,6 @@ namespace Character.Player
 
                 player = Instantiate(config.prefab, playerState.position, Quaternion.identity, transform);
             }
-
-            if (!mainCamera)
-            {
-                throw new InvalidOperationException("Please set camera");
-            }
-
-            mainCamera.Follow = player.cameraTarget;
-            mainCamera.LookAt = player.cameraTarget;
         
             Ready = true;
 
