@@ -33,6 +33,7 @@ namespace Character.Player
                 throw new InvalidOperationException("Please set camera");
             }
 
+            mainCamera.Follow = player.cameraTarget;
             mainCamera.LookAt = player.cameraTarget;
         
             Ready = true;

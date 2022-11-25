@@ -1053,6 +1053,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   cameraTarget: {fileID: 8085402067943711189}
+  cameraRotationSmoothTime: 0.1
+  cameraAngle: 0
+  zoomSpeed: 0.1
+  zoomLevel: 0.5
   onMoveStart:
     m_PersistentCalls:
       m_Calls: []
@@ -1074,6 +1078,8 @@ MonoBehaviour:
   move: {x: 0, y: 0}
   jump: 0
   sprint: 0
+  look: 0
+  zoom: 0
   analogMovement: 0
 --- !u!114 &3715273478418978869
 MonoBehaviour:
@@ -2398,6 +2404,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8085402067943711189}
+  - component: {fileID: 6837843082394957041}
   m_Layer: 0
   m_Name: CameraTarget
   m_TagString: Untagged
@@ -2420,6 +2427,18 @@ Transform:
   m_Father: {fileID: 2543602836572268083}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6837843082394957041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6965668487648110178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ea102bb638944c6a2813815628126d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7124804067404846336
 GameObject:
   m_ObjectHideFlags: 0
