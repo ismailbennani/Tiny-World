@@ -1087,8 +1087,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e2251cf86e16ea74db3db43bcebb93c4, type: 3}
   - {fileID: 8300000, guid: 8abb6302b39924b4480a547bcd341f48, type: 3}
   footstepAudioVolume: 0.5
-  jumpHeight: 1.2
-  gravity: -15
+  jumpHeight: 0.8
+  gravity: -30
   jumpTimeout: 0.5
   fallTimeout: 0.15
   grounded: 1
