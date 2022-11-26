@@ -29,9 +29,10 @@ namespace Map.Tile
 
             generationConfig = new GenerationConfig
             {
-                rotation = Random.Range(0, 4),
-                platformVariant = Random.Range(0, config.nPlatformVariants + 1),
-                resourceVariant = Random.Range(0, config.nResourceVariants + 1),
+                platformRotation = (uint)Random.Range(int.MinValue, int.MaxValue),
+                platformVariant = (uint)Random.Range(int.MinValue, int.MaxValue),
+                resourceRotation = (uint)Random.Range(int.MinValue, int.MaxValue),
+                resourceVariant = (uint)Random.Range(int.MinValue, int.MaxValue),
             };
 
             if (this.config.resource != ResourceType.None)
@@ -65,9 +66,9 @@ namespace Map.Tile
     [Serializable]
     public class GenerationConfig
     {
-        [Range(0, 3)]
-        public int rotation;
-        public int platformVariant;
-        public int resourceVariant;
+        public uint platformRotation;
+        public uint platformVariant;
+        public uint resourceRotation;
+        public uint resourceVariant;
     }
 }

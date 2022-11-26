@@ -22,11 +22,14 @@ namespace Map.Tile
         private MapTilePlatform _platform;
         private MapTileResource _resource;
 
+
         private TileType _currentPlatform;
-        private int _currentPlatformVariant;
+        private uint _currentPlatformVariant;
+        private uint _currentPlatformRotation;
 
         private ResourceType _currentResource;
-        private int _currentResourceVariant;
+        private uint _currentResourceVariant;
+        private uint _currentResourceRotation;
 
         private void OnEnable()
         {
@@ -112,11 +115,13 @@ namespace Map.Tile
                 return;
             }
 
-            if (newState.config.type == _currentPlatform && newState.generationConfig.platformVariant == _currentPlatformVariant)
+            if (newState.config.type == _currentPlatform
+                && newState.generationConfig.platformVariant == _currentPlatformVariant
+                && newState.generationConfig.platformRotation == _currentPlatformRotation)
             {
                 return;
             }
-            
+
             _currentPlatform = newState.config.type;
             _currentPlatformVariant = newState.generationConfig.platformVariant;
 
@@ -132,6 +137,10 @@ namespace Map.Tile
             if (prefab)
             {
                 _platform = Instantiate(prefab, transform);
+
+                int rotation = (int)(newState.generationConfig.platformRotation % 4);
+                _platform.transform.rotation = Quaternion.Euler(0, 90 * rotation, 0);
+
                 _platform.SetTile(newState);
             }
         }
@@ -144,13 +153,16 @@ namespace Map.Tile
                 return;
             }
 
-            if (newState.config.resource == _currentResource && newState.generationConfig.resourceVariant == _currentResourceVariant)
+            if (newState.config.resource == _currentResource
+                && newState.generationConfig.resourceVariant == _currentResourceVariant
+                && newState.generationConfig.resourceRotation == _currentResourceRotation)
             {
                 return;
             }
-            
+
             _currentResource = newState.config.resource;
             _currentResourceVariant = newState.generationConfig.resourceVariant;
+            _currentPlatformRotation = newState.generationConfig.platformRotation;
 
             DestroyGameObject(_resource);
 
@@ -169,6 +181,10 @@ namespace Map.Tile
             if (prefab)
             {
                 _resource = Instantiate(prefab, transform);
+
+                int rotation = (int)(newState.generationConfig.resourceRotation % 4);
+                _resource.transform.rotation = Quaternion.Euler(0, 90 * rotation, 0);
+
                 _resource.SetTile(newState);
             }
         }
