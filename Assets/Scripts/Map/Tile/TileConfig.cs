@@ -8,7 +8,9 @@ namespace Map.Tile
     {
         public TileType type;
         public ResourceType resource;
-        
+        public int nPlatformVariants = 1;
+        public int nResourceVariants = 1;
+
         public static TileConfig Empty => new();
     }
 }

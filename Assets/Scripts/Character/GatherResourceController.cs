@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using Map;
 using Map.Tile;
 using Resource;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Character
 {
     public class GatherResourceController : MonoBehaviour
     {
-        public GatheredResourceParams mine;
-        public GatheredResourceParams chop;
-
+        public bool allowMine;
+        public bool allowChop;
+        
         private int _animIDMine;
         private int _animIDChop;
 
@@ -82,102 +80,39 @@ namespace Character
         {
             if (_currentResource == ResourceType.None)
             {
+                Debug.LogWarning($"Invalid state: {nameof(_currentResource)} cannot be {ResourceType.None}");
                 return;
             }
             
             GameState state = GameStateManager.Current;
             if (state == null)
             {
+                Debug.LogWarning($"Invalid state: {nameof(GameState)} cannot be null");
+                return;
+            }
+
+            GameMap map = GameMap.Instance;
+            if (!map)
+            {
+                Debug.LogWarning($"Invalid state: {nameof(GameMap)} cannot be null");
                 return;
             }
 
             TileState tile = state.map.GetTile(state.player.playerTile);
             
-            int actualConsumption = tile.ConsumeResource(1);
-            state.resource.Produce(_currentResource, actualConsumption);
+            MapTile mapTile = map.GetTile(tile);
+            if (!mapTile)
+            {
+                Debug.LogWarning($"Invalid state: tile {tile.position} is not rendered");
+                return;
+            }
 
-            PlayParticles(_currentResource);
-            PlayClip(_currentResource);
-
-            TriggerResourceAnimation(tile);
+            tile.ConsumeResource(1);
 
             if (!tile.HasResource)
             {
                 CancelGather();
             }
-        }
-
-        private void PlayParticles(ResourceType resource)
-        {
-            switch (resource)
-            {
-                case ResourceType.None:
-                    throw new InvalidOperationException("Cannot happen");
-                case ResourceType.Wood:
-                    PlayParticles(chop.particles, new Vector3(0, 0.5f, 0.2f));
-                    break;
-                case ResourceType.Stone:
-                    PlayParticles(mine.particles, new Vector3(0, 0, 0.2f));
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private void PlayParticles(IReadOnlyList<GameObject> particles, Vector3 offset)
-        {
-            if (particles.Count <= 0)
-            {
-                return;
-            }
-
-            int index = Random.Range(0, particles.Count);
-            Instantiate(particles[index], offset, Quaternion.identity, transform);
-        }
-
-        private void PlayClip(ResourceType resource)
-        {
-            switch (resource)
-            {
-                case ResourceType.None:
-                    throw new InvalidOperationException("Cannot happen");
-                case ResourceType.Wood:
-                    PlayClip(chop.audioClips, chop.audioVolume);
-                    break;
-                case ResourceType.Stone:
-                    PlayClip(mine.audioClips, mine.audioVolume);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private void PlayClip(IReadOnlyList<AudioClip> clips, float volume)
-        {
-            if (clips.Count <= 0)
-            {
-                return;
-            }
-
-            int index = Random.Range(0, clips.Count);
-            AudioSource.PlayClipAtPoint(clips[index], transform.position, volume);
-        }
-
-        private void TriggerResourceAnimation(TileState tile)
-        {
-            GameMap map = GameMap.Instance;
-            if (!map)
-            {
-                return;
-            }
-
-            MapTile mapTile = map.GetTile(tile);
-            if (!mapTile)
-            {
-                return;
-            }
-            
-            mapTile.TriggerResourceAnimation();
         }
     }
 

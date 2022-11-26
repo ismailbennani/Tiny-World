@@ -2,6 +2,7 @@
 using Resource;
 using UnityEngine;
 using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 namespace Map.Tile
 {
@@ -12,22 +13,26 @@ namespace Map.Tile
         public UnityEvent onDepleted = new();
         
         public TileConfig config;
+        public GenerationConfig generationConfig;
 
         public Vector2Int position;
-        
-        [Range(0, 3)]
-        public int rotation;
 
         [Header("Resource")]
         public int resourceQuantity;
 
         public bool HasResource => config.resource != ResourceType.None && resourceQuantity > 0;
 
-        public TileState(TileConfig config, Vector2Int position, int rotation)
+        public TileState(TileConfig config, Vector2Int position)
         {
             this.config = config;
             this.position = position;
-            this.rotation = Mathf.Clamp(rotation, 0, 3);
+
+            generationConfig = new GenerationConfig
+            {
+                rotation = Random.Range(0, 4),
+                platformVariant = Random.Range(0, config.nPlatformVariants + 1),
+                resourceVariant = Random.Range(0, config.nResourceVariants + 1),
+            };
 
             if (this.config.resource != ResourceType.None)
             {
@@ -55,5 +60,14 @@ namespace Map.Tile
 
             return actualQuantity;
         }
+    }
+
+    [Serializable]
+    public class GenerationConfig
+    {
+        [Range(0, 3)]
+        public int rotation;
+        public int platformVariant;
+        public int resourceVariant;
     }
 }

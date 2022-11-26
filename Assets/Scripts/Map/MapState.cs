@@ -5,7 +5,6 @@ using Map.Chunk;
 using Map.Generation;
 using Map.Tile;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace Map
 {
@@ -78,9 +77,8 @@ namespace Map
             {
                 Vector2Int tilePosition = chunkGridPosition + new Vector2Int(x, y);
                 TileConfig tileConfig = _mapGenerator.GenerateTile(tilePosition);
-                int rotation = Random.Range(0, 4);
 
-                tiles.Add(new TileState(tileConfig, tilePosition, rotation));
+                tiles.Add(new TileState(tileConfig, tilePosition));
             }
 
             ChunkState newChunk = new()

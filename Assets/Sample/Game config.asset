@@ -15,29 +15,37 @@ MonoBehaviour:
   mapInitialConfig:
     chunkSize: {x: 10, y: 10}
     initialChunks: {x: 5, y: 5}
-    seed: 1876943519
+    seed: 859997948
     tiles:
     - tileConfig:
         type: 1
         resource: 0
+        nPlatformVariants: 1
+        nResourceVariants: 1
       weight: 5
     - tileConfig:
         type: 2
         resource: 0
+        nPlatformVariants: 1
+        nResourceVariants: 1
       weight: 3
     - tileConfig:
         type: 1
         resource: 1
-      weight: 1
+        nPlatformVariants: 1
+        nResourceVariants: 1
+      weight: 0.5
     - tileConfig:
         type: 2
         resource: 2
-      weight: 1
+        nPlatformVariants: 1
+        nResourceVariants: 1
+      weight: 0.5
     mapGenerationAlgorithm: 0
   mapRuntimeConfig:
     baseChunk: {fileID: 3329574202506706147, guid: 334e0a40afcf1454093e45738771de00, type: 3}
     baseTile: {fileID: 1500428027516698341, guid: 3612d7d2dd1298745b5b3c1d9b19f7c2, type: 3}
-    chunkRange: {x: 2, y: 2}
+    chunkRange: {x: 1, y: 1}
     tileSize: {x: 4, y: 4}
     resourceScale: 4
   player:
