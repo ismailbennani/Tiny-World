@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Character.Player
 {
@@ -14,32 +13,7 @@ namespace Character.Player
 
 		[Header("Movement Settings")]
 		public bool analogMovement;
-
-		public void OnMove(InputValue value)
-		{
-			MoveInput(value.Get<Vector2>());
-		}
-
-		public void OnJump(InputValue value)
-		{
-			JumpInput(value.isPressed);
-		}
-
-		public void OnSprint(InputValue value)
-		{
-			SprintInput(value.isPressed);
-		}
-
-		public void OnLook(InputValue value)
-		{
-			LookInput(value.Get<float>());
-		}
-
-		public void OnZoom(InputValue value)
-		{
-			ZoomInput(value.Get<float>());
-		}
-
+		
 		public void MoveInput(Vector2 newMoveDirection)
 		{
 			move = newMoveDirection;
@@ -55,12 +29,12 @@ namespace Character.Player
 			sprint = newSprintState;
 		}
 
-		private void LookInput(float delta)
+		public void LookInput(float delta)
 		{
 			look = delta;
 		}
 
-		private void ZoomInput(float delta)
+		public void ZoomInput(float delta)
 		{
 			zoom = delta;
 		}
