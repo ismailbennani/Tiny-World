@@ -61,7 +61,10 @@ namespace Map.Tile
                 return;
             }
 
-            Debug.Log($"Loot: {string.Join(", ", items.Select(i => i.name))}");
+            foreach (Item item in items)
+            {
+                GameMap.Instance.SpawnItem(item, state.position);
+            }
 
             PlayLootClip();
 

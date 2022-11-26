@@ -11,6 +11,7 @@ using UnityEngine;
 public class GameStateManager : MonoBehaviour
 {
     public static GameStateManager Instance { get; private set; }
+    public static GameConfig Config => Instance ? Instance.gameConfig : null;
     public static GameState Current => Instance ? Instance.currentState : null;
     public static bool Ready => Instance && Instance.ready;
 
@@ -86,6 +87,12 @@ public class GameStateManager : MonoBehaviour
             position = currentState.map.GetTileCenterPosition(manager.gameConfig.player.spawnTile)
         };
 
+        Debug.Log("Done.");
+        
+        Debug.Log("Copying other configs...");
+
+        currentState.itemsConfig = manager.gameConfig.items;
+        
         Debug.Log("Done.");
 
         manager.ready = true;

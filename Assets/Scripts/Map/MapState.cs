@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Items;
 using Map.Chunk;
 using Map.Generation;
 using Map.Tile;
@@ -16,8 +17,8 @@ namespace Map
         public MapInitialConfig initialConfig;
         public MapRuntimeConfig runtimeConfig;
 
-        [SerializeField]
         public List<ChunkState> chunks;
+        public List<ItemState> items;
 
         private IMapGenerator _mapGenerator;
 
@@ -48,6 +49,12 @@ namespace Map
         public ChunkState GetChunk(int chunkX, int chunkY)
         {
             return chunks.SingleOrDefault(c => c.position.x == chunkX && c.position.y == chunkY) ?? GenerateChunk(chunkX, chunkY);
+        }
+
+        public IEnumerable<ItemState> GetItemsInChunk(int chunkX, int chunkY)
+        {
+            Rect chunkRect = GetChunkRect(chunkX, chunkY);
+            return items.Where(i => chunkRect.Contains(new Vector2(i.position.x, i.position.z)));
         }
 
         private ChunkState GenerateChunk(int chunkX, int chunkY)
@@ -119,9 +126,19 @@ namespace Map
             return (chunkX, chunkY);
         }
 
-        public Vector3 GetTileCenterPosition(int x, int y)
+        public Rect GetTileRect(int x, int y)
         {
-            return new Vector3(x * runtimeConfig.tileSize.x, 0, y * runtimeConfig.tileSize.y);
+            Vector2 start = new(x * runtimeConfig.tileSize.x, y * runtimeConfig.tileSize.y);
+            
+            return new Rect(start, runtimeConfig.tileSize);
+        }
+
+        public Rect GetChunkRect(int chunkX, int chunkY)
+        {
+            Vector2 size = new(initialConfig.chunkSize.x * runtimeConfig.tileSize.x, initialConfig.chunkSize.y * runtimeConfig.tileSize.y);
+            Vector2 start = new(chunkX * size.x, chunkY * size.y);
+
+            return new Rect(start, size);
         }
 
         private IMapGenerator GetMapGenerator(MapGenerationAlgorithm algorithm)

@@ -1,4 +1,5 @@
 ﻿using Character.Player;
+using Items;
 using Map;
 using UnityEngine;
 
@@ -7,6 +8,9 @@ public class GameState: ScriptableObject
 {
     public MapState map;
     public PlayerState player;
+
+    [Header("Other configs")]
+    public ItemsRuntimeConfig itemsConfig;
 
     public bool IsValid => MapIsValid && PlayerIsValid;
 
