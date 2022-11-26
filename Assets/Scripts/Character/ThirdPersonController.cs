@@ -77,6 +77,7 @@ namespace Character
         public UnityEvent onMoveEnd = new();
 
         // player
+        private bool _isSprinting;
         private float _speed;
         private float _animationBlend;
         private float _targetRotation;
@@ -159,8 +160,14 @@ namespace Character
 
         private void Move()
         {
+            // don't change speed if we are not grounded because it would change speed mid-air
+            if (grounded)
+            {
+                _isSprinting = _playerControllerInputSource.sprint;
+            }
+            
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _playerControllerInputSource.sprint ? sprintSpeed : moveSpeed;
+            float targetSpeed = _isSprinting ? sprintSpeed : moveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
