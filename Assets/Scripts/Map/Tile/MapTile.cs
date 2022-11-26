@@ -36,7 +36,7 @@ namespace Map.Tile
             }
         }
 
-        public void SetConfig(TileState newState, bool urgent)
+        public void Spawn(TileState newState)
         {
             if (newState == null)
             {
@@ -46,11 +46,7 @@ namespace Map.Tile
 
             AddListeners(newState);
             SpawnPlatform(newState);
-
-            if (urgent)
-            {
-                SpawnResource(newState);
-            }
+            SpawnResource(newState);
 
             state = newState;
         }
@@ -253,7 +249,7 @@ namespace Map.Tile
             {
                 MapTile mapTile = target as MapTile;
 
-                mapTile.SetConfig(mapTile.state, true);
+                mapTile.Spawn(mapTile.state);
             }
         }
     }
