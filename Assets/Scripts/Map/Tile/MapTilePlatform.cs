@@ -3,10 +3,10 @@ using UnityEngine;
 
 namespace Map.Tile
 {
-    public class MapTilePlatform: MonoBehaviour
+    public class MapTilePlatform : MonoBehaviour
     {
         private TileState _state;
-        
+
         void OnEnable()
         {
             if (_state != null)
@@ -27,13 +27,8 @@ namespace Map.Tile
             {
                 yield return null;
             }
-            
-            SetSize(GameStateManager.Current.map.runtimeConfig.tileSize);
-        }
 
-        private void SetSize(Vector2 size)
-        {
-            transform.localScale = new Vector3(size.x, 1, size.y);
+            transform.localScale = new Vector3(GameStateManager.Current.map.runtimeConfig.tileSize.x, 1, GameStateManager.Current.map.runtimeConfig.tileSize.y);
         }
     }
 }

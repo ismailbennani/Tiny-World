@@ -13,8 +13,15 @@ namespace Map.Chunk
         [SerializeField]
         private MapTile baseTile;
 
-        public void Set(MapState map, Vector2Int chunk)
+        private bool _lastSetWasUrgent;
+
+        public void Set(MapState map, Vector2Int chunk, bool urgent)
         {
+            if (state?.position == chunk && (_lastSetWasUrgent || !urgent))
+            {
+                return;
+            }
+            
             state = map.GetChunk(chunk);
             baseTile = map.runtimeConfig.baseTile;
 
@@ -36,7 +43,7 @@ namespace Map.Chunk
                 (int x, int y) = MyMath.GetCoords(index, state.size);
                 TileState tileConfig = state.GetTile(x, y);
                 
-                tile.SetConfig(tileConfig);
+                tile.SetConfig(tileConfig, urgent);
 
                 Vector3 position = map.GetTileCenterPosition(x + state.gridPosition.x, y + state.gridPosition.y);
                 tile.transform.position = position;
@@ -46,8 +53,8 @@ namespace Map.Chunk
             {
                 tiles[index].gameObject.SetActive(false);
             }
+            
+            _lastSetWasUrgent = urgent;
         }
-        
-        
     }
 }

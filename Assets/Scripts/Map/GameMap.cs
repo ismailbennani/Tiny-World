@@ -66,7 +66,7 @@ namespace Map
         {
             centerChunkPosition = player.playerChunk;
 
-            HashSet<Vector2Int> chunksToRender = new()
+            HashSet<Vector2Int> chunksInView = new()
             {
                 centerChunkPosition
             };
@@ -96,10 +96,10 @@ namespace Map
                     continue;
                 }
 
-                chunksToRender.Add(chunkPosition);
+                chunksInView.Add(chunkPosition);
             }
 
-            yield return null;
+            HashSet<Vector2Int> chunksToRender = new(chunksInView);
 
             // foreach visible chunk, render its adjacent chunks
             foreach (Vector2Int chunkPosition in chunksToRender.ToArray())
@@ -108,8 +108,12 @@ namespace Map
                 chunksToRender.Add(chunkPosition + Vector2Int.down);
                 chunksToRender.Add(chunkPosition + Vector2Int.left);
                 chunksToRender.Add(chunkPosition + Vector2Int.right);
+                chunksToRender.Add(chunkPosition + Vector2Int.up + Vector2Int.left);
+                chunksToRender.Add(chunkPosition + Vector2Int.up + Vector2Int.right);
+                chunksToRender.Add(chunkPosition + Vector2Int.down + Vector2Int.left);
+                chunksToRender.Add(chunkPosition + Vector2Int.down + Vector2Int.right);
             }
-
+            
             int nVisibleChunks = chunksToRender.Count;
 
             chunks ??= new List<MapChunk>();
@@ -121,6 +125,9 @@ namespace Map
                 {
                     toBeSkipped.Add(chunk.state.position);
                     chunksToRender.Remove(chunk.state.position);
+
+                    chunk.gameObject.SetActive(true);
+                    chunk.Set(map, chunk.state.position, chunksInView.Contains(chunk.state.position));
                 }
             }
 
@@ -133,7 +140,7 @@ namespace Map
                 chunksToRender.Remove(positionForCurrentChunk);
                 toBeSkipped.Add(positionForCurrentChunk);
 
-                newChunk.Set(map, positionForCurrentChunk);
+                newChunk.Set(map, positionForCurrentChunk, chunksInView.Contains(positionForCurrentChunk));
 
                 yield return null;
             }
@@ -142,12 +149,12 @@ namespace Map
             {
                 foreach (MapChunk chunk in chunks)
                 {
-                    chunk.gameObject.SetActive(true);
-
                     if (toBeSkipped.Contains(chunk.state.position))
                     {
                         continue;
                     }
+                    
+                    chunk.gameObject.SetActive(true);
 
                     if (chunksToRender.Count == 0)
                     {
@@ -158,7 +165,7 @@ namespace Map
                     Vector2Int positionForCurrentChunk = chunksToRender.First();
                     chunksToRender.Remove(positionForCurrentChunk);
 
-                    chunk.Set(map, positionForCurrentChunk);
+                    chunk.Set(map, positionForCurrentChunk, chunksInView.Contains(positionForCurrentChunk));
 
                     yield return null;
                 }

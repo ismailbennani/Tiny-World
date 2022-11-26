@@ -12,7 +12,7 @@ namespace Map.Tile
     {
         [Header("Platforms")]
         public List<MapTilePlatformParams> platformsParams;
-        
+
         [Header("Resources")]
         public List<MapTileResourceParams> resourcesParams;
 
@@ -22,6 +22,12 @@ namespace Map.Tile
         private MapTilePlatform _platform;
         private MapTileResource _resource;
 
+        private TileType _currentPlatform;
+        private int _currentPlatformVariant;
+
+        private ResourceType _currentResource;
+        private int _currentResourceVariant;
+
         private void OnEnable()
         {
             if (state != null)
@@ -30,31 +36,23 @@ namespace Map.Tile
             }
         }
 
-        void Update()
+        public void SetConfig(TileState newState, bool urgent)
         {
-            if (state != null && GameStateManager.Current)
+            if (newState == null)
             {
-                TileState newState = GameStateManager.Current.map.GetTile(state.position);
-                if (newState != state)
-                {
-                    SetConfig(newState);
-                }
-            }
-        }
-        
-        public void SetConfig(TileState tileConfig)
-        {
-            AddListeners(tileConfig);
-            
-            state = tileConfig;
-
-            if (state == null)
-            {
+                state = null;
                 return;
             }
 
-            SpawnPlatform();
-            SpawnResource();
+            AddListeners(newState);
+            SpawnPlatform(newState);
+
+            if (urgent)
+            {
+                SpawnResource(newState);
+            }
+
+            state = newState;
         }
 
         private void OnConsume(int quantity)
@@ -70,11 +68,7 @@ namespace Map.Tile
         private void OnDepleted()
         {
             PlayDepletedClip();
-            
-            if (_resource)
-            {
-                DestroyGameObject(_resource);
-            }
+            DestroyGameObject(_resource);
         }
 
         #region Audio
@@ -86,7 +80,7 @@ namespace Map.Tile
             {
                 return;
             }
-            
+
             PlayClip(resourceParams.consumeAudioClips, resourceParams.consumeAudioVolume);
         }
 
@@ -97,7 +91,7 @@ namespace Map.Tile
             {
                 return;
             }
-            
+
             PlayClip(resourceParams.depletedAudioClips, resourceParams.depletedAudioVolume);
         }
 
@@ -114,55 +108,82 @@ namespace Map.Tile
 
         #region Setup
 
-        private void SpawnPlatform()
+        private void SpawnPlatform(TileState newState)
         {
-            if (_platform)
+            if (newState == null)
             {
                 DestroyGameObject(_platform);
+                return;
             }
 
-            MapTilePlatform[] prefabs = platformsParams.SingleOrDefault(m => m.type == state.config.type)?.prefabs;
+            if (newState.config.type == _currentPlatform && newState.generationConfig.platformVariant == _currentPlatformVariant)
+            {
+                return;
+            }
+            
+            _currentPlatform = newState.config.type;
+            _currentPlatformVariant = newState.generationConfig.platformVariant;
+
+            DestroyGameObject(_platform);
+
+            MapTilePlatform[] prefabs = platformsParams.SingleOrDefault(m => m.type == newState.config.type)?.prefabs;
             if (prefabs == null || prefabs.Length <= 0)
             {
                 return;
             }
 
-            MapTilePlatform prefab = prefabs[state.generationConfig.resourceVariant % prefabs.Length];
+            MapTilePlatform prefab = prefabs[newState.generationConfig.platformVariant % prefabs.Length];
             if (prefab)
             {
                 _platform = Instantiate(prefab, transform);
-                _platform.SetTile(state);
+                _platform.SetTile(newState);
             }
         }
 
-        private void SpawnResource()
+        private void SpawnResource(TileState newState)
         {
-            if (_resource)
+            if (newState == null)
             {
                 DestroyGameObject(_resource);
+                return;
             }
 
-            if (!state.HasResource)
+            if (newState.config.resource == _currentResource && newState.generationConfig.resourceVariant == _currentResourceVariant)
+            {
+                return;
+            }
+            
+            _currentResource = newState.config.resource;
+            _currentResourceVariant = newState.generationConfig.resourceVariant;
+
+            DestroyGameObject(_resource);
+
+            if (!newState.HasResource)
             {
                 return;
             }
 
-            MapTileResource[] prefabs = resourcesParams.SingleOrDefault(m => m.resource == state.config.resource)?.prefabs;
+            MapTileResource[] prefabs = resourcesParams.SingleOrDefault(m => m.resource == newState.config.resource)?.prefabs;
             if (prefabs == null || prefabs.Length <= 0)
             {
                 return;
             }
 
-            MapTileResource prefab = prefabs[state.generationConfig.resourceVariant % prefabs.Length];
+            MapTileResource prefab = prefabs[newState.generationConfig.resourceVariant % prefabs.Length];
             if (prefab)
             {
                 _resource = Instantiate(prefab, transform);
-                _resource.SetTile(state);
+                _resource.SetTile(newState);
             }
         }
 
         private static void DestroyGameObject(Component component)
         {
+            if (!component)
+            {
+                return;
+            }
+
             if (Application.isPlaying)
             {
                 Destroy(component.gameObject);
@@ -180,19 +201,19 @@ namespace Map.Tile
                 state.onConsume.RemoveListener(OnConsume);
                 state.onDepleted.RemoveListener(OnDepleted);
             }
-            
+
             newState.onConsume.AddListener(OnConsume);
             newState.onDepleted.AddListener(OnDepleted);
         }
 
         #endregion
     }
-    
+
     [Serializable]
     public class MapTilePlatformParams
     {
         public TileType type;
-        
+
         [Header("Prefabs")]
         [Tooltip("Available variants for this platform, see TileState.platformVariant")]
         public MapTilePlatform[] prefabs;
@@ -232,7 +253,7 @@ namespace Map.Tile
             {
                 MapTile mapTile = target as MapTile;
 
-                mapTile.SetConfig(mapTile.state);
+                mapTile.SetConfig(mapTile.state, true);
             }
         }
     }
