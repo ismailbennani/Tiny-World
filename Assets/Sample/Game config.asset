@@ -15,31 +15,31 @@ MonoBehaviour:
   mapInitialConfig:
     chunkSize: {x: 5, y: 5}
     initialChunks: {x: 4, y: 4}
-    seed: 1299130329
+    seed: 209052756
     tiles:
     - tileConfig:
         type: 1
         resource: 0
-        nPlatformVariants: 1
-        nResourceVariants: 1
+        nPlatformVariants: 100
+        nResourceVariants: 100
       weight: 5
     - tileConfig:
         type: 2
         resource: 0
-        nPlatformVariants: 1
-        nResourceVariants: 1
+        nPlatformVariants: 100
+        nResourceVariants: 100
       weight: 3
     - tileConfig:
         type: 1
         resource: 1
-        nPlatformVariants: 1
-        nResourceVariants: 1
+        nPlatformVariants: 100
+        nResourceVariants: 100
       weight: 0.5
     - tileConfig:
         type: 2
         resource: 2
-        nPlatformVariants: 1
-        nResourceVariants: 1
+        nPlatformVariants: 100
+        nResourceVariants: 100
       weight: 0.5
     mapGenerationAlgorithm: 0
   mapRuntimeConfig:
