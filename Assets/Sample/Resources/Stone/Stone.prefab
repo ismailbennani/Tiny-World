@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6190243821772391621}
   - component: {fileID: 8628220915447311663}
+  - component: {fileID: 1862273192063383705}
   m_Layer: 0
   m_Name: Stone
   m_TagString: Untagged
@@ -47,6 +48,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb4760652d5f44bd8189fd05a39e1aa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!95 &1862273192063383705
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8741518820177202670}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 4f2c729bc9408f743b74659b1d40350d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &2686927521726725776
 PrefabInstance:
   m_ObjectHideFlags: 0

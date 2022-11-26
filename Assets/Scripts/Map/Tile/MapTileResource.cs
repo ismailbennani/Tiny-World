@@ -13,7 +13,7 @@ namespace Map.Tile
         void OnEnable()
         {
             _animator = GetComponent<Animator>();
-            _animatorGatherId = Animator.StringToHash("Gather");
+            _animatorGatherId = Animator.StringToHash("Consume");
             
             if (_state != null)
             {
