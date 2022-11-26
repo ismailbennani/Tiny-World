@@ -56,8 +56,8 @@ namespace Map
             }
 
             Vector2Int chunkPosition = state.map.GetChunkPositionAt(tile.position);
-            ChunkState chunk = state.map.GetChunk(chunkPosition);
-            return chunks.SingleOrDefault(c => c.state == chunk)?.tiles.SingleOrDefault(t => t.state == tile);
+            MapChunk chunk = chunks.SingleOrDefault(c => c.state.position == chunkPosition);
+            return chunk.tiles.SingleOrDefault(t => t.state.position == tile.position);
         }
 
         private IEnumerator UpdateChunks(MapState map, PlayerState player)

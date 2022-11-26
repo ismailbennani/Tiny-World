@@ -1,5 +1,4 @@
-﻿using System;
-using Map;
+﻿using Map;
 using Map.Tile;
 using Resource;
 using UnityEngine;
@@ -113,20 +112,7 @@ namespace Character
             {
                 CancelGather();
             }
+            
         }
-    }
-
-    [Serializable]
-    public class GatheredResourceParams
-    {
-        public bool allow;
-
-        [Header("Particles")]
-        public GameObject[] particles;
-        
-        [Header("Audio")]
-        public AudioClip[] audioClips;
-        public float audioVolume;
-
     }
 }

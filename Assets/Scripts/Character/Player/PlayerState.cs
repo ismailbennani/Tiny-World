@@ -1,4 +1,5 @@
 ﻿using System;
+using Map;
 using UnityEngine;
 
 namespace Character.Player

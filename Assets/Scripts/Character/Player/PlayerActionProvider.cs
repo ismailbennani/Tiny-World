@@ -27,6 +27,12 @@ namespace Character.Player
             {
                 return;
             }
+            
+            Vector2Int playerPosition = state.player.playerTile;
+            if (playerPosition == _lastKnownPlayerTile?.position)
+            {
+                return;
+            }
 
             AddInteractCallback(state);
         }
@@ -34,11 +40,6 @@ namespace Character.Player
         private void AddInteractCallback(GameState state)
         {
             Vector2Int playerPosition = state.player.playerTile;
-            if (playerPosition == _lastKnownPlayerTile?.position)
-            {
-                return;
-            }
-
             TileState tile = state.map.GetTile(playerPosition);
 
             if (tile.HasResource)

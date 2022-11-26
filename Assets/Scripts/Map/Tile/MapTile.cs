@@ -22,16 +22,30 @@ namespace Map.Tile
         private MapTilePlatform _platform;
         private MapTileResource _resource;
 
-        void Update()
+        private void OnEnable()
         {
-            if (!state.HasResource && _resource)
+            if (state != null)
             {
-                DestroyResource();
+                AddListeners(state);
             }
         }
 
+        void Update()
+        {
+            if (state != null && GameStateManager.Current)
+            {
+                TileState newState = GameStateManager.Current.map.GetTile(state.position);
+                if (newState != state)
+                {
+                    SetConfig(newState);
+                }
+            }
+        }
+        
         public void SetConfig(TileState tileConfig)
         {
+            AddListeners(tileConfig);
+            
             state = tileConfig;
 
             if (state == null)
@@ -41,9 +55,6 @@ namespace Map.Tile
 
             SpawnPlatform();
             SpawnResource();
-            
-            state.onConsume.AddListener(OnConsume);
-            state.onDepleted.AddListener(OnDepleted);
         }
 
         private void OnConsume(int quantity)
@@ -59,10 +70,15 @@ namespace Map.Tile
         private void OnDepleted()
         {
             PlayDepletedClip();
+            
+            if (_resource)
+            {
+                DestroyGameObject(_resource);
+            }
         }
-        
+
         #region Audio
-        
+
         public void PlayConsumeClip()
         {
             MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.resource == state.config.resource);
@@ -73,7 +89,7 @@ namespace Map.Tile
             
             PlayClip(resourceParams.consumeAudioClips, resourceParams.consumeAudioVolume);
         }
-        
+
         public void PlayDepletedClip()
         {
             MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.resource == state.config.resource);
@@ -88,13 +104,16 @@ namespace Map.Tile
         private void PlayClip(IReadOnlyList<AudioClip> clips, float volume)
         {
             AudioClip clip = clips.ChooseRandomly();
-            AudioSource.PlayClipAtPoint(clip, transform.position, volume);
+            if (clip)
+            {
+                AudioSource.PlayClipAtPoint(clip, transform.position, volume);
+            }
         }
-        
+
         #endregion
 
         #region Setup
-        
+
         private void SpawnPlatform()
         {
             if (_platform)
@@ -118,7 +137,15 @@ namespace Map.Tile
 
         private void SpawnResource()
         {
-            DestroyResource();
+            if (_resource)
+            {
+                DestroyGameObject(_resource);
+            }
+
+            if (!state.HasResource)
+            {
+                return;
+            }
 
             MapTileResource[] prefabs = resourcesParams.SingleOrDefault(m => m.resource == state.config.resource)?.prefabs;
             if (prefabs == null || prefabs.Length <= 0)
@@ -134,26 +161,30 @@ namespace Map.Tile
             }
         }
 
-        private void DestroyResource()
-        {
-            if (_resource)
-            {
-                DestroyGameObject(_resource);
-            }
-        }
-
         private static void DestroyGameObject(Component component)
         {
-            if (Application.isEditor)
-            {
-                DestroyImmediate(component.gameObject);
-            }
-            else
+            if (Application.isPlaying)
             {
                 Destroy(component.gameObject);
             }
+            else
+            {
+                DestroyImmediate(component.gameObject);
+            }
         }
-        
+
+        private void AddListeners(TileState newState)
+        {
+            if (state != null)
+            {
+                state.onConsume.RemoveListener(OnConsume);
+                state.onDepleted.RemoveListener(OnDepleted);
+            }
+            
+            newState.onConsume.AddListener(OnConsume);
+            newState.onDepleted.AddListener(OnDepleted);
+        }
+
         #endregion
     }
     

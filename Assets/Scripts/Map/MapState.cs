@@ -30,17 +30,7 @@ namespace Map
 
         public TileState GetTile(int x, int y)
         {
-            int chunkX = (x < 0 ? x + 1 : x) / initialConfig.chunkSize.x;
-            if (x < 0)
-            {
-                chunkX--;
-            }
-
-            int chunkY = (y < 0 ? y + 1 : y) / initialConfig.chunkSize.y;
-            if (y < 0)
-            {
-                chunkY--;
-            }
+            (int chunkX, int chunkY) = GetChunkPosition(x, y);
 
             int tileX = x - chunkX * initialConfig.chunkSize.x;
             int tileY = y - chunkY * initialConfig.chunkSize.y;
@@ -94,39 +84,39 @@ namespace Map
             return newChunk;
         }
 
-        public Vector2Int GetTilePositionAt(Vector3 position)
+        public (int, int) GetTilePosition(Vector3 worldPosition)
         {
             Vector2 halfTile = runtimeConfig.tileSize / 2;
             Vector3 realOrigin = new(-halfTile.x, 0, -halfTile.y);
 
-            Vector3 delta = position - realOrigin;
+            Vector3 delta = worldPosition - realOrigin;
             Vector2 tileAndGap = runtimeConfig.tileSize;
 
-            return new Vector2Int(Mathf.FloorToInt(delta.x / tileAndGap.x), Mathf.FloorToInt(delta.z / tileAndGap.y));
+            return (Mathf.FloorToInt(delta.x / tileAndGap.x), Mathf.FloorToInt(delta.z / tileAndGap.y));
         }
 
-        public Vector2Int GetChunkPositionAt(Vector3 position)
+        public (int, int) GetChunkPosition(Vector3 worldPosition)
         {
-            Vector2Int tile = GetTilePositionAt(position);
+            (int x, int y) = GetTilePosition(worldPosition);
 
-            return GetChunkPositionAt(tile);
+            return GetChunkPosition(x, y);
         }
 
-        public Vector2Int GetChunkPositionAt(Vector2Int tilePosition)
+        public (int, int) GetChunkPosition(int tileX, int tileY)
         {
-            int x = tilePosition.x / initialConfig.chunkSize.x;
-            if (tilePosition.x < 0)
+            int chunkX = (tileX < 0 ? tileX + 1 : tileX) / initialConfig.chunkSize.x;
+            if (tileX < 0)
             {
-                x--;
+                chunkX--;
             }
 
-            int y = tilePosition.y / initialConfig.chunkSize.y;
-            if (tilePosition.y < 0)
+            int chunkY = (tileY < 0 ? tileY + 1 : tileY) / initialConfig.chunkSize.y;
+            if (tileY < 0)
             {
-                y--;
+                chunkY--;
             }
 
-            return new Vector2Int(x, y);
+            return (chunkX, chunkY);
         }
 
         public Vector3 GetTileCenterPosition(int x, int y)
