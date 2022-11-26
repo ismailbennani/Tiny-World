@@ -28,6 +28,13 @@ namespace UI.Controls
                     }
                 }
             }
+            else
+            {
+                foreach (UIControlLineForInputType line in imageForInputTypes)
+                {
+                    line.obj.gameObject.SetActive(false);
+                }
+            }
         }
     }
 

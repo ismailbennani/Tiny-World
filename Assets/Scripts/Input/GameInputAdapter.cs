@@ -6,10 +6,17 @@ namespace Input
 {
     public class GameInputAdapter: MonoBehaviour
     {
+        public static GameInputAdapter Instance { get; private set; }
+        
+        public PlayerInput playerInput;
+        
         private PlayerControllerInputSource _playerControllerInputSource;
 
         private void OnEnable()
         {
+            Instance = this;
+            
+            playerInput = GetComponent<PlayerInput>();
             _playerControllerInputSource = GetComponent<PlayerControllerInputSource>();
         }
 
