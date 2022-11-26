@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Items;
 using UnityEditor;
 using UnityEngine;
 using Utils;
@@ -19,7 +20,7 @@ namespace Map.Tile
         public TileState state;
 
         private MapTilePlatform _platform;
-        private MapTileResource _resource;
+        private MapTileResource _tileResource;
 
 
         private TileType _currentPlatform;
@@ -53,25 +54,32 @@ namespace Map.Tile
             state = newState;
         }
 
-        private void OnConsume(int quantity)
+        private void OnLoot(Item[] items)
         {
-            PlayConsumeClip();
-
-            if (_resource)
+            if (items == null || items.Length == 0)
             {
-                _resource.OnGather();
+                return;
+            }
+
+            Debug.Log($"Loot: {string.Join(", ", items.Select(i => i.name))}");
+
+            PlayLootClip();
+
+            if (_tileResource)
+            {
+                _tileResource.OnLoot();
             }
         }
 
         private void OnDepleted()
         {
             PlayDepletedClip();
-            DestroyGameObject(_resource);
+            DestroyGameObject(_tileResource);
         }
 
         #region Audio
 
-        public void PlayConsumeClip()
+        public void PlayLootClip()
         {
             MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.tileResource == state.config.tileResource);
             if (resourceParams == null)
@@ -148,7 +156,7 @@ namespace Map.Tile
         {
             if (newState == null)
             {
-                DestroyGameObject(_resource);
+                DestroyGameObject(_tileResource);
                 return;
             }
 
@@ -163,7 +171,7 @@ namespace Map.Tile
             _currentResourceVariant = newState.generationConfig.resourceVariant;
             _currentPlatformRotation = newState.generationConfig.platformRotation;
 
-            DestroyGameObject(_resource);
+            DestroyGameObject(_tileResource);
 
             if (!newState.HasResource)
             {
@@ -179,12 +187,12 @@ namespace Map.Tile
             MapTileResource prefab = prefabs[newState.generationConfig.resourceVariant % prefabs.Length];
             if (prefab)
             {
-                _resource = Instantiate(prefab, transform);
+                _tileResource = Instantiate(prefab, transform);
 
                 int rotation = (int)(newState.generationConfig.resourceRotation % 4);
-                _resource.transform.rotation = Quaternion.Euler(0, 90 * rotation, 0);
+                _tileResource.transform.rotation = Quaternion.Euler(0, 90 * rotation, 0);
 
-                _resource.SetTile(newState);
+                _tileResource.SetTile(newState);
             }
         }
 
@@ -209,11 +217,11 @@ namespace Map.Tile
         {
             if (state != null)
             {
-                state.onConsume.RemoveListener(OnConsume);
+                state.onLoot.RemoveListener(OnLoot);
                 state.onDepleted.RemoveListener(OnDepleted);
             }
 
-            newState.onConsume.AddListener(OnConsume);
+            newState.onLoot.AddListener(OnLoot);
             newState.onDepleted.AddListener(OnDepleted);
         }
 

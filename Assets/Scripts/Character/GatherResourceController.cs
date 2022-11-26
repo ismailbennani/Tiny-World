@@ -9,17 +9,18 @@ namespace Character
         public bool allowMine;
         public bool allowChop;
         
+        // Loot is the generic animation
+        private int _animIDLoot;
         private int _animIDMine;
         private int _animIDChop;
 
         private Animator _animator;
         private ThirdPersonController _thirdPersonController;
 
-        private TileResourceType _currentTileResource;
-
         void OnEnable()
         {
             _animator = GetComponent<Animator>();
+            _animIDLoot = Animator.StringToHash("Loot");
             _animIDMine = Animator.StringToHash("Mine");
             _animIDChop = Animator.StringToHash("Chop");
 
@@ -28,6 +29,23 @@ namespace Character
             {
                 _thirdPersonController.onMoveStart.AddListener(CancelGather);
             }
+        }
+
+        public void Loot()
+        {
+            GameState state = GameStateManager.Current;
+            if (state == null)
+            {
+                return;
+            }
+            
+            TileState tile = state.map.GetTile(state.player.playerTile);
+            if (!tile.HasResource)
+            {
+                return;
+            }
+            
+            _animator.SetBool(_animIDLoot, true);
         }
 
         public void Mine()
@@ -44,11 +62,9 @@ namespace Character
                 return;
             }
             
-            _currentTileResource = TileResourceType.Rock;
             _animator.SetBool(_animIDMine, true);
-            
         }
-        
+
         public void Chop()
         {
             GameState state = GameStateManager.Current;
@@ -63,25 +79,18 @@ namespace Character
                 return;
             }
             
-            _currentTileResource = TileResourceType.Tree;
             _animator.SetBool(_animIDMine, true);
         }
 
         public void CancelGather()
         {
-            _currentTileResource = TileResourceType.None;
+            _animator.SetBool(_animIDLoot, false);
             _animator.SetBool(_animIDMine, false);
             _animator.SetBool(_animIDChop, false);
         }
 
         void OnGather()
         {
-            if (_currentTileResource == TileResourceType.None)
-            {
-                Debug.LogWarning($"Invalid state: {nameof(_currentTileResource)} cannot be {TileResourceType.None}");
-                return;
-            }
-            
             GameState state = GameStateManager.Current;
             if (state == null)
             {
@@ -105,7 +114,7 @@ namespace Character
                 return;
             }
 
-            tile.ConsumeResource(1);
+            tile.Loot(1);
 
             if (!tile.HasResource)
             {

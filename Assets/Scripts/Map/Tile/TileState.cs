@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Items;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -8,18 +10,18 @@ namespace Map.Tile
     [Serializable]
     public class TileState
     {
-        public UnityEvent<int> onConsume = new();
+        public UnityEvent<Item[]> onLoot = new();
         public UnityEvent onDepleted = new();
-        
+
         public TileConfig config;
         public GenerationConfig generationConfig;
 
         public Vector2Int position;
 
         [Header("Resource")]
-        public int resourceQuantity;
+        public int remainingLootAttempts;
 
-        public bool HasResource => config.tileResource != TileResourceType.None && resourceQuantity > 0;
+        public bool HasResource => config.lootTable != null && remainingLootAttempts > 0;
 
         public TileState(TileConfig config, Vector2Int position)
         {
@@ -36,24 +38,34 @@ namespace Map.Tile
 
             if (this.config.tileResource != TileResourceType.None)
             {
-                resourceQuantity = 10;
+                remainingLootAttempts = Random.Range(config.nLoots.x, config.nLoots.y + 1);
             }
         }
 
-        public int ConsumeResource(int quantity)
+        public int Loot(int quantity)
         {
-            if (resourceQuantity <= 0)
+            if (remainingLootAttempts <= 0)
             {
-                throw new InvalidOperationException("Not enough resources");
+                throw new InvalidOperationException($"Cannot loot tile {position}");
             }
 
-            int actualQuantity = Mathf.Min(resourceQuantity, quantity);
-            
-            resourceQuantity -= actualQuantity;
-            
-            onConsume.Invoke(actualQuantity);
+            int actualQuantity = quantity <= 0 ? remainingLootAttempts : Mathf.Min(remainingLootAttempts, quantity);
 
-            if (resourceQuantity <= 0)
+            remainingLootAttempts -= actualQuantity;
+
+            List<Item> loots = new();
+            for (int i = 0; i < actualQuantity; i++)
+            {
+                Item loot = config.lootTable.Loot();
+                if (loot)
+                {
+                    loots.Add(loot);
+                }
+            }
+
+            onLoot.Invoke(loots.ToArray());
+
+            if (remainingLootAttempts <= 0)
             {
                 onDepleted.Invoke();
             }

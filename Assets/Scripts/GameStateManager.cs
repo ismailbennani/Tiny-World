@@ -104,7 +104,7 @@ public class GameStateManager : MonoBehaviour
 
         foreach (TileState tile in manager.currentState.map.chunks.SelectMany(c => c.tiles))
         {
-            tile.resourceQuantity = 10;
+            tile.remainingLootAttempts = 10;
         }
     }
 

@@ -27,7 +27,7 @@ namespace Map.Tile
             StartCoroutine(UpdateWhenGameStateReady());
         }
 
-        public void OnGather()
+        public void OnLoot()
         {
             if (_animator)
             {

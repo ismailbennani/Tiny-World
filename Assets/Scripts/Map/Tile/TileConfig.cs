@@ -1,4 +1,6 @@
 ﻿using System;
+using Items;
+using UnityEngine;
 
 namespace Map.Tile
 {
@@ -7,7 +9,11 @@ namespace Map.Tile
     {
         public TileType type;
         public TileResourceType tileResource;
-
+        
+        [Header("Loot")]
+        public LootTable lootTable;
+        public Vector2Int nLoots = Vector2Int.one;
+      
         public static TileConfig Empty => new();
     }
 }

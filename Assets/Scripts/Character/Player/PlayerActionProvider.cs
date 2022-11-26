@@ -1,5 +1,4 @@
-﻿using System;
-using Input;
+﻿using Input;
 using Map;
 using Map.Tile;
 using UnityEngine;
@@ -79,15 +78,12 @@ namespace Character.Player
             
             switch (tile.config.tileResource)
             {
-                case TileResourceType.None:
-                    Debug.LogWarning("Cannot mine tile with no resource");
-                    return null;
                 case TileResourceType.Tree:
                     return _playerGatherResourceController.allowChop ? new GameInputCallback("Chop", _playerGatherResourceController.Chop) : null;
                 case TileResourceType.Rock:
                     return _playerGatherResourceController.allowMine ? new GameInputCallback("Mine", _playerGatherResourceController.Mine) : null;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(tile.config.tileResource), tile.config.tileResource, null);
+                    return _playerGatherResourceController.allowChop ? new GameInputCallback("Loot", _playerGatherResourceController.Loot) : null;
             }
         }
     }
