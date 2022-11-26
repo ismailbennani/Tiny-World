@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapInitialConfig:
     chunkSize: {x: 5, y: 5}
-    initialChunks: {x: 10, y: 10}
-    seed: 2014197692
+    initialChunks: {x: 4, y: 4}
+    seed: 1299130329
     tiles:
     - tileConfig:
         type: 1

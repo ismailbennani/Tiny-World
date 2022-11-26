@@ -113,7 +113,7 @@ namespace Map
                 chunksToRender.Add(chunkPosition + Vector2Int.down + Vector2Int.left);
                 chunksToRender.Add(chunkPosition + Vector2Int.down + Vector2Int.right);
             }
-            
+
             int nVisibleChunks = chunksToRender.Count;
 
             chunks ??= new List<MapChunk>();
@@ -126,7 +126,6 @@ namespace Map
                     toBeSkipped.Add(chunk.state.position);
                     chunksToRender.Remove(chunk.state.position);
 
-                    chunk.gameObject.SetActive(true);
                     chunk.Set(map, chunk.state.position, chunksInView.Contains(chunk.state.position));
                 }
             }
@@ -140,35 +139,32 @@ namespace Map
                 chunksToRender.Remove(positionForCurrentChunk);
                 toBeSkipped.Add(positionForCurrentChunk);
 
+                newChunk.gameObject.SetActive(true);
                 newChunk.Set(map, positionForCurrentChunk, chunksInView.Contains(positionForCurrentChunk));
 
                 yield return null;
             }
 
-            if (chunksToRender.Any())
+            foreach (MapChunk chunk in chunks)
             {
-                foreach (MapChunk chunk in chunks)
+                if (toBeSkipped.Contains(chunk.state.position))
                 {
-                    if (toBeSkipped.Contains(chunk.state.position))
-                    {
-                        continue;
-                    }
-                    
-                    chunk.gameObject.SetActive(true);
+                    continue;
+                }
 
-                    if (chunksToRender.Count == 0)
-                    {
-                        chunk.gameObject.SetActive(false);
-                        continue;
-                    }
-
+                if (chunksToRender.Count == 0)
+                {
+                    chunk.Hide();
+                }
+                else
+                {
                     Vector2Int positionForCurrentChunk = chunksToRender.First();
                     chunksToRender.Remove(positionForCurrentChunk);
 
                     chunk.Set(map, positionForCurrentChunk, chunksInView.Contains(positionForCurrentChunk));
-
-                    yield return null;
                 }
+
+                yield return null;
             }
 
             _updateCoroutine = null;

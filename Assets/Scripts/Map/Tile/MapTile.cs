@@ -36,7 +36,7 @@ namespace Map.Tile
             }
         }
 
-        public void Spawn(TileState newState)
+        public void UpdateState(TileState newState)
         {
             if (newState == null)
             {
@@ -45,8 +45,8 @@ namespace Map.Tile
             }
 
             AddListeners(newState);
-            SpawnPlatform(newState);
-            SpawnResource(newState);
+            SpawnPlatformIfNecessary(newState);
+            SpawnResourceIfNecessary(newState);
 
             state = newState;
         }
@@ -104,7 +104,7 @@ namespace Map.Tile
 
         #region Setup
 
-        private void SpawnPlatform(TileState newState)
+        private void SpawnPlatformIfNecessary(TileState newState)
         {
             if (newState == null)
             {
@@ -136,7 +136,7 @@ namespace Map.Tile
             }
         }
 
-        private void SpawnResource(TileState newState)
+        private void SpawnResourceIfNecessary(TileState newState)
         {
             if (newState == null)
             {
@@ -249,7 +249,7 @@ namespace Map.Tile
             {
                 MapTile mapTile = target as MapTile;
 
-                mapTile.Spawn(mapTile.state);
+                mapTile.UpdateState(mapTile.state);
             }
         }
     }
