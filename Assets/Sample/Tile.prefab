@@ -63,6 +63,15 @@ MonoBehaviour:
   - type: 2
     prefabs:
     - {fileID: 3107741431747107348, guid: 303a23239eccfad4aabb09989d1b8c2f, type: 3}
+    - {fileID: 3107741431747107348, guid: 303a23239eccfad4aabb09989d1b8c2f, type: 3}
+    - {fileID: 3107741431747107348, guid: 303a23239eccfad4aabb09989d1b8c2f, type: 3}
+    - {fileID: 3107741431747107348, guid: 303a23239eccfad4aabb09989d1b8c2f, type: 3}
+    - {fileID: 3107741431747107348, guid: 303a23239eccfad4aabb09989d1b8c2f, type: 3}
+    - {fileID: 3107741431747107348, guid: 303a23239eccfad4aabb09989d1b8c2f, type: 3}
+    - {fileID: 3107741431747107348, guid: 303a23239eccfad4aabb09989d1b8c2f, type: 3}
+    - {fileID: 3107741431747107348, guid: 303a23239eccfad4aabb09989d1b8c2f, type: 3}
+    - {fileID: 3107741431747107348, guid: 1f82e023628f7264aae615a8da9f355d, type: 3}
+    - {fileID: 3107741431747107348, guid: 376af96b76c23f54fbd191f04b659fce, type: 3}
   resourcesParams:
   - resource: 1
     prefabs:
