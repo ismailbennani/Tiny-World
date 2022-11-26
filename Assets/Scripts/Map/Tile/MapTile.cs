@@ -33,6 +33,14 @@ namespace Map.Tile
             }
         }
 
+        public void TriggerResourceAnimation()
+        {
+            if (_resource)
+            {
+                _resource.OnGather();
+            }
+        }
+
         private void SpawnPlatform()
         {
             if (_platform)

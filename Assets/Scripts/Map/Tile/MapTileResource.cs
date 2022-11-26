@@ -7,8 +7,14 @@ namespace Map.Tile
     {
         private TileState _state;
         
+        private Animator _animator;
+        private int _animatorGatherId;
+        
         void OnEnable()
         {
+            _animator = GetComponent<Animator>();
+            _animatorGatherId = Animator.StringToHash("Gather");
+            
             if (_state != null)
             {
                 StartCoroutine(UpdateWhenGameStateReady());
@@ -19,6 +25,15 @@ namespace Map.Tile
         {
             _state = state;
             StartCoroutine(UpdateWhenGameStateReady());
+        }
+
+        public void OnGather()
+        {
+            if (_animator)
+            {
+                _animator.ResetTrigger(_animatorGatherId);
+                _animator.SetTrigger(_animatorGatherId);
+            }
         }
 
         private IEnumerator UpdateWhenGameStateReady()

@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Character.Player;
 using Map.Chunk;
+using Map.Tile;
 using UnityEngine;
 
 namespace Map
 {
     public class GameMap : MonoBehaviour
     {
+        public static GameMap Instance { get; private set; }
+        
         public bool Ready { get; private set; }
         
         [SerializeField]
@@ -18,6 +21,11 @@ namespace Map
         private Vector2Int centerChunkPosition;
         
         private Coroutine _updateCoroutine;
+
+        private void OnEnable()
+        {
+            Instance = this;
+        }
 
         public void Initialize()
         {
@@ -32,6 +40,24 @@ namespace Map
             {
                 _updateCoroutine = StartCoroutine(UpdateChunks(GameStateManager.Current.map, GameStateManager.Current.player));
             }
+        }
+
+        public MapTile GetTile(TileState tile)
+        {
+            GameState state = GameStateManager.Current;
+            if (!state)
+            {
+                return null;
+            }
+
+            if (state.map == null)
+            {
+                return null;
+            }
+
+            Vector2Int chunkPosition = state.map.GetChunkPositionAt(tile.position);
+            ChunkState chunk = state.map.GetChunk(chunkPosition);
+            return chunks.SingleOrDefault(c => c.state == chunk)?.tiles.SingleOrDefault(t => t.state == tile);
         }
 
         private IEnumerator UpdateChunks(MapState map, PlayerState player)

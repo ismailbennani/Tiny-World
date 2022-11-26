@@ -10,16 +10,9 @@ namespace Character
 {
     public class GatherResourceController : MonoBehaviour
     {
-        [Header("Mine")]
-        public bool allowMine;
-        public AudioClip[] mineAudioClips;
-        public float mineAudioClipVolume;
-        
-        [Header("Chop")]
-        public bool allowChop;
-        public AudioClip[] chopAudioClips;
-        public float chopAudioClipVolume;
-        
+        public GatheredResourceParams mine;
+        public GatheredResourceParams chop;
+
         private int _animIDMine;
         private int _animIDChop;
 
@@ -103,23 +96,59 @@ namespace Character
             int actualConsumption = tile.ConsumeResource(1);
             state.resource.Produce(_currentResource, actualConsumption);
 
-            switch (_currentResource)
-            {
-                case ResourceType.None:
-                    throw new InvalidOperationException("Cannot happen");
-                case ResourceType.Wood:
-                    PlayClip(chopAudioClips, chopAudioClipVolume);
-                    break;
-                case ResourceType.Stone:
-                    PlayClip(mineAudioClips, mineAudioClipVolume);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            PlayParticles(_currentResource);
+            PlayClip(_currentResource);
+
+            TriggerResourceAnimation(tile);
 
             if (!tile.HasResource)
             {
                 CancelGather();
+            }
+        }
+
+        private void PlayParticles(ResourceType resource)
+        {
+            switch (resource)
+            {
+                case ResourceType.None:
+                    throw new InvalidOperationException("Cannot happen");
+                case ResourceType.Wood:
+                    PlayParticles(chop.particles, new Vector3(0, 0.5f, 0.2f));
+                    break;
+                case ResourceType.Stone:
+                    PlayParticles(mine.particles, new Vector3(0, 0, 0.2f));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void PlayParticles(IReadOnlyList<GameObject> particles, Vector3 offset)
+        {
+            if (particles.Count <= 0)
+            {
+                return;
+            }
+
+            int index = Random.Range(0, particles.Count);
+            Instantiate(particles[index], offset, Quaternion.identity, transform);
+        }
+
+        private void PlayClip(ResourceType resource)
+        {
+            switch (resource)
+            {
+                case ResourceType.None:
+                    throw new InvalidOperationException("Cannot happen");
+                case ResourceType.Wood:
+                    PlayClip(chop.audioClips, chop.audioVolume);
+                    break;
+                case ResourceType.Stone:
+                    PlayClip(mine.audioClips, mine.audioVolume);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -133,5 +162,36 @@ namespace Character
             int index = Random.Range(0, clips.Count);
             AudioSource.PlayClipAtPoint(clips[index], transform.position, volume);
         }
+
+        private void TriggerResourceAnimation(TileState tile)
+        {
+            GameMap map = GameMap.Instance;
+            if (!map)
+            {
+                return;
+            }
+
+            MapTile mapTile = map.GetTile(tile);
+            if (!mapTile)
+            {
+                return;
+            }
+            
+            mapTile.TriggerResourceAnimation();
+        }
+    }
+
+    [Serializable]
+    public class GatheredResourceParams
+    {
+        public bool allow;
+
+        [Header("Particles")]
+        public GameObject[] particles;
+        
+        [Header("Audio")]
+        public AudioClip[] audioClips;
+        public float audioVolume;
+
     }
 }

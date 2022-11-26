@@ -29,8 +29,8 @@ namespace Character.Player
                 return;
             }
             
-            playerChunk = state.map.GetChunkAt(position);
-            playerTile = state.map.GetTileAt(position);
+            playerChunk = state.map.GetChunkPositionAt(position);
+            playerTile = state.map.GetTilePositionAt(position);
         }
     }
 }

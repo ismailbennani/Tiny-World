@@ -83,9 +83,9 @@ namespace Character.Player
                     Debug.LogWarning("Cannot mine tile with no resource");
                     return null;
                 case ResourceType.Wood:
-                    return _playerGatherResourceController.allowChop ? new GameInputCallback("Chop", _playerGatherResourceController.Chop) : null;
+                    return _playerGatherResourceController.chop.allow ? new GameInputCallback("Chop", _playerGatherResourceController.Chop) : null;
                 case ResourceType.Stone:
-                    return _playerGatherResourceController.allowMine ? new GameInputCallback("Mine", _playerGatherResourceController.Mine) : null;
+                    return _playerGatherResourceController.mine.allow ? new GameInputCallback("Mine", _playerGatherResourceController.Mine) : null;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(tile.config.resource), tile.config.resource, null);
             }

@@ -18,7 +18,7 @@ namespace Map
         public MapRuntimeConfig runtimeConfig;
 
         [SerializeField]
-        private List<ChunkState> chunks;
+        public List<ChunkState> chunks;
 
         private IMapGenerator _mapGenerator;
 
@@ -96,7 +96,7 @@ namespace Map
             return newChunk;
         }
 
-        public Vector2Int GetTileAt(Vector3 position)
+        public Vector2Int GetTilePositionAt(Vector3 position)
         {
             Vector2 halfTile = runtimeConfig.tileSize / 2;
             Vector3 realOrigin = new(-halfTile.x, 0, -halfTile.y);
@@ -107,18 +107,23 @@ namespace Map
             return new Vector2Int(Mathf.FloorToInt(delta.x / tileAndGap.x), Mathf.FloorToInt(delta.z / tileAndGap.y));
         }
 
-        public Vector2Int GetChunkAt(Vector3 position)
+        public Vector2Int GetChunkPositionAt(Vector3 position)
         {
-            Vector2Int tile = GetTileAt(position);
+            Vector2Int tile = GetTilePositionAt(position);
 
-            int x = tile.x / initialConfig.chunkSize.x;
-            if (tile.x < 0)
+            return GetChunkPositionAt(tile);
+        }
+
+        public Vector2Int GetChunkPositionAt(Vector2Int tilePosition)
+        {
+            int x = tilePosition.x / initialConfig.chunkSize.x;
+            if (tilePosition.x < 0)
             {
                 x--;
             }
 
-            int y = tile.y / initialConfig.chunkSize.y;
-            if (tile.y < 0)
+            int y = tilePosition.y / initialConfig.chunkSize.y;
+            if (tilePosition.y < 0)
             {
                 y--;
             }

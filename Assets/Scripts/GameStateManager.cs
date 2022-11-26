@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 using Character.Player;
 using Map;
+using Map.Tile;
 using UnityEditor;
 using UnityEngine;
 
@@ -92,6 +94,20 @@ public class GameStateManager : MonoBehaviour
         yield break;
     }
 
+    public static void ResetAllResources()
+    {
+        GameStateManager manager = Instance;
+        if (!manager)
+        {
+            manager = FindObjectOfType<GameStateManager>();
+        }
+
+        foreach (TileState tile in manager.currentState.map.chunks.SelectMany(c => c.tiles))
+        {
+            tile.resourceQuantity = 10;
+        }
+    }
+
     public static void ResetPlayerPosition()
     {
         GameStateManager manager = Instance;
@@ -148,6 +164,11 @@ public class GameStateManagerEditor : Editor
         DrawDefaultInspector();
 
         GUILayout.Space(10);
+
+        if (GUILayout.Button("Reset all resources"))
+        {
+            GameStateManager.ResetAllResources();
+        }
 
         if (GUILayout.Button("Reset player position"))
         {
