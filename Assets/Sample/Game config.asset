@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Game config
   m_EditorClassIdentifier: 
   mapInitialConfig:
-    chunkSize: {x: 10, y: 10}
+    chunkSize: {x: 30, y: 30}
     initialChunks: {x: 5, y: 5}
-    seed: 859997948
+    seed: 1708989123
     tiles:
     - tileConfig:
         type: 1
@@ -45,7 +45,7 @@ MonoBehaviour:
   mapRuntimeConfig:
     baseChunk: {fileID: 3329574202506706147, guid: 334e0a40afcf1454093e45738771de00, type: 3}
     baseTile: {fileID: 1500428027516698341, guid: 3612d7d2dd1298745b5b3c1d9b19f7c2, type: 3}
-    chunkRange: {x: 1, y: 1}
+    maxChunkRange: {x: 3, y: 3}
     tileSize: {x: 4, y: 4}
     resourceScale: 4
   player:
