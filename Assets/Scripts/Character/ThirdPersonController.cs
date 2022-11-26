@@ -78,6 +78,7 @@ namespace Character
 
         // player
         private bool _isSprinting;
+        private Vector2 _moveInput;
         private float _speed;
         private float _animationBlend;
         private float _targetRotation;
@@ -164,6 +165,7 @@ namespace Character
             if (grounded)
             {
                 _isSprinting = _playerControllerInputSource.sprint;
+                _moveInput = _playerControllerInputSource.move;
             }
             
             // set target speed based on move speed, sprint speed and if sprint is pressed
@@ -173,14 +175,14 @@ namespace Character
 
             // note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is no input, set the target speed to 0
-            if (_playerControllerInputSource.move == Vector2.zero) targetSpeed = 0.0f;
+            if (_moveInput == Vector2.zero) targetSpeed = 0.0f;
 
             // a reference to the players current horizontal velocity
             Vector3 velocity = _controller.velocity;
             float currentHorizontalSpeed = new Vector3(velocity.x, 0.0f, velocity.z).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = _playerControllerInputSource.analogMovement ? _playerControllerInputSource.move.magnitude : 1f;
+            float inputMagnitude = _playerControllerInputSource.analogMovement ? _moveInput.magnitude : 1f;
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
@@ -201,11 +203,11 @@ namespace Character
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
             // normalise input direction
-            Vector3 inputDirection = new Vector3(_playerControllerInputSource.move.x, 0.0f, _playerControllerInputSource.move.y).normalized;
+            Vector3 inputDirection = new Vector3(_moveInput.x, 0.0f, _moveInput.y).normalized;
 
             // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
             // if there is a move input rotate player when the player is moving
-            if (_playerControllerInputSource.move != Vector2.zero)
+            if (_moveInput != Vector2.zero)
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
 
