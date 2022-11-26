@@ -1,7 +1,12 @@
-﻿using Character.Player;
+﻿using System;
+using System.Linq;
+using Character.Player;
+using Map;
+using Map.Tile;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Random = UnityEngine.Random;
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
@@ -26,8 +31,10 @@ namespace Character
         [Tooltip("Acceleration and deceleration")]
         public float speedChangeRate = 10.0f;
 
-        public AudioClip landingAudioClip;
-        public AudioClip[] footstepAudioClips;
+        public AudioClipsForTileType[] landingByTileType;
+        public AudioClip[] defaultLandingAudioClips;
+        public AudioClipsForTileType[] footstepByTileType;
+        public AudioClip[] defaultFootstepAudioClips;
         [Range(0, 1)]
         public float footstepAudioVolume = 0.5f;
 
@@ -308,7 +315,11 @@ namespace Character
                           )
                           % 360;
 
-            float targetZoom = _playerControllerInputSource.zoom > 0.5 ? 1 : _playerControllerInputSource.zoom < -0.5 ? 0 : zoomLevel;
+            float targetZoom = _playerControllerInputSource.zoom > 0.5
+                ? 1
+                : _playerControllerInputSource.zoom < -0.5
+                    ? 0
+                    : zoomLevel;
             zoomLevel = Mathf.SmoothStep(zoomLevel, targetZoom, zoomSpeed);
         }
 
@@ -329,18 +340,12 @@ namespace Character
         /// </remarks>
         private void OnFootstep(AnimationEvent animationEvent)
         {
-            if (!(animationEvent.animatorClipInfo.weight > 0.5f))
+            if (animationEvent.animatorClipInfo.weight <= 0.5f)
             {
                 return;
             }
 
-            if (footstepAudioClips.Length <= 0)
-            {
-                return;
-            }
-
-            int index = Random.Range(0, footstepAudioClips.Length);
-            AudioSource.PlayClipAtPoint(footstepAudioClips[index], transform.TransformPoint(_controller.center), footstepAudioVolume);
+            PlayRandomClip(defaultFootstepAudioClips, footstepByTileType);
         }
 
         /// <remarks>
@@ -348,10 +353,39 @@ namespace Character
         /// </remarks>
         private void OnLand(AnimationEvent animationEvent)
         {
-            if (animationEvent.animatorClipInfo.weight > 0.5f)
+            if (animationEvent.animatorClipInfo.weight <= 0.5f)
             {
-                AudioSource.PlayClipAtPoint(landingAudioClip, transform.TransformPoint(_controller.center), footstepAudioVolume);
+                return;
             }
+            
+            PlayRandomClip(defaultLandingAudioClips, landingByTileType);
         }
+
+        private void PlayRandomClip(AudioClip[] defaultClips, AudioClipsForTileType[] clipsByTileType)
+        {
+            if (defaultClips.Length <= 0)
+            {
+                return;
+            }
+
+            AudioClip[] clips = null;
+            GameState state = GameStateManager.Current;
+            if (state && state.player != null && state.map != null)
+            {
+                clips = clipsByTileType.FirstOrDefault(f => f.tileType == state.map.GetTile(state.player.playerTile)?.config?.type)?.audioClips;
+            }
+
+            clips ??= defaultClips;
+
+            int index = Random.Range(0, clips.Length);
+            AudioSource.PlayClipAtPoint(clips[index], transform.TransformPoint(_controller.center), footstepAudioVolume);
+        }
+    }
+
+    [Serializable]
+    public class AudioClipsForTileType
+    {
+        public TileType tileType;
+        public AudioClip[] audioClips;
     }
 }
