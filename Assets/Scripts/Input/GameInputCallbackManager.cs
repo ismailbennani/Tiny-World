@@ -23,12 +23,16 @@ namespace Input
 
         public void Register(GameInputType inputType, Component component, GameInputCallback callback)
         {
-            RunAndNotifyOnCallbackChange(inputType, () => _callbacks.Add(new InputComponentCallback(inputType, component, callback)));
+            RunAndNotifyOnCallbackChange(inputType, () =>
+            {
+                UnregisterInternal(inputType, component);
+                _callbacks.Add(new InputComponentCallback(inputType, component, callback));
+            });
         }
 
         public void Unregister(GameInputType inputType, Component component)
         {
-            RunAndNotifyOnCallbackChange(inputType, () => _callbacks.RemoveAll(c => c.InputType == inputType && c.Component == component));
+            RunAndNotifyOnCallbackChange(inputType, () => UnregisterInternal(inputType, component));
         }
 
         public void UnregisterAll(Component component)
@@ -45,6 +49,7 @@ namespace Input
         }
 
         // called through SendMessage
+
         public void OnInput(GameInputType inputType)
         {
             GameInputCallback callback = GetCallback(inputType);
@@ -62,6 +67,11 @@ namespace Input
             {
                 onCallbackChange?.Invoke(inputType, newCallback);
             }
+        }
+
+        private void UnregisterInternal(GameInputType inputType, Component component)
+        {
+            _callbacks.RemoveAll(c => c.InputType == inputType && c.Component == component);
         }
 
         private class InputComponentCallback

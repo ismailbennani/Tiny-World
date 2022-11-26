@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Input;
 using UnityEngine;
 
@@ -12,49 +11,43 @@ namespace UI.Controls
 
         void Update()
         {
-            HideAll();
-            
             GameInputAdapter inputAdapter = GameInputAdapter.Instance;
             if (!inputAdapter || !inputAdapter.playerInput || !ShowPanelForScheme(inputAdapter.playerInput.currentControlScheme))
             {
-                ShowDefaultPanel();
+                ShowDefaultPanel(true);
+            }
+            else
+            {
+                ShowDefaultPanel(false);
             }
         }
 
-        private void ShowDefaultPanel()
+        private void ShowDefaultPanel(bool show)
         {
             if (defaultPanel)
             {
-                defaultPanel.gameObject.SetActive(true);
+                defaultPanel.gameObject.SetActive(show);
             }
         }
 
         private bool ShowPanelForScheme(string scheme)
         {
-            GameObject obj = panelsByScheme.FirstOrDefault(p => p.scheme == scheme)?.obj;
-            if (obj)
-            {
-                obj.SetActive(true);
-                return true;
-            }
-
-            return false;
-        }
-
-        private void HideAll()
-        {
-            if (defaultPanel)
-            {
-                defaultPanel.gameObject.SetActive(false);
-            }
-
+            bool atLeastOne = false;
+            
             foreach (UIControlPanelForInputScheme panel in panelsByScheme)
             {
-                if (panel.obj)
+                if (!panel.obj)
                 {
-                    panel.obj.SetActive(false);
+                    continue;
                 }
+
+                bool show = string.Equals(panel.scheme, scheme, StringComparison.InvariantCultureIgnoreCase);
+                panel.obj.SetActive(show);
+
+                atLeastOne = atLeastOne || show;
             }
+
+            return atLeastOne;
         }
     }
 

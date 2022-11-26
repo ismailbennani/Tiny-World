@@ -2,8 +2,9 @@
 {
     public enum GameInputType
     {
-        Interact,
-        Confirm,
-        Cancel,
+        Interact = 1,
+        Confirm = 2,
+        Cancel = 3,
+        ToggleSprint = 4
     }
 }

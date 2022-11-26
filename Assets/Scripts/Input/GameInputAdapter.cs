@@ -30,11 +30,6 @@ namespace Input
             _playerControllerInputSource.JumpInput(value.isPressed);
         }
 
-        public void OnSprint(InputValue value)
-        {
-            _playerControllerInputSource.SprintInput(value.isPressed);
-        }
-
         public void OnLook(InputValue value)
         {
             _playerControllerInputSource.LookInput(value.Get<float>());
@@ -44,7 +39,15 @@ namespace Input
         {
             _playerControllerInputSource.ZoomInput(value.Get<float>());
         }
-        
+
+        public void OnSprint(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                Trigger(GameInputType.ToggleSprint);
+            }
+        }
+
         public void OnInteract(InputValue value)
         {
             if (value.isPressed)
