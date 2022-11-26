@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Resource;
 using UnityEditor;
 using UnityEngine;
 using Utils;
@@ -27,7 +26,7 @@ namespace Map.Tile
         private uint _currentPlatformVariant;
         private uint _currentPlatformRotation;
 
-        private ResourceType _currentResource;
+        private TileResourceType _currentTileResource;
         private uint _currentResourceVariant;
         private uint _currentResourceRotation;
 
@@ -74,7 +73,7 @@ namespace Map.Tile
 
         public void PlayConsumeClip()
         {
-            MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.resource == state.config.resource);
+            MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.tileResource == state.config.tileResource);
             if (resourceParams == null)
             {
                 return;
@@ -85,7 +84,7 @@ namespace Map.Tile
 
         public void PlayDepletedClip()
         {
-            MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.resource == state.config.resource);
+            MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.tileResource == state.config.tileResource);
             if (resourceParams == null)
             {
                 return;
@@ -153,14 +152,14 @@ namespace Map.Tile
                 return;
             }
 
-            if (newState.config.resource == _currentResource
+            if (newState.config.tileResource == _currentTileResource
                 && newState.generationConfig.resourceVariant == _currentResourceVariant
                 && newState.generationConfig.resourceRotation == _currentResourceRotation)
             {
                 return;
             }
 
-            _currentResource = newState.config.resource;
+            _currentTileResource = newState.config.tileResource;
             _currentResourceVariant = newState.generationConfig.resourceVariant;
             _currentPlatformRotation = newState.generationConfig.platformRotation;
 
@@ -171,7 +170,7 @@ namespace Map.Tile
                 return;
             }
 
-            MapTileResource[] prefabs = resourcesParams.SingleOrDefault(m => m.resource == newState.config.resource)?.prefabs;
+            MapTileResource[] prefabs = resourcesParams.SingleOrDefault(m => m.tileResource == newState.config.tileResource)?.prefabs;
             if (prefabs == null || prefabs.Length <= 0)
             {
                 return;
@@ -234,7 +233,7 @@ namespace Map.Tile
     [Serializable]
     public class MapTileResourceParams
     {
-        public ResourceType resource;
+        public TileResourceType tileResource;
 
         [Header("Prefabs")]
         [Tooltip("Available variants for this resource, see TileState.resourceVariant")]

@@ -1,5 +1,4 @@
 ﻿using System;
-using Resource;
 
 namespace Map.Tile
 {
@@ -7,7 +6,7 @@ namespace Map.Tile
     public class TileConfig
     {
         public TileType type;
-        public ResourceType resource;
+        public TileResourceType tileResource;
 
         public static TileConfig Empty => new();
     }

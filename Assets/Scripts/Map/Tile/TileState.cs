@@ -1,5 +1,4 @@
 ﻿using System;
-using Resource;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -20,7 +19,7 @@ namespace Map.Tile
         [Header("Resource")]
         public int resourceQuantity;
 
-        public bool HasResource => config.resource != ResourceType.None && resourceQuantity > 0;
+        public bool HasResource => config.tileResource != TileResourceType.None && resourceQuantity > 0;
 
         public TileState(TileConfig config, Vector2Int position)
         {
@@ -35,7 +34,7 @@ namespace Map.Tile
                 resourceVariant = (uint)Random.Range(int.MinValue, int.MaxValue),
             };
 
-            if (this.config.resource != ResourceType.None)
+            if (this.config.tileResource != TileResourceType.None)
             {
                 resourceQuantity = 10;
             }

@@ -1,6 +1,5 @@
 ﻿using Map;
 using Map.Tile;
-using Resource;
 using UnityEngine;
 
 namespace Character
@@ -16,7 +15,7 @@ namespace Character
         private Animator _animator;
         private ThirdPersonController _thirdPersonController;
 
-        private ResourceType _currentResource;
+        private TileResourceType _currentTileResource;
 
         void OnEnable()
         {
@@ -40,12 +39,12 @@ namespace Character
             }
             
             TileState tile = state.map.GetTile(state.player.playerTile);
-            if (tile.config.resource != ResourceType.Stone || !tile.HasResource)
+            if (tile.config.tileResource != TileResourceType.Rock || !tile.HasResource)
             {
                 return;
             }
             
-            _currentResource = ResourceType.Stone;
+            _currentTileResource = TileResourceType.Rock;
             _animator.SetBool(_animIDMine, true);
             
         }
@@ -59,27 +58,27 @@ namespace Character
             }
             
             TileState tile = state.map.GetTile(state.player.playerTile);
-            if (tile.config.resource != ResourceType.Wood || !tile.HasResource)
+            if (tile.config.tileResource != TileResourceType.Tree || !tile.HasResource)
             {
                 return;
             }
             
-            _currentResource = ResourceType.Wood;
+            _currentTileResource = TileResourceType.Tree;
             _animator.SetBool(_animIDMine, true);
         }
 
         public void CancelGather()
         {
-            _currentResource = ResourceType.None;
+            _currentTileResource = TileResourceType.None;
             _animator.SetBool(_animIDMine, false);
             _animator.SetBool(_animIDChop, false);
         }
 
         void OnGather()
         {
-            if (_currentResource == ResourceType.None)
+            if (_currentTileResource == TileResourceType.None)
             {
-                Debug.LogWarning($"Invalid state: {nameof(_currentResource)} cannot be {ResourceType.None}");
+                Debug.LogWarning($"Invalid state: {nameof(_currentTileResource)} cannot be {TileResourceType.None}");
                 return;
             }
             

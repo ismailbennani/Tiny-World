@@ -73,7 +73,7 @@ MonoBehaviour:
     - {fileID: 3107741431747107348, guid: 1f82e023628f7264aae615a8da9f355d, type: 3}
     - {fileID: 3107741431747107348, guid: 376af96b76c23f54fbd191f04b659fce, type: 3}
   resourcesParams:
-  - resource: 1
+  - tileResource: 1
     prefabs:
     - {fileID: 6724582270491821290, guid: cbcb020fe17c5374587e77ec29113673, type: 3}
     consumeAudioClips:
@@ -93,7 +93,7 @@ MonoBehaviour:
     consumeAudioVolume: 1
     depletedAudioClips: []
     depletedAudioVolume: 1
-  - resource: 2
+  - tileResource: 2
     prefabs:
     - {fileID: 8628220915447311663, guid: 42f96111dab7708488135c473bf834f5, type: 3}
     consumeAudioClips:
@@ -114,12 +114,11 @@ MonoBehaviour:
         m_Calls: []
     config:
       type: 0
-      resource: 0
-      nPlatformVariants: 1
-      nResourceVariants: 1
+      tileResource: 0
     generationConfig:
-      rotation: 0
+      platformRotation: 0
       platformVariant: 0
+      resourceRotation: 0
       resourceVariant: 0
     position: {x: 0, y: 0}
     resourceQuantity: 0

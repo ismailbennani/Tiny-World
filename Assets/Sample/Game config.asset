@@ -19,27 +19,23 @@ MonoBehaviour:
     tiles:
     - tileConfig:
         type: 1
-        resource: 0
-        nPlatformVariants: 100
-        nResourceVariants: 100
+        tileResource: 0
       weight: 5
     - tileConfig:
         type: 2
-        resource: 0
-        nPlatformVariants: 100
-        nResourceVariants: 100
+        tileResource: 0
       weight: 3
     - tileConfig:
         type: 1
-        resource: 1
-        nPlatformVariants: 100
-        nResourceVariants: 100
+        tileResource: 1
       weight: 0.5
     - tileConfig:
         type: 2
-        resource: 2
-        nPlatformVariants: 100
-        nResourceVariants: 100
+        tileResource: 2
+      weight: 0.5
+    - tileConfig:
+        type: 1
+        tileResource: 2
       weight: 0.5
     mapGenerationAlgorithm: 0
   mapRuntimeConfig:
