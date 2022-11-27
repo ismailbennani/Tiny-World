@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Character.Player;
+﻿using Character.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,47 +17,45 @@ namespace Input
             Instance = this;
 
             playerInput = GetComponent<PlayerInput>();
-
-            StartCoroutine(GetPlayerController());
         }
 
         public void OnMove(InputValue value)
         {
-            if (!_playerControllerInputSource)
+            if (!GetPlayerController())
             {
                 return;
             }
-            
+
             _playerControllerInputSource.MoveInput(value.Get<Vector2>());
         }
 
         public void OnJump(InputValue value)
         {
-            if (!_playerControllerInputSource)
+            if (!GetPlayerController())
             {
                 return;
             }
-            
+
             _playerControllerInputSource.JumpInput(value.isPressed);
         }
 
         public void OnLook(InputValue value)
         {
-            if (!_playerControllerInputSource)
+            if (!GetPlayerController())
             {
                 return;
             }
-            
+
             _playerControllerInputSource.LookInput(value.Get<float>());
         }
 
         public void OnZoom(InputValue value)
         {
-            if (!_playerControllerInputSource)
+            if (!GetPlayerController())
             {
                 return;
             }
-            
+
             _playerControllerInputSource.ZoomInput(value.Get<float>());
         }
 
@@ -83,15 +80,19 @@ namespace Input
             SendMessage("OnInput", inputType);
         }
 
-        private IEnumerator GetPlayerController()
+        private bool GetPlayerController()
         {
-            while (!PlayerController.Instance)
+            if (!_playerControllerInputSource)
             {
-                yield return null;
+                PlayerController playerController = PlayerController.Instance;
+                if (playerController)
+                {
+                    _playerControllerInputSource = playerController.playerControllerInputSource;
+                    return _playerControllerInputSource;
+                }
             }
-
-            PlayerController playerController = PlayerController.Instance;
-            _playerControllerInputSource = playerController.playerControllerInputSource;
+            
+            return false;
         }
     }
 }

@@ -9,9 +9,6 @@ using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
-/* Note: animations are called via the controller for both the character and capsule using animator null checks
- */
-
 namespace Character
 {
     [RequireComponent(typeof(CharacterController))]
@@ -84,7 +81,6 @@ namespace Character
 
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
-            playerControllerInputSource = GetComponent<PlayerControllerInputSource>();
 
             AssignAnimationIDs();
 
@@ -97,8 +93,8 @@ namespace Character
 
         void OnEnable()
         {
-            Debug.Log("PrintOnEnable: script was enabled");
             _registerSprintCoroutine = StartCoroutine(RegisterSprintCommand());
+            playerControllerInputSource = GetComponent<PlayerControllerInputSource>();
         }
 
         private void Update()
@@ -357,6 +353,11 @@ namespace Character
 
         private void OnDrawGizmosSelected()
         {
+            if (state == null)
+            {
+                return;
+            }
+            
             Color transparentGreen = new(0.0f, 1.0f, 0.0f, 0.35f);
             Color transparentRed = new(1.0f, 0.0f, 0.0f, 0.35f);
 
