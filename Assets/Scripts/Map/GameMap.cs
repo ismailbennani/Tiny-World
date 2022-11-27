@@ -80,7 +80,7 @@ namespace Map
 
         private IEnumerator UpdateChunks(GameState gameState)
         {
-            assumedPlayerChunk = gameState.character.playerChunk;
+            assumedPlayerChunk = gameState.character.chunk;
 
             GetChunksToRender(gameState.map, out HashSet<Vector2Int> chunksInView, out HashSet<Vector2Int> chunksToRender);
 

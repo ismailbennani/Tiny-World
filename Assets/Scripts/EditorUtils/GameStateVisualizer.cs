@@ -39,7 +39,7 @@ namespace EditorUtils
                 return;
             }
 
-            Vector2Int chunkPosition = character.playerChunk;
+            Vector2Int chunkPosition = character.chunk;
             Rect rect = map.GetChunkRect(chunkPosition);
 
             Vector3 center = new(rect.center.x, 1, rect.center.y);
@@ -71,7 +71,7 @@ namespace EditorUtils
             Gizmos.color = Color.blue;
             Gizmos.DrawSphere(state.position, 0.2f);
 
-            Rect tileRect = map.GetTileRect(state.playerTile);
+            Rect tileRect = map.GetTileRect(state.tile);
             
             Vector3 tileCenter = new(tileRect.center.x, 1, tileRect.center.y);
             Vector3 tileSize = new(tileRect.size.x, 0, tileRect.size.y);

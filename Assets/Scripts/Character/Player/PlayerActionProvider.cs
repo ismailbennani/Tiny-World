@@ -61,7 +61,7 @@ namespace Character.Player
 
         private void UpdateTileInteract(GameState state)
         {
-            Vector2Int playerPosition = state.character.playerTile;
+            Vector2Int playerPosition = state.character.tile;
 
             if (_currentTileTarget == playerPosition)
             {
