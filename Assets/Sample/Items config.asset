@@ -16,9 +16,11 @@ MonoBehaviour:
   gatherRadius: 1
   prefabsByItem:
   - item: {fileID: 11400000, guid: 1d6b54767f8d45c4286f28efbc7d228d, type: 2}
-    prefabs: []
+    prefabs:
+    - {fileID: 6813059519069944542, guid: 82b052aa1fa2c9c42a9de1586ce17c91, type: 3}
   - item: {fileID: 11400000, guid: e51a94c001af73b4eb75ce8ff42f2405, type: 2}
-    prefabs: []
+    prefabs:
+    - {fileID: 159318803058258138, guid: 9fb4a193c0eea8a4889aefdee4fbba5d, type: 3}
   - item: {fileID: 11400000, guid: 47cbc9a72b884444db0bf30f0282b35e, type: 2}
     prefabs:
     - {fileID: 8693733093029553978, guid: 6b8988afe0a45124cabb2af42f43ad6d, type: 3}
