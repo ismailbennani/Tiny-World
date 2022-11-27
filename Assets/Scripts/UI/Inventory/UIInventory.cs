@@ -11,6 +11,8 @@ namespace UI.Inventory
     {
         public UIInventory Instance { get; private set; }
 
+        public GameObject root;
+        
         public UIInventoryTheme defaultTheme;
         public UIInventoryTheme currentTheme;
 
@@ -34,8 +36,6 @@ namespace UI.Inventory
         void OnEnable()
         {
             Instance = this;
-
-            StartCoroutine(ApplyThemeWhenReady());
         }
 
         public void SetTheme(UIInventoryTheme theme)
@@ -67,7 +67,7 @@ namespace UI.Inventory
 
         public void Open()
         {
-            gameObject.SetActive(true);
+            root.SetActive(true);
 
             UpdateInventory();
 
@@ -76,7 +76,7 @@ namespace UI.Inventory
 
         public void Close()
         {
-            gameObject.SetActive(false);
+            root.SetActive(false);
 
             _inventoryState?.onChange.RemoveListener(OnInventoryChange);
         }

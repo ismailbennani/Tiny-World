@@ -1,4 +1,5 @@
 ﻿using Character.Player;
+using UI.Menu;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Utils;
@@ -58,6 +59,14 @@ namespace Input
             }
 
             _playerControllerInputSource.ZoomInput(value.Get<float>());
+        }
+
+        public void OnMenu(InputValue value)
+        {
+            if (value.isPressed)
+            {
+                UIMenu.Instance.Toggle();
+            }
         }
 
         public void OnSprint(InputValue value)
