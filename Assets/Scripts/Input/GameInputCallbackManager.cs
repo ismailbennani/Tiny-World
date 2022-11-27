@@ -21,25 +21,38 @@ namespace Input
             _callbacks = new List<InputComponentCallback>();
         }
 
-        public void Register(GameInputType inputType, Component component, GameInputCallback callback)
+        public void Register(GameInputType inputType, Component component, GameInputCallback callback, int channel = 0)
         {
-            RunAndNotifyOnCallbackChange(inputType, () =>
-            {
-                UnregisterInternal(inputType, component);
-                _callbacks.Add(new InputComponentCallback(inputType, component, callback));
-            });
+            RunAndNotifyOnCallbackChange(
+                inputType,
+                () =>
+                {
+                    IEnumerable<InputComponentCallback> current = _callbacks.Where(
+                        c => c.InputType == inputType && c.Component == component && c.Channel == channel
+                    );
+                    InputComponentCallback highest = current.OrderByDescending(c => c.Callback.Priority).FirstOrDefault();
+
+                    if (highest != null && highest.Callback.Priority > callback.Priority)
+                    {
+                        return;
+                    }
+
+                    Unregister(inputType, component, channel);
+                    _callbacks.Add(new InputComponentCallback(inputType, component, callback, channel));
+                }
+            );
         }
 
-        public void Unregister(GameInputType inputType, Component component)
+        public void Unregister(GameInputType inputType, Component component, int? channel = null)
         {
-            RunAndNotifyOnCallbackChange(inputType, () => UnregisterInternal(inputType, component));
+            RunAndNotifyOnCallbackChange(inputType, () => UnregisterInternal(inputType, component, channel));
         }
 
         public void UnregisterAll(Component component)
         {
             foreach (InputComponentCallback callback in _callbacks.Where(c => c.Component == component).ToArray())
             {
-                Unregister(callback.InputType, callback.Component);
+                Unregister(callback.InputType, callback.Component, null);
             }
         }
 
@@ -69,9 +82,9 @@ namespace Input
             }
         }
 
-        private void UnregisterInternal(GameInputType inputType, Component component)
+        private void UnregisterInternal(GameInputType inputType, Component component, int? channel)
         {
-            _callbacks.RemoveAll(c => c.InputType == inputType && c.Component == component);
+            _callbacks.RemoveAll(c => c.InputType == inputType && c.Component == component && (!channel.HasValue || c.Channel == channel.Value));
         }
 
         private class InputComponentCallback
@@ -80,10 +93,16 @@ namespace Input
             public readonly Component Component;
             public readonly GameInputCallback Callback;
 
-            public InputComponentCallback(GameInputType inputType, Component component, GameInputCallback callback)
+            /// <summary>
+            /// The same component can register multiple callbacks for the same input (with different priorities) in different channels
+            /// </summary>
+            public readonly int Channel;
+
+            public InputComponentCallback(GameInputType inputType, Component component, GameInputCallback callback, int channel)
             {
                 InputType = inputType;
                 Component = component;
+                Channel = channel;
                 Callback = callback;
             }
         }
