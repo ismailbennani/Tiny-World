@@ -5,7 +5,7 @@ namespace Map.Tile
 {
     public class MapTileResource: MonoBehaviour
     {
-        private TileState _state;
+        private Vector2Int _position;
         
         private Animator _animator;
         private int _animatorGatherId;
@@ -14,16 +14,11 @@ namespace Map.Tile
         {
             _animator = GetComponent<Animator>();
             _animatorGatherId = Animator.StringToHash("Consume");
-            
-            if (_state != null)
-            {
-                StartCoroutine(UpdateWhenGameStateReady());
-            }
         }
 
         public void SetTile(TileState state)
         {
-            _state = state;
+            _position = state.position;
             StartCoroutine(UpdateWhenGameStateReady());
         }
 
