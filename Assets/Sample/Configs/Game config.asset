@@ -13,11 +13,6 @@ MonoBehaviour:
   m_Name: Game config
   m_EditorClassIdentifier: 
   mapInitialConfig: {fileID: 11400000, guid: 5dbd245f8de143348a2e26cbda7d6d65, type: 2}
-  mapRuntimeConfig:
-    baseChunk: {fileID: 3329574202506706147, guid: 334e0a40afcf1454093e45738771de00, type: 3}
-    baseTile: {fileID: 1500428027516698341, guid: 3612d7d2dd1298745b5b3c1d9b19f7c2, type: 3}
-    maxChunkRange: {x: 5, y: 5}
-    tileSize: {x: 4, y: 4}
-    resourceScale: 4
+  mapRuntimeConfig: {fileID: 11400000, guid: 67e9fe4f2ea0ab241a287d17e1647a2c, type: 2}
   player: {fileID: 11400000, guid: 2cff0e3ee850c2a4b8bf0c2b9ff05e47, type: 2}
   items: {fileID: 11400000, guid: e16e916614862b749a047b0656b6ebec, type: 2}

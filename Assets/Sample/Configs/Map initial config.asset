@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Map initial config
   m_EditorClassIdentifier: 
   chunkSize: {x: 5, y: 5}
-  initialChunks: {x: 4, y: 4}
+  initialChunks: {x: 5, y: 5}
   seed: 0
   tiles:
   - tileConfig:

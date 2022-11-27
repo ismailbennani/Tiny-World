@@ -1,12 +1,11 @@
-﻿using System;
-using Map.Chunk;
+﻿using Map.Chunk;
 using Map.Tile;
 using UnityEngine;
 
 namespace Map
 {
-    [Serializable]
-    public class MapRuntimeConfig
+    [CreateAssetMenu(menuName = "Custom/Map runtime config")]
+    public class MapRuntimeConfig: ScriptableObject
     {
         public MapChunk baseChunk;
         public MapTile baseTile;
