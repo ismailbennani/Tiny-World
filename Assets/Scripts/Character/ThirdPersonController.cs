@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Linq;
 using Character.Player;
 using Input;
@@ -7,6 +6,7 @@ using Map;
 using Map.Tile;
 using UnityEngine;
 using UnityEngine.Events;
+using Utils;
 using Random = UnityEngine.Random;
 
 namespace Character
@@ -66,10 +66,11 @@ namespace Character
         private CharacterController _controller;
         private GameObject _mainCamera;
 
-        private Coroutine _registerSprintCoroutine;
-
         private bool _hasAnimator;
         private bool _moving;
+        
+        [NonSerialized]
+        private bool _sprintCommandRegistered;
 
         void Start()
         {
@@ -87,24 +88,23 @@ namespace Character
             // reset our timeouts on start
             _jumpTimeoutDelta = state.config.jumpTimeout;
             _fallTimeoutDelta = state.config.fallTimeout;
-            
-            _registerSprintCoroutine = StartCoroutine(RegisterSprintCommand());
-        }
-
-        void OnEnable()
-        {
-            _registerSprintCoroutine = StartCoroutine(RegisterSprintCommand());
-            playerControllerInputSource = GetComponent<PlayerControllerInputSource>();
         }
 
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
 
+            ComponentExtensions.GetComponent(this, ref playerControllerInputSource);
+            
             JumpAndGravity();
             GroundedCheck();
             Move();
             UpdateCamera();
+
+            if (!_sprintCommandRegistered)
+            {
+                RegisterSprintCommand();
+            }
         }
 
         private void LateUpdate()
@@ -326,29 +326,24 @@ namespace Character
             zoomLevel = Mathf.SmoothStep(zoomLevel, targetZoom, playerConfig.zoomSpeed);
         }
 
-        private IEnumerator RegisterSprintCommand()
+        private void RegisterSprintCommand()
         {
-            while (!GameInputCallbackManager.Instance || state == null)
-            {
-                yield return null;
-            }
-
             GameInputCallbackManager gameInputCallbackManager = GameInputCallbackManager.Instance;
+            if (!gameInputCallbackManager)
+            {
+                return;
+            }
 
             GameInputCallback callback = new(state.sprint ? "Walk" : "Sprint", ToggleSprint);
             gameInputCallbackManager.Register(GameInputType.ToggleSprint, this, callback);
 
-            _registerSprintCoroutine = null;
+            _sprintCommandRegistered = true;
         }
 
         private void ToggleSprint()
         {
             state.sprint = !state.sprint;
-            
-            if (_registerSprintCoroutine == null)
-            {
-                _registerSprintCoroutine = StartCoroutine(RegisterSprintCommand());
-            }
+            _sprintCommandRegistered = false;
         }
 
         private void OnDrawGizmosSelected()

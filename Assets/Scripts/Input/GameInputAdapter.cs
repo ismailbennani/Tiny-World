@@ -1,6 +1,7 @@
 ﻿using Character.Player;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Utils;
 
 namespace Input
 {
@@ -82,17 +83,10 @@ namespace Input
 
         private bool GetPlayerController()
         {
-            if (!_playerControllerInputSource)
-            {
-                PlayerController playerController = PlayerController.Instance;
-                if (playerController)
-                {
-                    _playerControllerInputSource = playerController.playerControllerInputSource;
-                    return _playerControllerInputSource;
-                }
-            }
-            
-            return false;
+            return ComponentExtensions.GetComponent(
+                ref _playerControllerInputSource,
+                () => PlayerController.Instance ? PlayerController.Instance.playerControllerInputSource : null
+            );
         }
     }
 }
