@@ -47,11 +47,9 @@ namespace Map
             }
         }
 
-        public void SpawnItem(Item item, Vector2Int tilePosition)
+        public void SpawnItem(Item item, Vector3 position)
         {
             GameState gameState = GameStateManager.Current;
-
-            Vector3 position = gameState.map.GetTileCenterPosition(tilePosition);
 
             ItemState itemState = new(item)
             {
