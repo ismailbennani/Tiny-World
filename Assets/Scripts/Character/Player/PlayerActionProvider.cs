@@ -22,7 +22,7 @@ namespace Character.Player
             TryGetGatherResourceControllerIfNecessary();
 
             GameState state = GameStateManager.Current;
-            if (!state || state.map == null || state.character == null)
+            if (!state || state.map == null || state.player == null)
             {
                 return;
             }
@@ -61,7 +61,7 @@ namespace Character.Player
 
         private void UpdateTileInteract(GameState state)
         {
-            Vector2Int playerPosition = state.character.tile;
+            Vector2Int playerPosition = state.player.tile;
 
             if (_currentTileTarget == playerPosition)
             {
@@ -96,17 +96,17 @@ namespace Character.Player
                 {
                     GameInputCallbackManager.Instance.Register(GameInputType.Interact, this, callback, LootTileChannel);
                     tile.onDepleted.AddListener(UnregisterLootInteract);
-                    _currentTileTarget = playerPosition;
                     return;
                 }
             }
             
+            _currentTileTarget = playerPosition;
+
             UnregisterLootInteract();
         }
 
         private void UnregisterLootInteract()
         {
-            _currentTileTarget = null;
             GameInputCallbackManager.Instance.Unregister(GameInputType.Interact, this, LootTileChannel);
         }
 

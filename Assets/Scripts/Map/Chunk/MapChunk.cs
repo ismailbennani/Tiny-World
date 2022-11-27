@@ -9,7 +9,7 @@ namespace Map.Chunk
     public class MapChunk : MonoBehaviour
     {
         public List<MapTile> tiles;
-        public ChunkState state;
+        public Vector2Int position;
 
         [SerializeField]
         private MapTile baseTile;
@@ -18,15 +18,16 @@ namespace Map.Chunk
         private bool _chunkFullySpawned;
         private bool _hidden;
 
-        public void Set(MapState map, Vector2Int chunk, bool urgent)
+        public void Set(GameState gameState, Vector2Int newPosition, bool urgent)
         {
-            if (!_hidden && state?.position == chunk && (_chunkFullySpawned || !urgent))
+            if (!_hidden && position == newPosition && (_chunkFullySpawned || !urgent))
             {
                 return;
             }
 
-            state = map.GetChunk(chunk);
-            baseTile = map.runtimeConfig.baseTile;
+            position = newPosition;
+            ChunkState state = gameState.map.GetChunk(newPosition);
+            baseTile = gameState.map.runtimeConfig.baseTile;
 
             tiles ??= new List<MapTile>();
 
@@ -45,11 +46,11 @@ namespace Map.Chunk
 
             if (urgent)
             {
-                UpdateChunkImmediately(map, chunk);
+                UpdateChunkImmediately(gameState, state);
             }
             else
             {
-                _spawnCoroutine = StartCoroutine(UpdateChunkCoroutine(map, chunk));
+                _spawnCoroutine = StartCoroutine(UpdateChunkCoroutine(gameState, state));
             }
         }
 
@@ -64,9 +65,9 @@ namespace Map.Chunk
             _hidden = true;
         }
 
-        private void UpdateChunkImmediately(MapState map, Vector2Int chunk)
+        private void UpdateChunkImmediately(GameState gameState, ChunkState state)
         {
-            IEnumerator coroutine = UpdateChunkCoroutine(map, chunk);
+            IEnumerator coroutine = UpdateChunkCoroutine(gameState, state);
             while (coroutine.MoveNext())
             {
             }
@@ -74,19 +75,20 @@ namespace Map.Chunk
             _chunkFullySpawned = true;
         }
 
-        private IEnumerator UpdateChunkCoroutine(MapState map, Vector2Int chunk)
+        private IEnumerator UpdateChunkCoroutine(GameState gameState, ChunkState state)
         {
             int nTiles = state.size.x * state.size.y;
 
             for (int i = tiles.Count; i < nTiles; i++)
             {
                 MapTile newTile = Instantiate(baseTile, transform);
+                newTile.gameState = gameState;
                 tiles.Add(newTile);
 
                 yield return null;
             }
 
-            Vector2Int playerPosition = GameStateManager.Current.character.tile;
+            Vector2Int playerPosition = GameStateManager.Current.player.tile;
             IOrderedEnumerable<TileState> sortedTilesToUpdate = state.tiles.OrderBy(t => Vector2.Distance(t.position, playerPosition));
 
             int index = 0;
@@ -97,7 +99,7 @@ namespace Map.Chunk
 
                 mapTile.UpdateState(tile);
 
-                mapTile.transform.position = map.GetTileCenterPosition(tile.position);
+                mapTile.transform.position = gameState.map.GetTileCenterPosition(tile.position);
 
                 index++;
                 yield return null;

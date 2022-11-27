@@ -17,7 +17,12 @@ namespace Map.Tile
         public List<MapTileResourceParams> resourcesParams;
 
         [Space(10)]
-        public TileState state;
+        public GameState gameState;
+
+        public bool hasPosition;
+        public Vector2Int tilePosition;
+
+        public TileState State => hasPosition && gameState ? gameState.map.GetTile(tilePosition) : null;
 
         private MapTilePlatform _platform;
         private MapTileResource _tileResource;
@@ -33,9 +38,10 @@ namespace Map.Tile
 
         private void OnEnable()
         {
-            if (state != null)
+            TileState tileState = State;
+            if (tileState != null)
             {
-                AddListeners(state);
+                AddListeners(tileState);
             }
         }
 
@@ -43,7 +49,7 @@ namespace Map.Tile
         {
             if (newState == null)
             {
-                state = null;
+                hasPosition = false;
                 return;
             }
 
@@ -51,21 +57,22 @@ namespace Map.Tile
             SpawnPlatformIfNecessary(newState);
             SpawnResourceIfNecessary(newState);
 
-            state = newState;
+            tilePosition = newState.position;
+            hasPosition = true;
         }
 
         private void OnLoot(Item[] items)
         {
             PlayLootClip();
-            
-            if (items == null || items.Length == 0)
+
+            if (items == null || items.Length == 0 || !hasPosition)
             {
                 return;
             }
 
             foreach (Item item in items)
             {
-                GameMap.Instance.SpawnItem(item, state.position);
+                GameMap.Instance.SpawnItem(item, tilePosition);
             }
 
             if (_tileResource)
@@ -84,7 +91,13 @@ namespace Map.Tile
 
         public void PlayLootClip()
         {
-            MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.tileResource == state.config.tileResource);
+            TileState tileState = State;
+            if (tileState == null)
+            {
+                return;
+            }
+            
+            MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.tileResource == tileState.config.tileResource);
             if (resourceParams == null)
             {
                 return;
@@ -95,7 +108,13 @@ namespace Map.Tile
 
         public void PlayDepletedClip()
         {
-            MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.tileResource == state.config.tileResource);
+            TileState tileState = State;
+            if (tileState == null)
+            {
+                return;
+            }
+            
+            MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.tileResource == tileState.config.tileResource);
             if (resourceParams == null)
             {
                 return;
@@ -218,10 +237,10 @@ namespace Map.Tile
 
         private void AddListeners(TileState newState)
         {
-            if (state != null)
+            if (State != null)
             {
-                state.onLoot.RemoveListener(OnLoot);
-                state.onDepleted.RemoveListener(OnDepleted);
+                State.onLoot.RemoveListener(OnLoot);
+                State.onDepleted.RemoveListener(OnDepleted);
             }
 
             newState.onLoot.AddListener(OnLoot);
@@ -275,7 +294,7 @@ namespace Map.Tile
             {
                 MapTile mapTile = target as MapTile;
 
-                mapTile.UpdateState(mapTile.state);
+                mapTile.UpdateState(mapTile.State);
             }
         }
     }

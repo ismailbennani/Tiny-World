@@ -24,7 +24,7 @@ namespace Map.Chunk
         /// Chunk size in tiles
         /// </summary>
         /// <remarks>
-        /// tiles for this chunk range from <c>gridPosition</c> to <c/>gridPosition + size</c> 
+        /// tiles for this chunk range from <c>gridPosition</c> to <c>gridPosition + size</c> 
         /// </remarks>
         public Vector2Int size;
         
