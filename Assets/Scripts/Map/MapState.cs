@@ -18,7 +18,6 @@ namespace Map
         public MapRuntimeConfig runtimeConfig;
 
         public List<ChunkState> chunks;
-        public List<ItemState> items;
 
         private IMapGenerator _mapGenerator;
 
@@ -53,18 +52,23 @@ namespace Map
 
         public void AddItem(ItemState itemState)
         {
-            items.Add(itemState);
+            (int chunkX, int chunkY) = GetChunkPosition(itemState.position);
+            ChunkState chunk = GetChunk(chunkX, chunkY);
+            
+            chunk.items.Add(itemState);
+            itemState.chunk = new Vector2Int(chunkX, chunkY);
         }
 
         public void RemoveItem(ItemState itemState)
         {
-            items.Remove(itemState);
+            ChunkState chunk = GetChunk(itemState.chunk.x, itemState.chunk.y);
+            chunk.items.Remove(itemState);
         }
 
         public IEnumerable<ItemState> GetItemsInChunk(int chunkX, int chunkY)
         {
-            Rect chunkRect = GetChunkRect(chunkX, chunkY);
-            return items.Where(i => chunkRect.Contains(new Vector2(i.position.x, i.position.z)));
+            ChunkState chunk = GetChunk(chunkX, chunkY);
+            return chunk.items;
         }
 
         private ChunkState GenerateChunk(int chunkX, int chunkY)
