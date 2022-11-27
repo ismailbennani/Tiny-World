@@ -909,12 +909,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2543602836572268083}
   - component: {fileID: 2649814435191772009}
-  - component: {fileID: 763021247331697054}
-  - component: {fileID: 6140264540849444956}
   - component: {fileID: 1090842298889398871}
   - component: {fileID: 4151355903617304371}
   - component: {fileID: 1531707133698989256}
-  - component: {fileID: 3715273478418978869}
   - component: {fileID: 1983519566600461238}
   - component: {fileID: 4269841135076651646}
   m_Layer: 8
@@ -966,49 +963,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &763021247331697054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2884381706308074633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 2f5d5373fbc7a014599708e825e43e8e, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
---- !u!114 &6140264540849444956
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2884381706308074633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c64e9ec6c0f6454f86f81ed5667cb678, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerInput: {fileID: 763021247331697054}
 --- !u!143 &1090842298889398871
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1039,10 +993,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bb4c3c3ba59455aa2a91f76d704aacd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 4
-  sprintSpeed: 10.67
-  rotationSmoothTime: 0.12
-  speedChangeRate: 20
+  state:
+    config: {fileID: 0}
+    position: {x: 0, y: 0, z: 0}
+    sprint: 0
+    inventory:
+      lines: []
+    chunk: {x: 0, y: 0}
+    tile: {x: 0, y: 0}
+  playerControllerInputSource: {fileID: 0}
+  grounded: 1
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 64
   landingByTileType: []
   defaultLandingAudioClips:
   - {fileID: 8300000, guid: ac300c5b1d663024ebc6f8898529ed40, type: 3}
@@ -1088,20 +1051,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: e2251cf86e16ea74db3db43bcebb93c4, type: 3}
   - {fileID: 8300000, guid: 8abb6302b39924b4480a547bcd341f48, type: 3}
   footstepAudioVolume: 0.5
-  jumpHeight: 0.8
-  gravity: -30
-  jumpTimeout: 0.5
-  fallTimeout: 0.15
-  grounded: 1
-  groundedOffset: 0
-  groundedRadius: 0.28
-  groundLayers:
-    serializedVersion: 2
-    m_Bits: 64
   cameraTarget: {fileID: 8085402067943711189}
-  cameraRotationSmoothTime: 0.1
   cameraAngle: 0
-  zoomSpeed: 0.1
   zoomLevel: 0.5
   onMoveStart:
     m_PersistentCalls:
@@ -1123,25 +1074,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   move: {x: 0, y: 0}
   jump: 0
-  sprint: 0
   look: 0
   zoom: 0
   analogMovement: 0
---- !u!114 &3715273478418978869
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2884381706308074633}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8678b99bdf441478897d0621a217865, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  onCallbackChange:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &1983519566600461238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1577,6 +1512,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 19d8d65b2dba4c38bf15d154c18c83e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onClosestItemChange:
+    m_PersistentCalls:
+      m_Calls: []
+  closestItem: {fileID: 0}
+  itemsNearby: []
+  highlightClosestItem: 0
 --- !u!1 &4342989734702450264
 GameObject:
   m_ObjectHideFlags: 0
