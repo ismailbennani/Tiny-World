@@ -14,13 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseItem: {fileID: 306767647326952027, guid: 0763ee3f405417d40a368805605add97, type: 3}
   gatherRadius: 1
-  prefabs:
+  prefabsByItem:
   - item: {fileID: 11400000, guid: 1d6b54767f8d45c4286f28efbc7d228d, type: 2}
-    prefab: {fileID: 0}
+    prefabs: []
   - item: {fileID: 11400000, guid: e51a94c001af73b4eb75ce8ff42f2405, type: 2}
-    prefab: {fileID: 0}
+    prefabs: []
   - item: {fileID: 11400000, guid: 47cbc9a72b884444db0bf30f0282b35e, type: 2}
-    prefab: {fileID: 8693733093029553978, guid: 6b8988afe0a45124cabb2af42f43ad6d, type: 3}
+    prefabs:
+    - {fileID: 8693733093029553978, guid: 6b8988afe0a45124cabb2af42f43ad6d, type: 3}
+    - {fileID: 8693733093029553978, guid: 1f18bdc8dd09d794eafbfedff7eee2b2, type: 3}
+    - {fileID: 8693733093029553978, guid: e2998be78f009c04395600d409d70102, type: 3}
   - item: {fileID: 11400000, guid: d419cf18772846742a2c1b773abc1448, type: 2}
-    prefab: {fileID: 0}
+    prefabs: []
   defaultPrefab: {fileID: 2453901654357654607, guid: 8d9950f72ca62394cad878ac6afe5089, type: 3}

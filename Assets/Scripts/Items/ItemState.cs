@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Items
 {
@@ -12,6 +13,9 @@ namespace Items
         public Item item;
         public Vector3 position;
 
+        [Header("Render")]
+        public uint variant;
+
         public bool newlySpawned;
 
         public ItemState(Item item)
@@ -19,6 +23,7 @@ namespace Items
             guid = Guid.NewGuid().ToString();
             this.item = item;
 
+            variant = (uint)Random.Range(int.MinValue, int.MaxValue);
             newlySpawned = true;
         }
 

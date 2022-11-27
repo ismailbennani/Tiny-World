@@ -51,7 +51,7 @@ namespace Items
             }
 
             GameConfig gameState = GameStateManager.Config;
-            GameObject prefab = gameState.items.GetPrefab(newState.item);
+            GameObject prefab = gameState.items.GetPrefab(newState);
             if (!prefab)
             {
                 return;
