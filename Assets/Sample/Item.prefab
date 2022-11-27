@@ -65,6 +65,8 @@ MonoBehaviour:
     guid: 
     item: {fileID: 0}
     position: {x: 0, y: 0, z: 0}
+    chunk: {x: 0, y: 0}
     variant: 0
     newlySpawned: 0
   rigidbody: {fileID: 4640438730358561824}
+  outline: {fileID: 0}

@@ -35,6 +35,9 @@ namespace Character.Player
 
             mainCamera.Follow = player.cameraTarget;
             mainCamera.LookAt = player.cameraTarget;
+
+            CharacterItemsDetector itemDetector = player.GetComponentInChildren<CharacterItemsDetector>();
+            itemDetector.highlightClosestItem = true;
         
             Ready = true;
 
