@@ -8,6 +8,8 @@ namespace Items
         public string itemName;
         public string itemDescription;
 
+        public bool stackable;
+
         public override string ToString()
         {
             return $"{itemName}";
