@@ -1,4 +1,5 @@
 ﻿using System;
+using Character.Inventory;
 using UnityEngine;
 
 namespace Character

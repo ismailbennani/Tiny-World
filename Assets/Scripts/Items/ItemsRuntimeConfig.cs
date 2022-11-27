@@ -19,7 +19,7 @@ namespace Items
 
         public GameObject GetPrefab(ItemState state)
         {
-            GameObject[] prefabs = prefabsByItem.FirstOrDefault(i => i.item.itemName == state.item.itemName)?.prefabs;
+            GameObject[] prefabs = prefabsByItem.FirstOrDefault(i => i.item == state.item)?.prefabs;
             if (prefabs != null && prefabs.Length > 0)
             {
                 GameObject prefab = prefabs[state.variant % prefabs.Length];
