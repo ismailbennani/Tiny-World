@@ -1,11 +1,10 @@
-﻿using System;
-using Map.Generation;
+﻿using Map.Generation;
 using UnityEngine;
 
 namespace Map
 {
-    [Serializable]
-    public class MapInitialConfig
+    [CreateAssetMenu(menuName = "Custom/Map initial config")]
+    public class MapInitialConfig: ScriptableObject
     {
         [Header("Map generation")]
         [Tooltip("Chunk size in tiles")]
