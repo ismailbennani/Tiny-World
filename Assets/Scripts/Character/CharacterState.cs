@@ -8,7 +8,7 @@ namespace Character
     {
         public CharacterConfig config;
         public Vector3 position;
-        public bool sprinting;
+        public bool sprint;
 
         public CharacterInventory inventory;
 

@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Linq;
 using Character.Player;
+using Input;
 using Map;
 using Map.Tile;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -14,10 +15,10 @@ using Random = UnityEngine.Random;
 namespace Character
 {
     [RequireComponent(typeof(CharacterController))]
-    [RequireComponent(typeof(PlayerInput))]
     public class ThirdPersonController : MonoBehaviour
     {
         public CharacterState state;
+        public PlayerControllerInputSource playerControllerInputSource;
 
         [Header("Player Grounded")]
         [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
@@ -25,7 +26,7 @@ namespace Character
 
         [Tooltip("What layers the character uses as ground")]
         public LayerMask groundLayers;
-        
+
         [Header("Audio")]
         public AudioClipsForTileType[] landingByTileType;
         public AudioClip[] defaultLandingAudioClips;
@@ -66,8 +67,9 @@ namespace Character
 
         private Animator _animator;
         private CharacterController _controller;
-        private PlayerControllerInputSource _playerControllerInputSource;
         private GameObject _mainCamera;
+
+        private Coroutine _registerSprintCoroutine;
 
         private bool _hasAnimator;
         private bool _moving;
@@ -82,14 +84,21 @@ namespace Character
 
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
-            _playerControllerInputSource = GetComponent<PlayerControllerInputSource>();
-            GetComponent<PlayerInput>();
+            playerControllerInputSource = GetComponent<PlayerControllerInputSource>();
 
             AssignAnimationIDs();
 
             // reset our timeouts on start
             _jumpTimeoutDelta = state.config.jumpTimeout;
             _fallTimeoutDelta = state.config.fallTimeout;
+            
+            _registerSprintCoroutine = StartCoroutine(RegisterSprintCommand());
+        }
+
+        void OnEnable()
+        {
+            Debug.Log("PrintOnEnable: script was enabled");
+            _registerSprintCoroutine = StartCoroutine(RegisterSprintCommand());
         }
 
         private void Update()
@@ -108,7 +117,7 @@ namespace Character
             {
                 return;
             }
-            
+
             state.position = transform.position;
 
             GameState gameState = GameStateManager.Current;
@@ -116,7 +125,7 @@ namespace Character
             {
                 return;
             }
-            
+
             state.chunk = gameState.map.GetChunkPositionAt(state.position);
             state.tile = gameState.map.GetTilePositionAt(state.position);
         }
@@ -149,12 +158,11 @@ namespace Character
             // don't change speed if we are not grounded because it would change speed mid-air
             if (grounded)
             {
-                state.sprinting = _playerControllerInputSource.sprint;
-                _moveInput = _playerControllerInputSource.move;
+                _moveInput = playerControllerInputSource.move;
             }
 
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = state.sprinting ? state.config.sprintSpeed : state.config.moveSpeed;
+            float targetSpeed = state.sprint ? state.config.sprintSpeed : state.config.moveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -167,7 +175,7 @@ namespace Character
             float currentHorizontalSpeed = new Vector3(velocity.x, 0.0f, velocity.z).magnitude;
 
             float speedOffset = 0.1f;
-            float inputMagnitude = _playerControllerInputSource.analogMovement ? _moveInput.magnitude : 1f;
+            float inputMagnitude = playerControllerInputSource.analogMovement ? _moveInput.magnitude : 1f;
 
             // accelerate or decelerate to target speed
             if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
@@ -251,7 +259,7 @@ namespace Character
                 }
 
                 // Jump
-                if (_playerControllerInputSource.jump && _jumpTimeoutDelta <= 0.0f)
+                if (playerControllerInputSource.jump && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(state.config.jumpHeight * -2f * state.config.gravity);
@@ -289,7 +297,7 @@ namespace Character
                 }
 
                 // if we are not grounded, do not jump
-                _playerControllerInputSource.jump = false;
+                playerControllerInputSource.jump = false;
             }
 
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
@@ -305,21 +313,46 @@ namespace Character
             {
                 return;
             }
-            
+
             cameraAngle = Mathf.SmoothDampAngle(
                               cameraAngle,
-                              cameraAngle + _playerControllerInputSource.look * 10,
+                              cameraAngle + playerControllerInputSource.look * 10,
                               ref _cameraRotationVelocity,
                               playerConfig.cameraRotationSmoothTime
                           )
                           % 360;
 
-            float targetZoom = _playerControllerInputSource.zoom > 0.5
+            float targetZoom = playerControllerInputSource.zoom > 0.5
                 ? 1
-                : _playerControllerInputSource.zoom < -0.5
+                : playerControllerInputSource.zoom < -0.5
                     ? 0
                     : zoomLevel;
             zoomLevel = Mathf.SmoothStep(zoomLevel, targetZoom, playerConfig.zoomSpeed);
+        }
+
+        private IEnumerator RegisterSprintCommand()
+        {
+            while (!GameInputCallbackManager.Instance || state == null)
+            {
+                yield return null;
+            }
+
+            GameInputCallbackManager gameInputCallbackManager = GameInputCallbackManager.Instance;
+
+            GameInputCallback callback = new(state.sprint ? "Walk" : "Sprint", ToggleSprint);
+            gameInputCallbackManager.Register(GameInputType.ToggleSprint, this, callback);
+
+            _registerSprintCoroutine = null;
+        }
+
+        private void ToggleSprint()
+        {
+            state.sprint = !state.sprint;
+            
+            if (_registerSprintCoroutine == null)
+            {
+                _registerSprintCoroutine = StartCoroutine(RegisterSprintCommand());
+            }
         }
 
         private void OnDrawGizmosSelected()
