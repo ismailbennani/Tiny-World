@@ -35,7 +35,7 @@ namespace Character.Player
         {
             if (_playerItemsDetector && _playerItemsDetector.closestItem)
             {
-                if (_currentItemTarget == _playerItemsDetector.closestItem.state.guid)
+                if (_currentItemTarget == _playerItemsDetector.closestItem.guid)
                 {
                     return;
                 }
@@ -44,14 +44,14 @@ namespace Character.Player
                     GameInputType.Interact,
                     this,
                     new GameInputCallback(
-                        $"Take {_playerItemsDetector.closestItem.state.item.itemName}",
-                        () => Debug.Log($"TAKE {_playerItemsDetector.closestItem.state.item.itemName}"),
+                        $"Take {_playerItemsDetector.closestItem.guid}",
+                        () => Debug.Log($"TAKE {_playerItemsDetector.closestItem.guid}"),
                         10
                     ),
                     TakeItemChannel
                 );
 
-                _currentItemTarget = _playerItemsDetector.closestItem.state.guid;
+                _currentItemTarget = _playerItemsDetector.closestItem.guid;
             }
             else
             {

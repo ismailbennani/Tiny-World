@@ -27,7 +27,7 @@ namespace Character
             itemsNearby.RemoveAll(i => !i);
 
             Vector3 playerPosition = GameStateManager.Current.player.position;
-            GameItem newClosestItem = itemsNearby.OrderBy(i => Vector3.Distance(i.state.position, playerPosition)).FirstOrDefault();
+            GameItem newClosestItem = itemsNearby.OrderBy(i => Vector3.Distance(i.transform.position, playerPosition)).FirstOrDefault();
 
             if (newClosestItem != closestItem)
             {

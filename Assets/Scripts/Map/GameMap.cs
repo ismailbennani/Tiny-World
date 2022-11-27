@@ -66,7 +66,7 @@ namespace Map
             {
                 return null;
             }
-            
+
             GameState state = GameStateManager.Current;
             if (!state)
             {
@@ -84,7 +84,7 @@ namespace Map
             {
                 return null;
             }
-            
+
             return chunk.tiles.SingleOrDefault(t => t.hasPosition && t.tilePosition == tile.position);
         }
 
@@ -167,21 +167,20 @@ namespace Map
 
         private IEnumerator UpdateItems(GameState gameState, IEnumerable<Vector2Int> chunksInView)
         {
-            HashSet<ItemState> itemsToDisplay = chunksInView.SelectMany(gameState.map.GetItemsInChunk).ToHashSet();
+            Dictionary<string, ItemState> newItems = chunksInView.SelectMany(gameState.map.GetItemsInChunk).ToDictionary(i => i.guid, i => i);
+
+            HashSet<string> itemsToDisplay = newItems.Keys.ToHashSet();
             int nItems = itemsToDisplay.Count;
 
             items ??= new List<GameItem>();
 
-            HashSet<ItemState> toBeSkipped = new();
-            foreach (GameItem item in items)
+            HashSet<string> toBeSkipped = new();
+            foreach (GameItem item in items.Where(item => itemsToDisplay.Contains(item.guid)))
             {
-                if (itemsToDisplay.Contains(item.state))
-                {
-                    toBeSkipped.Add(item.state);
-                    itemsToDisplay.Remove(item.state);
+                toBeSkipped.Add(item.guid);
+                itemsToDisplay.Remove(item.guid);
 
-                    item.Set(item.state);
-                }
+                item.Set(newItems[item.guid]);
             }
 
             for (int i = items.Count; i < nItems; i++)
@@ -189,35 +188,31 @@ namespace Map
                 GameItem newItem = Instantiate(gameState.itemsConfig.baseItem, transform);
                 items.Add(newItem);
 
-                ItemState itemStateForNewItem = itemsToDisplay.First();
-                itemsToDisplay.Remove(itemStateForNewItem);
-                toBeSkipped.Add(itemStateForNewItem);
+                string newItemGuid = itemsToDisplay.First();
+                itemsToDisplay.Remove(newItemGuid);
+                toBeSkipped.Add(newItemGuid);
 
                 newItem.gameObject.SetActive(true);
+
+                ItemState itemStateForNewItem = newItems[newItemGuid];
                 newItem.Set(itemStateForNewItem);
 
                 yield return null;
             }
 
-            foreach (GameItem item in items)
+            foreach (GameItem item in items.Where(item => !toBeSkipped.Contains(item.guid)))
             {
-                if (toBeSkipped.Contains(item.state))
-                {
-                    continue;
-                }
-
                 if (itemsToDisplay.Count == 0)
                 {
                     item.Hide();
                 }
                 else
                 {
-                    ItemState itemState = itemsToDisplay.First();
-                    itemsToDisplay.Remove(itemState);
+                    string itemGuid = itemsToDisplay.First();
+                    itemsToDisplay.Remove(itemGuid);
 
+                    ItemState itemState = newItems[itemGuid];
                     item.Set(itemState);
-
-                    toBeSkipped.Add(itemState);
 
                     yield return null;
                 }

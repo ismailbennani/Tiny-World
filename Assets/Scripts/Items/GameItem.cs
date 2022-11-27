@@ -7,10 +7,10 @@ namespace Items
 {
     public class GameItem: MonoBehaviour
     {
+        public string guid;
         public new Rigidbody rigidbody;
 
         private Vector2Int _chunk;
-        private string _guid;
         
         private GameObject _itemObject;
         private HighlightableGameObject _highlightable;
@@ -23,7 +23,7 @@ namespace Items
         
         void Update()
         {
-            if (_guid == null)
+            if (guid == null)
             {
                 return;
             }
@@ -35,7 +35,7 @@ namespace Items
             }
 
             ChunkState chunkState = gameState.map.GetChunk(_chunk);
-            ItemState state = chunkState?.GetItem(_guid);
+            ItemState state = chunkState?.GetItem(guid);
             if (state == null)
             {
                 return;
@@ -51,7 +51,7 @@ namespace Items
         
         public void Set(ItemState newState)
         {
-            if (!_hidden && _guid == newState?.guid)
+            if (!_hidden && guid == newState?.guid)
             {
                 return;
             }
@@ -63,7 +63,7 @@ namespace Items
                 return;
             }
             
-            _guid = newState.guid;
+            guid = newState.guid;
             _chunk = newState.chunk;
             
             gameObject.SetActive(true);
@@ -108,7 +108,7 @@ namespace Items
             }
             else
             {
-                Debug.LogWarning($"Missing highlight for item {_guid} at {_chunk}");
+                Debug.LogWarning($"Missing highlight for item {guid} at {_chunk}");
             }
         }
 
