@@ -22,11 +22,10 @@ namespace Character.Player
 
             if (!player)
             {
-                CharacterState characterState = GameStateManager.Current.character;
+                CharacterState characterState = GameStateManager.Current.player;
                 CharacterConfig config = characterState.config;
 
                 player = Instantiate(config.prefab, characterState.position, Quaternion.identity, transform);
-                player.state = characterState;
             }
 
             if (!mainCamera)

@@ -23,12 +23,12 @@ namespace EditorUtils
 
             if (showMap)
             {
-                DrawMapState(gameState.map, gameState.character);
+                DrawMapState(gameState.map, gameState.player);
             }
 
             if (showPlayer)
             {
-                DrawPlayerState(gameState.map, gameState.character);
+                DrawPlayerState(gameState.map, gameState.player);
             }
         }
 
