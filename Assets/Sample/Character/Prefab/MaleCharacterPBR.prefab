@@ -1001,7 +1001,7 @@ MonoBehaviour:
       lines: []
     chunk: {x: 0, y: 0}
     tile: {x: 0, y: 0}
-  playerControllerInputSource: {fileID: 0}
+  playerControllerInputSource: {fileID: 1531707133698989256}
   grounded: 1
   groundLayers:
     serializedVersion: 2
