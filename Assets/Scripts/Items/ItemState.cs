@@ -12,10 +12,14 @@ namespace Items
         public Item item;
         public Vector3 position;
 
+        public bool newlySpawned;
+
         public ItemState(Item item)
         {
             guid = Guid.NewGuid().ToString();
             this.item = item;
+
+            newlySpawned = true;
         }
 
         public bool Equals(ItemState other)

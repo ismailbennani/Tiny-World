@@ -5,6 +5,7 @@ namespace Items
     public class GameItem: MonoBehaviour
     {
         public ItemState state;
+        public new Rigidbody rigidbody;
 
         private GameObject _itemObject;
         private bool _hidden;
@@ -39,6 +40,15 @@ namespace Items
             }
 
             transform.position = newState.position;
+
+            if (newState.newlySpawned && rigidbody)
+            {
+                Vector3 force = Random.onUnitSphere;
+                force.y = 1;
+                rigidbody.AddForce(force, ForceMode.Impulse);
+
+                newState.newlySpawned = false;
+            }
 
             GameConfig gameState = GameStateManager.Config;
             GameObject prefab = gameState.items.GetPrefab(newState.item);
