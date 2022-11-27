@@ -26,6 +26,11 @@ namespace UI.Inventory
 
         private InventoryState _inventoryState;
 
+        void Start()
+        {
+            Close();
+        }
+        
         void OnEnable()
         {
             Instance = this;
