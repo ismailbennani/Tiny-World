@@ -103,6 +103,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rock_03
       objectReference: {fileID: 0}
+    - target: {fileID: 4680757731160225450, guid: 23c2990103430a04392cd0dd8ed65bd3, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7495719641570791432, guid: 23c2990103430a04392cd0dd8ed65bd3, type: 3}
       propertyPath: m_Convex
       value: 1
