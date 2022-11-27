@@ -11,7 +11,7 @@ namespace Character
         public Vector3 position;
         public bool sprint;
 
-        public CharacterInventory inventory;
+        public InventoryState inventoryState;
 
         [Header("Computed state")]
         public Vector2Int chunk;

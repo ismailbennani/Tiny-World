@@ -35,7 +35,7 @@ namespace Character.Player
         private void UpdateItemInteract()
         {
             GameState gameState = GameStateManager.Current;
-            if (_playerItemsDetector && _playerItemsDetector.closestItem && gameState && gameState.player?.inventory != null)
+            if (_playerItemsDetector && _playerItemsDetector.closestItem && gameState && gameState.player?.inventoryState != null)
             {
                 if (_currentItemTarget == _playerItemsDetector.closestItem.guid)
                 {
@@ -48,7 +48,7 @@ namespace Character.Player
                     GameInputCallbackManager.Instance.Register(
                         GameInputType.Interact,
                         this,
-                        new GameInputCallback($"Take {itemState.item.itemName}", () => Inventory.Inventory.Take(gameState.player.inventory, itemState), 10),
+                        new GameInputCallback($"Take {itemState.item.itemName}", () => Inventory.Inventory.Take(gameState.player.inventoryState, itemState), 10),
                         TakeItemChannel
                     );
 

@@ -4,12 +4,15 @@ using System.Linq;
 using Items;
 using Map;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Character.Inventory
 {
     [Serializable]
-    public class CharacterInventory
+    public class InventoryState
     {
+        public UnityEvent<InventoryLine> onChange = new();
+
         public List<InventoryLine> lines;
 
         public void TakeItem(ItemState item)
@@ -20,6 +23,8 @@ namespace Character.Inventory
                 matchingLine = new InventoryLine { item = item.item, count = 0 };
                 lines.Add(matchingLine);
             }
+            
+            onChange.Invoke(matchingLine);
 
             matchingLine.count++;
         }
@@ -49,6 +54,8 @@ namespace Character.Inventory
             {
                 lines.Remove(matchingLine);
             }
+
+            onChange.Invoke(matchingLine);
 
             GameMap map = GameMap.Instance;
             if (!map)

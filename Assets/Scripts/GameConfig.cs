@@ -1,6 +1,7 @@
 ﻿using Character.Player;
 using Items;
 using Map;
+using UI.Inventory;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Custom/Game config")]
@@ -15,4 +16,7 @@ public class GameConfig: ScriptableObject
     
     [Header("Items")]
     public ItemsRuntimeConfig items;
+
+    [Header("UI")]
+    public UIInventoryTheme inventoryTheme;
 }

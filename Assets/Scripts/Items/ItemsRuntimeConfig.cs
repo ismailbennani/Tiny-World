@@ -31,6 +31,11 @@ namespace Items
 
             return defaultPrefab;
         }
+
+        public GameObject GetPrefab(Item item)
+        {
+            return GetPrefab(new ItemState(item));
+        }
     }
 
     [Serializable]

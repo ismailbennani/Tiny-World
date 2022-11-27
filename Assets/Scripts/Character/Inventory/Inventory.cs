@@ -5,7 +5,7 @@ namespace Character.Inventory
 {
     public static class Inventory
     {
-        public static bool Take(CharacterInventory inventory, ItemState item)
+        public static bool Take(InventoryState inventoryState, ItemState item)
         {
             GameState gameState = GameStateManager.Current;
             if (!gameState)
@@ -21,7 +21,7 @@ namespace Character.Inventory
 
             if (map.RemoveItem(item))
             {
-                inventory.TakeItem(item);
+                inventoryState.TakeItem(item);
             }
 
             return true;
