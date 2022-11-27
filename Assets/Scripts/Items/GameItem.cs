@@ -5,20 +5,9 @@ namespace Items
     public class GameItem: MonoBehaviour
     {
         public ItemState state;
-        public bool animateOnStart;
 
         private GameObject _itemObject;
         private bool _hidden;
-
-        void Start()
-        {
-            if (state != null && animateOnStart)
-            {
-                transform.Translate(Random.Range(-0.5f, 0.5f), 1, Random.Range(-0.5f, 0.5f));
-                state.position = transform.position;
-                animateOnStart = false;
-            }
-        }
         
         void Update()
         {
@@ -48,6 +37,8 @@ namespace Items
             {
                 return;
             }
+
+            transform.position = newState.position;
 
             GameConfig gameState = GameStateManager.Config;
             GameObject prefab = gameState.items.GetPrefab(newState.item);

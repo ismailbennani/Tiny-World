@@ -50,18 +50,14 @@ namespace Map
         public void SpawnItem(Item item, Vector2Int tilePosition)
         {
             GameState gameState = GameStateManager.Current;
-            GameConfig gameConfig = GameStateManager.Config;
-            
-            ItemState itemState = new(item);
-            gameState.map.items.Add(itemState);
-            
-            GameItem gameItem = Instantiate(gameConfig.items.baseItem, transform);
+
             Vector3 position = gameState.map.GetTileCenterPosition(tilePosition);
-            gameItem.transform.position = position;
-            gameItem.animateOnStart = true;
-            gameItem.Set(itemState);
             
-            items.Add(gameItem);
+            ItemState itemState = new(item)
+            {
+                position = position + new Vector3(Random.Range(-0.5f, 0.5f), 1, Random.Range(-0.5f, 0.5f))
+            };
+            gameState.map.items.Add(itemState);
         }
 
         public MapTile GetTile(TileState tile)
@@ -178,7 +174,7 @@ namespace Map
                 }
             }
             
-            for (int i = chunks.Count; i < nItems; i++)
+            for (int i = items.Count; i < nItems; i++)
             {
                 GameItem newItem = Instantiate(gameState.itemsConfig.baseItem, transform);
                 items.Add(newItem);
@@ -192,7 +188,7 @@ namespace Map
 
                 yield return null;
             }
-            
+
             foreach (GameItem item in items)
             {
                 if (toBeSkipped.Contains(item.state))
@@ -202,15 +198,15 @@ namespace Map
 
                 if (itemsToDisplay.Count == 0)
                 {
-                    item.Hide();
+                    break;
                 }
-                else
-                {
-                    ItemState itemState = itemsToDisplay.First();
-                    itemsToDisplay.Remove(itemState);
+                
+                ItemState itemState = itemsToDisplay.First();
+                itemsToDisplay.Remove(itemState);
 
-                    item.Set(itemState);
-                }
+                item.Set(itemState);
+                
+                toBeSkipped.Add(itemState);
 
                 yield return null;
             }
@@ -235,10 +231,10 @@ namespace Map
 
                 Rect chunkRect = map.GetChunkRect(chunkPosition);
 
-                Vector3 corner1 = new(chunkRect.xMin, 0, chunkRect.xMin);
-                Vector3 corner2 = new(chunkRect.xMax, 0, chunkRect.xMin);
-                Vector3 corner3 = new(chunkRect.xMax, 0, chunkRect.xMax);
-                Vector3 corner4 = new(chunkRect.xMin, 0, chunkRect.xMax);
+                Vector3 corner1 = new(chunkRect.xMin, 0, chunkRect.yMin);
+                Vector3 corner2 = new(chunkRect.xMax, 0, chunkRect.yMin);
+                Vector3 corner3 = new(chunkRect.xMax, 0, chunkRect.yMax);
+                Vector3 corner4 = new(chunkRect.xMin, 0, chunkRect.yMax);
 
                 bool corner1InViewport = _camera.InViewport(corner1);
                 bool corner2InViewport = _camera.InViewport(corner2);

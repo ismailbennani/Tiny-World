@@ -40,7 +40,7 @@ namespace Character
             }
             
             TileState tile = state.map.GetTile(state.player.playerTile);
-            if (!tile.HasResource)
+            if (!tile.IsLootable)
             {
                 return;
             }
@@ -57,7 +57,7 @@ namespace Character
             }
             
             TileState tile = state.map.GetTile(state.player.playerTile);
-            if (tile.config.tileResource != TileResourceType.Rock || !tile.HasResource)
+            if (tile.config.tileResource != TileResourceType.Rock || !tile.IsLootable)
             {
                 return;
             }
@@ -74,7 +74,7 @@ namespace Character
             }
             
             TileState tile = state.map.GetTile(state.player.playerTile);
-            if (tile.config.tileResource != TileResourceType.Tree || !tile.HasResource)
+            if (tile.config.tileResource != TileResourceType.Tree || !tile.IsLootable)
             {
                 return;
             }
@@ -114,9 +114,15 @@ namespace Character
                 return;
             }
 
+            if (!tile.IsLootable)
+            {
+                Debug.LogWarning($"Invalidstate: tile {tile.position} is not lootable");
+                CancelGather();
+            }
+
             tile.Loot(1);
 
-            if (!tile.HasResource)
+            if (!tile.IsLootable)
             {
                 CancelGather();
             }

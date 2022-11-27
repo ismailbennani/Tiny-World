@@ -40,7 +40,7 @@ namespace Character.Player
             Vector2Int playerPosition = state.player.playerTile;
             TileState tile = state.map.GetTile(playerPosition);
 
-            if (tile.HasResource)
+            if (tile.IsLootable)
             {
                 Register(tile);
             }

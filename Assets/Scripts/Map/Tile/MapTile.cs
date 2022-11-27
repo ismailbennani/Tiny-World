@@ -176,7 +176,7 @@ namespace Map.Tile
 
             DestroyGameObject(_tileResource);
 
-            if (!newState.HasResource)
+            if (!newState.IsLootable)
             {
                 return;
             }

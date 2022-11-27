@@ -21,7 +21,7 @@ namespace Map.Tile
         [Header("Resource")]
         public int remainingLootAttempts;
 
-        public bool HasResource => config.lootTable != null && remainingLootAttempts > 0;
+        public bool IsLootable => config.lootTable != null && remainingLootAttempts > 0;
 
         public TileState(TileConfig config, Vector2Int position)
         {
