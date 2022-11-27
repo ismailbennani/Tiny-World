@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2afa298bb7d4bc78984fe90e3b7c3c3, type: 3}
+  m_Name: Map initial config
+  m_EditorClassIdentifier: 
+  chunkSize: {x: 5, y: 5}
+  initialChunks: {x: 5, y: 5}
+  seed: 0
+  tiles:
+  - tileConfig:
+      type: 1
+      tileResource: 0
+      lootTable: {fileID: 0}
+      nLoots: {x: 0, y: 0}
+    weight: 5
+  - tileConfig:
+      type: 2
+      tileResource: 0
+      lootTable: {fileID: 0}
+      nLoots: {x: 0, y: 0}
+    weight: 3
+  - tileConfig:
+      type: 1
+      tileResource: 1
+      lootTable: {fileID: 11400000, guid: bf433141645f0f74cbbe5d5352448254, type: 2}
+      nLoots: {x: 3, y: 3}
+    weight: 0.5
+  - tileConfig:
+      type: 2
+      tileResource: 2
+      lootTable: {fileID: 11400000, guid: b5494eb9db399aa42ba4981199934982, type: 2}
+      nLoots: {x: 5, y: 5}
+    weight: 0.5
+  - tileConfig:
+      type: 1
+      tileResource: 2
+      lootTable: {fileID: 11400000, guid: b5494eb9db399aa42ba4981199934982, type: 2}
+      nLoots: {x: 5, y: 5}
+    weight: 0.5
+  mapGenerationAlgorithm: 0

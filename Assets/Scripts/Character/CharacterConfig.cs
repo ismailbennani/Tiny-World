@@ -1,10 +1,9 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Character
 {
-    [Serializable]
-    public class CharacterConfig
+    [CreateAssetMenu(menuName = "Custom/Character config")]
+    public class CharacterConfig: ScriptableObject
     {
         public ThirdPersonController prefab;
         public Vector2Int spawnTile;
