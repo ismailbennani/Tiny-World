@@ -17,7 +17,7 @@ namespace Map
 
         [SerializeField]
         private List<MapChunk> chunks;
-        
+
         [SerializeField]
         private List<GameItem> items;
 
@@ -52,7 +52,7 @@ namespace Map
             GameState gameState = GameStateManager.Current;
 
             Vector3 position = gameState.map.GetTileCenterPosition(tilePosition);
-            
+
             ItemState itemState = new(item)
             {
                 position = position + new Vector3(Random.Range(-0.5f, 0.5f), 1, Random.Range(-0.5f, 0.5f))
@@ -89,7 +89,7 @@ namespace Map
             {
                 yield return null;
             }
-            
+
             IEnumerator updateItemsCoroutine = UpdateItems(gameState, chunksInView);
             while (updateItemsCoroutine.MoveNext())
             {
@@ -149,9 +149,9 @@ namespace Map
                     chunksToRender.Remove(positionForCurrentChunk);
 
                     chunk.Set(map, positionForCurrentChunk, chunksInView.Contains(positionForCurrentChunk));
-                }
 
-                yield return null;
+                    yield return null;
+                }
             }
         }
 
@@ -159,9 +159,9 @@ namespace Map
         {
             HashSet<ItemState> itemsToDisplay = chunksInView.SelectMany(gameState.map.GetItemsInChunk).ToHashSet();
             int nItems = itemsToDisplay.Count;
-            
+
             items ??= new List<GameItem>();
-            
+
             HashSet<ItemState> toBeSkipped = new();
             foreach (GameItem item in items)
             {
@@ -173,7 +173,7 @@ namespace Map
                     item.Set(item.state);
                 }
             }
-            
+
             for (int i = items.Count; i < nItems; i++)
             {
                 GameItem newItem = Instantiate(gameState.itemsConfig.baseItem, transform);
@@ -198,17 +198,19 @@ namespace Map
 
                 if (itemsToDisplay.Count == 0)
                 {
-                    break;
+                    item.Hide();
                 }
-                
-                ItemState itemState = itemsToDisplay.First();
-                itemsToDisplay.Remove(itemState);
+                else
+                {
+                    ItemState itemState = itemsToDisplay.First();
+                    itemsToDisplay.Remove(itemState);
 
-                item.Set(itemState);
-                
-                toBeSkipped.Add(itemState);
+                    item.Set(itemState);
 
-                yield return null;
+                    toBeSkipped.Add(itemState);
+
+                    yield return null;
+                }
             }
         }
 
