@@ -41,7 +41,6 @@ namespace Character
         public UnityEvent onMoveEnd = new();
 
         // player
-        private CharacterState _state;
         private Vector2 _moveInput;
         private float _speed;
         private float _animationBlend;
@@ -91,11 +90,6 @@ namespace Character
             _hasAnimator = TryGetComponent(out _animator);
 
             GameState gameState = GameStateManager.Current;
-            if (gameState)
-            {
-                _state = gameState.player;
-            }
-
             if (!gameState)
             {
                 return;
@@ -103,34 +97,29 @@ namespace Character
             
             ComponentExtensions.GetComponent(this, ref playerControllerInputSource);
             
-            JumpAndGravity();
-            GroundedCheck();
-            Move();
-            UpdateCamera();
+            JumpAndGravity(gameState);
+            GroundedCheck(gameState);
+            Move(gameState);
+            UpdateCamera(gameState);
 
             if (!_sprintCommandRegistered)
             {
-                RegisterSprintCommand();
+                RegisterSprintCommand(gameState);
             }
         }
 
         private void LateUpdate()
         {
-            if (_state == null)
-            {
-                return;
-            }
-            
-            _state.position = transform.position;
-
             GameState gameState = GameStateManager.Current;
             if (!gameState)
             {
                 return;
             }
 
-            _state.chunk = gameState.map.GetChunkPositionAt(_state.position);
-            _state.tile = gameState.map.GetTilePositionAt(_state.position);
+            PlayerState player = gameState.player;
+            player.position = transform.position;
+            player.chunk = gameState.map.GetChunkPositionAt(player.position);
+            player.tile = gameState.map.GetTilePositionAt(player.position);
         }
 
         private void AssignAnimationIDs()
@@ -142,12 +131,12 @@ namespace Character
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
         }
 
-        private void GroundedCheck()
+        private void GroundedCheck(GameState gameState)
         {
             // set sphere position, with offset
             Vector3 position = transform.position;
-            Vector3 spherePosition = new(position.x, position.y - _state.config.groundedOffset, position.z);
-            grounded = Physics.CheckSphere(spherePosition, _state.config.groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
+            Vector3 spherePosition = new(position.x, position.y - gameState.player.config.groundedOffset, position.z);
+            grounded = Physics.CheckSphere(spherePosition, gameState.player.config.groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
 
             // update animator if using character
             if (_hasAnimator)
@@ -156,7 +145,7 @@ namespace Character
             }
         }
 
-        private void Move()
+        private void Move(GameState gameState)
         {
             // don't change speed if we are not grounded because it would change speed mid-air
             if (grounded)
@@ -165,7 +154,7 @@ namespace Character
             }
 
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _state.sprint ? _state.config.sprintSpeed : _state.config.moveSpeed;
+            float targetSpeed = gameState.player.sprint ? gameState.player.config.sprintSpeed : gameState.player.config.moveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -185,7 +174,7 @@ namespace Character
             {
                 // creates curved result rather than a linear one giving a more organic speed change
                 // note T in Lerp is clamped, so we don't need to clamp our speed
-                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * _state.config.speedChangeRate);
+                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * gameState.player.config.speedChangeRate);
 
                 // round speed to 3 decimal places
                 _speed = Mathf.Round(_speed * 1000f) / 1000f;
@@ -195,7 +184,7 @@ namespace Character
                 _speed = targetSpeed;
             }
 
-            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * _state.config.speedChangeRate);
+            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * gameState.player.config.speedChangeRate);
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
             // normalise input direction
@@ -207,7 +196,7 @@ namespace Character
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
 
-                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, _state.config.rotationSmoothTime);
+                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, gameState.player.config.rotationSmoothTime);
 
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
 
@@ -241,12 +230,12 @@ namespace Character
             }
         }
 
-        private void JumpAndGravity()
+        private void JumpAndGravity(GameState gameState)
         {
             if (grounded)
             {
                 // reset the fall timeout timer
-                _fallTimeoutDelta = _state.config.fallTimeout;
+                _fallTimeoutDelta = gameState.player.config.fallTimeout;
 
                 // update animator if using character
                 if (_hasAnimator)
@@ -265,7 +254,7 @@ namespace Character
                 if (playerControllerInputSource.jump && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    _verticalVelocity = Mathf.Sqrt(_state.config.jumpHeight * -2f * _state.config.gravity);
+                    _verticalVelocity = Mathf.Sqrt(gameState.player.config.jumpHeight * -2f * gameState.player.config.gravity);
 
                     // update animator if using character
                     if (_hasAnimator)
@@ -283,7 +272,7 @@ namespace Character
             else
             {
                 // reset the jump timeout timer
-                _jumpTimeoutDelta = _state.config.jumpTimeout;
+                _jumpTimeoutDelta = gameState.player.config.jumpTimeout;
 
                 // fall timeout
                 if (_fallTimeoutDelta >= 0.0f)
@@ -306,13 +295,13 @@ namespace Character
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
             if (_verticalVelocity < _terminalVelocity)
             {
-                _verticalVelocity += _state.config.gravity * Time.deltaTime;
+                _verticalVelocity += gameState.player.config.gravity * Time.deltaTime;
             }
         }
 
-        private void UpdateCamera()
+        private void UpdateCamera(GameState gameState)
         {
-            if (_state.config is not PlayerConfig playerConfig)
+            if (gameState.player.config is not PlayerConfig playerConfig)
             {
                 return;
             }
@@ -333,7 +322,7 @@ namespace Character
             zoomLevel = Mathf.SmoothStep(zoomLevel, targetZoom, playerConfig.zoomSpeed);
         }
 
-        private void RegisterSprintCommand()
+        private void RegisterSprintCommand(GameState gameState)
         {
             GameInputCallbackManager gameInputCallbackManager = GameInputCallbackManager.Instance;
             if (!gameInputCallbackManager)
@@ -341,7 +330,7 @@ namespace Character
                 return;
             }
 
-            GameInputCallback callback = new(_state.sprint ? "Walk" : "Sprint", ToggleSprint);
+            GameInputCallback callback = new(gameState.player.sprint ? "Walk" : "Sprint", ToggleSprint);
             gameInputCallbackManager.Register(GameInputType.ToggleSprint, this, callback);
 
             _sprintCommandRegistered = true;
@@ -349,13 +338,25 @@ namespace Character
 
         private void ToggleSprint()
         {
-            _state.sprint = !_state.sprint;
+            GameState gameState = GameStateManager.Current;
+            if (!gameState)
+            {
+                return;
+            }
+            
+            gameState.player.sprint = !gameState.player.sprint;
             _sprintCommandRegistered = false;
         }
 
         private void OnDrawGizmosSelected()
         {
-            if (_state == null)
+            GameState gameState = GameStateManager.Current;
+            if (!gameState)
+            {
+                return;
+            }
+            
+            if (gameState.player == null)
             {
                 return;
             }
@@ -367,7 +368,7 @@ namespace Character
 
             // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
             Vector3 position = transform.position;
-            Gizmos.DrawSphere(new Vector3(position.x, position.y - _state.config.groundedOffset, position.z), _state.config.groundedRadius);
+            Gizmos.DrawSphere(new Vector3(position.x, position.y - gameState.player.config.groundedOffset, position.z), gameState.player.config.groundedRadius);
         }
 
         /// <remarks>
