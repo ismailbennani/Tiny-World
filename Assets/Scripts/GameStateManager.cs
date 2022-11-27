@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
-using Character;
 using Character.Player;
 using Map;
 using Map.Tile;
@@ -72,10 +71,9 @@ public class GameStateManager : MonoBehaviour
 
         Debug.Log("Initializing player state...");
 
-        currentState.character = new CharacterState
+        currentState.character = new PlayerState(manager.gameConfig.player)
         {
-            config = manager.gameConfig.character,
-            position = currentState.map.GetTileCenterPosition(manager.gameConfig.character.spawnTile)
+            position = currentState.map.GetTileCenterPosition(manager.gameConfig.player.spawnTile)
         };
 
         Debug.Log("Done.");

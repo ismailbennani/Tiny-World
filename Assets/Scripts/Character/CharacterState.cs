@@ -10,7 +10,12 @@ namespace Character
         public Vector3 position;
 
         [Header("Computed state")]
-        public Vector2Int playerChunk;
-        public Vector2Int playerTile;
+        public Vector2Int chunk;
+        public Vector2Int tile;
+
+        public CharacterState(CharacterConfig config)
+        {
+            this.config = config;
+        }
     }
 }

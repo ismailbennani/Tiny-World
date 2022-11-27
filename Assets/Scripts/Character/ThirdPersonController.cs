@@ -17,22 +17,16 @@ namespace Character
     [RequireComponent(typeof(PlayerInput))]
     public class ThirdPersonController : MonoBehaviour
     {
-        [Header("Character")]
         public CharacterState state;
 
-        [Tooltip("Move speed of the character in m/s")]
-        public float moveSpeed = 2.0f;
+        [Header("Player Grounded")]
+        [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
+        public bool grounded = true;
 
-        [Tooltip("Sprint speed of the character in m/s")]
-        public float sprintSpeed = 5.335f;
-
-        [Tooltip("How fast the character turns to face movement direction")]
-        [Range(0.0f, 0.3f)]
-        public float rotationSmoothTime = 0.12f;
-
-        [Tooltip("Acceleration and deceleration")]
-        public float speedChangeRate = 10.0f;
-
+        [Tooltip("What layers the character uses as ground")]
+        public LayerMask groundLayers;
+        
+        [Header("Audio")]
         public AudioClipsForTileType[] landingByTileType;
         public AudioClip[] defaultLandingAudioClips;
         public AudioClipsForTileType[] footstepByTileType;
@@ -40,38 +34,9 @@ namespace Character
         [Range(0, 1)]
         public float footstepAudioVolume = 0.5f;
 
-        [Space(10)]
-        [Tooltip("The height the player can jump")]
-        public float jumpHeight = 1.2f;
-
-        [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
-        public float gravity = -15.0f;
-
-        [Space(10)]
-        [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
-        public float jumpTimeout = 0.50f;
-
-        [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
-        public float fallTimeout = 0.15f;
-
-        [Header("Player Grounded")]
-        [Tooltip("If the character is grounded or not. Not part of the CharacterController built in grounded check")]
-        public bool grounded = true;
-
-        [Tooltip("Useful for rough ground")]
-        public float groundedOffset = -0.14f;
-
-        [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
-        public float groundedRadius = 0.28f;
-
-        [Tooltip("What layers the character uses as ground")]
-        public LayerMask groundLayers;
-
         [Header("Camera")]
         public Transform cameraTarget;
-        public float cameraRotationSmoothTime = 0.1f;
         public float cameraAngle;
-        public float zoomSpeed = 0.1f;
         public float zoomLevel;
 
         [Header("Events")]
@@ -124,8 +89,8 @@ namespace Character
             AssignAnimationIDs();
 
             // reset our timeouts on start
-            _jumpTimeoutDelta = jumpTimeout;
-            _fallTimeoutDelta = fallTimeout;
+            _jumpTimeoutDelta = state.config.jumpTimeout;
+            _fallTimeoutDelta = state.config.fallTimeout;
         }
 
         private void Update()
@@ -153,8 +118,8 @@ namespace Character
                 return;
             }
             
-            state.playerChunk = gameState.map.GetChunkPositionAt(state.position);
-            state.playerTile = gameState.map.GetTilePositionAt(state.position);
+            state.chunk = gameState.map.GetChunkPositionAt(state.position);
+            state.tile = gameState.map.GetTilePositionAt(state.position);
         }
 
         private void AssignAnimationIDs()
@@ -170,8 +135,8 @@ namespace Character
         {
             // set sphere position, with offset
             Vector3 position = transform.position;
-            Vector3 spherePosition = new(position.x, position.y - groundedOffset, position.z);
-            grounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
+            Vector3 spherePosition = new(position.x, position.y - state.config.groundedOffset, position.z);
+            grounded = Physics.CheckSphere(spherePosition, state.config.groundedRadius, groundLayers, QueryTriggerInteraction.Ignore);
 
             // update animator if using character
             if (_hasAnimator)
@@ -190,7 +155,7 @@ namespace Character
             }
 
             // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _isSprinting ? sprintSpeed : moveSpeed;
+            float targetSpeed = _isSprinting ? state.config.sprintSpeed : state.config.moveSpeed;
 
             // a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -210,7 +175,7 @@ namespace Character
             {
                 // creates curved result rather than a linear one giving a more organic speed change
                 // note T in Lerp is clamped, so we don't need to clamp our speed
-                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * speedChangeRate);
+                _speed = Mathf.Lerp(currentHorizontalSpeed, targetSpeed * inputMagnitude, Time.deltaTime * state.config.speedChangeRate);
 
                 // round speed to 3 decimal places
                 _speed = Mathf.Round(_speed * 1000f) / 1000f;
@@ -220,7 +185,7 @@ namespace Character
                 _speed = targetSpeed;
             }
 
-            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * speedChangeRate);
+            _animationBlend = Mathf.Lerp(_animationBlend, targetSpeed, Time.deltaTime * state.config.speedChangeRate);
             if (_animationBlend < 0.01f) _animationBlend = 0f;
 
             // normalise input direction
@@ -232,7 +197,7 @@ namespace Character
             {
                 _targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
 
-                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, rotationSmoothTime);
+                float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, state.config.rotationSmoothTime);
 
                 transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
 
@@ -271,7 +236,7 @@ namespace Character
             if (grounded)
             {
                 // reset the fall timeout timer
-                _fallTimeoutDelta = fallTimeout;
+                _fallTimeoutDelta = state.config.fallTimeout;
 
                 // update animator if using character
                 if (_hasAnimator)
@@ -290,7 +255,7 @@ namespace Character
                 if (_playerControllerInputSource.jump && _jumpTimeoutDelta <= 0.0f)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    _verticalVelocity = Mathf.Sqrt(jumpHeight * -2f * gravity);
+                    _verticalVelocity = Mathf.Sqrt(state.config.jumpHeight * -2f * state.config.gravity);
 
                     // update animator if using character
                     if (_hasAnimator)
@@ -308,7 +273,7 @@ namespace Character
             else
             {
                 // reset the jump timeout timer
-                _jumpTimeoutDelta = jumpTimeout;
+                _jumpTimeoutDelta = state.config.jumpTimeout;
 
                 // fall timeout
                 if (_fallTimeoutDelta >= 0.0f)
@@ -331,17 +296,22 @@ namespace Character
             // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
             if (_verticalVelocity < _terminalVelocity)
             {
-                _verticalVelocity += gravity * Time.deltaTime;
+                _verticalVelocity += state.config.gravity * Time.deltaTime;
             }
         }
 
         private void UpdateCamera()
         {
+            if (state.config is not PlayerConfig playerConfig)
+            {
+                return;
+            }
+            
             cameraAngle = Mathf.SmoothDampAngle(
                               cameraAngle,
                               cameraAngle + _playerControllerInputSource.look * 10,
                               ref _cameraRotationVelocity,
-                              cameraRotationSmoothTime
+                              playerConfig.cameraRotationSmoothTime
                           )
                           % 360;
 
@@ -350,7 +320,7 @@ namespace Character
                 : _playerControllerInputSource.zoom < -0.5
                     ? 0
                     : zoomLevel;
-            zoomLevel = Mathf.SmoothStep(zoomLevel, targetZoom, zoomSpeed);
+            zoomLevel = Mathf.SmoothStep(zoomLevel, targetZoom, playerConfig.zoomSpeed);
         }
 
         private void OnDrawGizmosSelected()
@@ -362,7 +332,7 @@ namespace Character
 
             // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
             Vector3 position = transform.position;
-            Gizmos.DrawSphere(new Vector3(position.x, position.y - groundedOffset, position.z), groundedRadius);
+            Gizmos.DrawSphere(new Vector3(position.x, position.y - state.config.groundedOffset, position.z), state.config.groundedRadius);
         }
 
         /// <remarks>
@@ -402,7 +372,7 @@ namespace Character
             GameState state = GameStateManager.Current;
             if (state && state.character != null && state.map != null)
             {
-                clips = clipsByTileType.FirstOrDefault(f => f.tileType == state.map.GetTile(state.character.playerTile)?.config?.type)?.audioClips;
+                clips = clipsByTileType.FirstOrDefault(f => f.tileType == state.map.GetTile(state.character.tile)?.config?.type)?.audioClips;
             }
 
             clips ??= defaultClips;

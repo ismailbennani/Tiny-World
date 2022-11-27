@@ -86,7 +86,7 @@ namespace Map.Chunk
                 yield return null;
             }
 
-            Vector2Int playerPosition = GameStateManager.Current.character.playerTile;
+            Vector2Int playerPosition = GameStateManager.Current.character.tile;
             IOrderedEnumerable<TileState> sortedTilesToUpdate = state.tiles.OrderBy(t => Vector2.Distance(t.position, playerPosition));
 
             int index = 0;
