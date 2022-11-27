@@ -1,9 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Character.Player
 {
-    [Serializable]
+    [CreateAssetMenu(menuName = "Custom/Player config")]
     public class PlayerConfig: CharacterConfig
     {
         [Header("Camera")]
