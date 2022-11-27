@@ -106,7 +106,7 @@ MonoBehaviour:
     depletedAudioClips: []
     depletedAudioVolume: 1
   state:
-    onConsume:
+    onLoot:
       m_PersistentCalls:
         m_Calls: []
     onDepleted:
@@ -115,10 +115,12 @@ MonoBehaviour:
     config:
       type: 0
       tileResource: 0
+      lootTable: {fileID: 0}
+      nLoots: {x: 1, y: 1}
     generationConfig:
       platformRotation: 0
       platformVariant: 0
       resourceRotation: 0
       resourceVariant: 0
     position: {x: 0, y: 0}
-    resourceQuantity: 0
+    remainingLootAttempts: 0

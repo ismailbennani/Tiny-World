@@ -31,7 +31,12 @@ namespace Map.Chunk
             tiles ??= new List<MapTile>();
 
             _chunkFullySpawned = false;
-            _hidden = false;
+
+            if (_hidden)
+            {
+                gameObject.SetActive(true);
+                _hidden = false;
+            }
 
             if (_spawnCoroutine != null)
             {
@@ -55,11 +60,7 @@ namespace Map.Chunk
                 return;
             }
 
-            foreach (MapTile tile in tiles)
-            {
-                tile.transform.Translate(0, -100, 0);
-            }
-
+            gameObject.SetActive(false);
             _hidden = true;
         }
 

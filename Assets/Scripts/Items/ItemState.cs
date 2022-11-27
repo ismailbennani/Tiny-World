@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Items
 {
@@ -11,6 +12,12 @@ namespace Items
 
         public Item item;
         public Vector3 position;
+        
+        [Tooltip("Chunk where this item is stored. This might be different than the chunk corresponding to `position` because the item might have moved")]
+        public Vector2Int chunk;
+
+        [Header("Render")]
+        public uint variant;
 
         public bool newlySpawned;
 
@@ -19,6 +26,7 @@ namespace Items
             guid = Guid.NewGuid().ToString();
             this.item = item;
 
+            variant = (uint)Random.Range(int.MinValue, int.MaxValue);
             newlySpawned = true;
         }
 

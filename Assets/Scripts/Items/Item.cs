@@ -7,5 +7,10 @@ namespace Items
     {
         public string itemName;
         public string itemDescription;
+
+        public override string ToString()
+        {
+            return $"{itemName}";
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Items;
 using Map.Tile;
 using UnityEngine;
 using Utils;
@@ -27,6 +29,7 @@ namespace Map.Chunk
         public Vector2Int size;
         
         public TileState[] tiles;
+        public List<ItemState> items;
 
         public TileState GetTile(int x, int y)
         {
