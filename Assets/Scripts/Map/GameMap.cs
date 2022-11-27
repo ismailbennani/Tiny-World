@@ -62,6 +62,11 @@ namespace Map
 
         public MapTile GetTile(TileState tile)
         {
+            if (chunks == null)
+            {
+                return null;
+            }
+            
             GameState state = GameStateManager.Current;
             if (!state)
             {
@@ -74,17 +79,22 @@ namespace Map
             }
 
             Vector2Int chunkPosition = state.map.GetChunkPositionAt(tile.position);
-            MapChunk chunk = chunks.SingleOrDefault(c => c.state.position == chunkPosition);
-            return chunk.tiles.SingleOrDefault(t => t.state.position == tile.position);
+            MapChunk chunk = chunks.SingleOrDefault(c => c.position == chunkPosition);
+            if (chunk == null)
+            {
+                return null;
+            }
+            
+            return chunk.tiles.SingleOrDefault(t => t.hasPosition && t.tilePosition == tile.position);
         }
 
         private IEnumerator UpdateChunks(GameState gameState)
         {
-            assumedPlayerChunk = gameState.character.chunk;
+            assumedPlayerChunk = gameState.player.chunk;
 
             GetChunksToRender(gameState.map, out HashSet<Vector2Int> chunksInView, out HashSet<Vector2Int> chunksToRender);
 
-            IEnumerator updateTilesCoroutine = UpdateTiles(gameState.map, chunksToRender, chunksInView);
+            IEnumerator updateTilesCoroutine = UpdateTiles(gameState, chunksToRender, chunksInView);
             while (updateTilesCoroutine.MoveNext())
             {
                 yield return null;
@@ -100,7 +110,7 @@ namespace Map
             Ready = true;
         }
 
-        private IEnumerator UpdateTiles(MapState map, HashSet<Vector2Int> chunksToRender, HashSet<Vector2Int> chunksInView)
+        private IEnumerator UpdateTiles(GameState state, HashSet<Vector2Int> chunksToRender, HashSet<Vector2Int> chunksInView)
         {
             int nVisibleChunks = chunksToRender.Count;
             chunks ??= new List<MapChunk>();
@@ -108,18 +118,18 @@ namespace Map
             HashSet<Vector2Int> toBeSkipped = new();
             foreach (MapChunk chunk in chunks)
             {
-                if (chunksToRender.Contains(chunk.state.position))
+                if (chunksToRender.Contains(chunk.position))
                 {
-                    toBeSkipped.Add(chunk.state.position);
-                    chunksToRender.Remove(chunk.state.position);
+                    toBeSkipped.Add(chunk.position);
+                    chunksToRender.Remove(chunk.position);
 
-                    chunk.Set(map, chunk.state.position, chunksInView.Contains(chunk.state.position));
+                    chunk.Set(state, chunk.position, chunksInView.Contains(chunk.position));
                 }
             }
 
             for (int i = chunks.Count; i < nVisibleChunks; i++)
             {
-                MapChunk newChunk = Instantiate(map.runtimeConfig.baseChunk, transform);
+                MapChunk newChunk = Instantiate(state.map.runtimeConfig.baseChunk, transform);
                 chunks.Add(newChunk);
 
                 Vector2Int positionForCurrentChunk = chunksToRender.First();
@@ -127,14 +137,14 @@ namespace Map
                 toBeSkipped.Add(positionForCurrentChunk);
 
                 newChunk.gameObject.SetActive(true);
-                newChunk.Set(map, positionForCurrentChunk, chunksInView.Contains(positionForCurrentChunk));
+                newChunk.Set(state, positionForCurrentChunk, chunksInView.Contains(positionForCurrentChunk));
 
                 yield return null;
             }
 
             foreach (MapChunk chunk in chunks)
             {
-                if (toBeSkipped.Contains(chunk.state.position))
+                if (toBeSkipped.Contains(chunk.position))
                 {
                     continue;
                 }
@@ -148,7 +158,7 @@ namespace Map
                     Vector2Int positionForCurrentChunk = chunksToRender.First();
                     chunksToRender.Remove(positionForCurrentChunk);
 
-                    chunk.Set(map, positionForCurrentChunk, chunksInView.Contains(positionForCurrentChunk));
+                    chunk.Set(state, positionForCurrentChunk, chunksInView.Contains(positionForCurrentChunk));
 
                     yield return null;
                 }

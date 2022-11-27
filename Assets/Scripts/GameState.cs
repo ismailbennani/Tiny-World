@@ -7,7 +7,7 @@ using UnityEngine;
 public class GameState: ScriptableObject
 {
     public MapState map;
-    public PlayerState character;
+    public PlayerState player;
 
     [Header("Other configs")]
     public ItemsRuntimeConfig itemsConfig;
@@ -15,5 +15,5 @@ public class GameState: ScriptableObject
     public bool IsValid => MapIsValid && PlayerIsValid;
 
     private bool MapIsValid => map?.IsValid ?? false;
-    private bool PlayerIsValid => character?.config != null && character.config.prefab;
+    private bool PlayerIsValid => player?.config != null && player.config.prefab;
 }

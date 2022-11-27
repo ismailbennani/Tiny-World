@@ -71,7 +71,7 @@ public class GameStateManager : MonoBehaviour
 
         Debug.Log("Initializing player state...");
 
-        currentState.character = new PlayerState(manager.gameConfig.player)
+        currentState.player = new PlayerState(manager.gameConfig.player)
         {
             position = currentState.map.GetTileCenterPosition(manager.gameConfig.player.spawnTile)
         };
@@ -112,12 +112,12 @@ public class GameStateManager : MonoBehaviour
             manager = FindObjectOfType<GameStateManager>();
         }
         
-        manager.currentState.character.position = manager.currentState.map.GetTileCenterPosition(manager.currentState.character.config.spawnTile);
+        manager.currentState.player.position = manager.currentState.map.GetTileCenterPosition(manager.currentState.player.config.spawnTile);
 
         PlayerController controller = FindObjectOfType<PlayerController>();
         if (controller)
         {
-            controller.transform.position = manager.currentState.map.GetTileCenterPosition(manager.currentState.character.config.spawnTile);
+            controller.transform.position = manager.currentState.map.GetTileCenterPosition(manager.currentState.player.config.spawnTile);
         }
     }
 
