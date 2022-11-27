@@ -1,4 +1,4 @@
-﻿using Character.Player;
+﻿using Character;
 using Items;
 using Map;
 using UnityEngine;
@@ -11,7 +11,7 @@ public class GameConfig: ScriptableObject
     public MapRuntimeConfig mapRuntimeConfig;
     
     [Header("player")]
-    public PlayerConfig player;
+    public CharacterConfig character;
     
     [Header("Items")]
     public ItemsRuntimeConfig items;

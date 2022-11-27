@@ -54,7 +54,7 @@ MonoBehaviour:
     maxChunkRange: {x: 5, y: 5}
     tileSize: {x: 4, y: 4}
     resourceScale: 4
-  player:
+  character:
     prefab: {fileID: 4151355903617304371, guid: 6bf3c41e8827c90449b243c1c78de49f, type: 3}
-    spawnTile: {x: 3, y: 4}
+    spawnTile: {x: 0, y: 0}
   items: {fileID: 11400000, guid: e16e916614862b749a047b0656b6ebec, type: 2}

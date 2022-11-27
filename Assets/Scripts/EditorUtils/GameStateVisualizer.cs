@@ -1,4 +1,4 @@
-﻿using Character.Player;
+﻿using Character;
 using Map;
 using Map.Tile;
 using UnityEngine;
@@ -23,23 +23,23 @@ namespace EditorUtils
 
             if (showMap)
             {
-                DrawMapState(gameState.map, gameState.player);
+                DrawMapState(gameState.map, gameState.character);
             }
 
             if (showPlayer)
             {
-                DrawPlayerState(gameState.map, gameState.player);
+                DrawPlayerState(gameState.map, gameState.character);
             }
         }
 
-        private void DrawMapState(MapState map, PlayerState player)
+        private void DrawMapState(MapState map, CharacterState character)
         {
             if (map?.initialConfig == null)
             {
                 return;
             }
 
-            Vector2Int chunkPosition = player.playerChunk;
+            Vector2Int chunkPosition = character.playerChunk;
             Rect rect = map.GetChunkRect(chunkPosition);
 
             Vector3 center = new(rect.center.x, 1, rect.center.y);
@@ -61,7 +61,7 @@ namespace EditorUtils
             }
         }
 
-        private void DrawPlayerState(MapState map, PlayerState state)
+        private void DrawPlayerState(MapState map, CharacterState state)
         {
             if (state == null)
             {

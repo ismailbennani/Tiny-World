@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq;
+using Character;
 using Character.Player;
 using Map;
 using Map.Tile;
@@ -41,16 +42,6 @@ public class GameStateManager : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        if (!Current)
-        {
-            return;
-        }
-
-        Current.player?.Update();
-    }
-
     public static IEnumerator CreateNewGame(GameStateManager manager)
     {
         GameState currentState = manager.currentState;
@@ -81,10 +72,10 @@ public class GameStateManager : MonoBehaviour
 
         Debug.Log("Initializing player state...");
 
-        currentState.player = new PlayerState
+        currentState.character = new CharacterState
         {
-            config = manager.gameConfig.player,
-            position = currentState.map.GetTileCenterPosition(manager.gameConfig.player.spawnTile)
+            config = manager.gameConfig.character,
+            position = currentState.map.GetTileCenterPosition(manager.gameConfig.character.spawnTile)
         };
 
         Debug.Log("Done.");
@@ -123,12 +114,12 @@ public class GameStateManager : MonoBehaviour
             manager = FindObjectOfType<GameStateManager>();
         }
         
-        manager.currentState.player.position = manager.currentState.map.GetTileCenterPosition(manager.currentState.player.config.spawnTile);
+        manager.currentState.character.position = manager.currentState.map.GetTileCenterPosition(manager.currentState.character.config.spawnTile);
 
         PlayerController controller = FindObjectOfType<PlayerController>();
         if (controller)
         {
-            controller.transform.position = manager.currentState.map.GetTileCenterPosition(manager.currentState.player.config.spawnTile);
+            controller.transform.position = manager.currentState.map.GetTileCenterPosition(manager.currentState.character.config.spawnTile);
         }
     }
 

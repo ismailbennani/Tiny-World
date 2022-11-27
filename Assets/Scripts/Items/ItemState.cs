@@ -8,7 +8,7 @@ namespace Items
     public class ItemState: IEquatable<ItemState>
     {
         [SerializeField]
-        private string guid;
+        public string guid;
 
         public Item item;
         public Vector3 position;

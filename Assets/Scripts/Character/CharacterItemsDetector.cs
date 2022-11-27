@@ -2,17 +2,20 @@
 using System.Linq;
 using Items;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace Character
 {
     public class CharacterItemsDetector: MonoBehaviour
     {
+        public UnityEvent<GameItem> onClosestItemChange = new();
+        
+        public GameItem closestItem;
         public List<GameItem> itemsNearby;
 
         [Header("Config")]
         public bool highlightClosestItem;
 
-        private GameItem _closestItem;
 
         void FixedUpdate()
         {
@@ -21,25 +24,26 @@ namespace Character
                 return;
             }
 
-            Vector3 playerPosition = GameStateManager.Current.player.position;
-            GameItem closestItem = itemsNearby.OrderBy(i => Vector3.Distance(i.state.position, playerPosition)).FirstOrDefault();
+            Vector3 playerPosition = GameStateManager.Current.character.position;
+            GameItem newClosestItem = itemsNearby.OrderBy(i => Vector3.Distance(i.state.position, playerPosition)).FirstOrDefault();
 
-            if (closestItem != _closestItem)
+            if (newClosestItem != closestItem)
             {
                 if (highlightClosestItem)
                 {
-                    if (_closestItem)
-                    {
-                        _closestItem.Unhighlight();
-                    }
-
                     if (closestItem)
                     {
-                        closestItem.Highlight();
+                        closestItem.Unhighlight();
+                    }
+
+                    if (newClosestItem)
+                    {
+                        newClosestItem.Highlight();
                     }
                 }
 
-                _closestItem = closestItem;
+                onClosestItemChange?.Invoke(newClosestItem);
+                closestItem = newClosestItem;
             }
         }
         

@@ -39,7 +39,7 @@ namespace Character
                 return;
             }
             
-            TileState tile = state.map.GetTile(state.player.playerTile);
+            TileState tile = state.map.GetTile(state.character.playerTile);
             if (!tile.IsLootable)
             {
                 return;
@@ -56,7 +56,7 @@ namespace Character
                 return;
             }
             
-            TileState tile = state.map.GetTile(state.player.playerTile);
+            TileState tile = state.map.GetTile(state.character.playerTile);
             if (tile.config.tileResource != TileResourceType.Rock || !tile.IsLootable)
             {
                 return;
@@ -73,7 +73,7 @@ namespace Character
                 return;
             }
             
-            TileState tile = state.map.GetTile(state.player.playerTile);
+            TileState tile = state.map.GetTile(state.character.playerTile);
             if (tile.config.tileResource != TileResourceType.Tree || !tile.IsLootable)
             {
                 return;
@@ -105,7 +105,7 @@ namespace Character
                 return;
             }
 
-            TileState tile = state.map.GetTile(state.player.playerTile);
+            TileState tile = state.map.GetTile(state.character.playerTile);
             
             MapTile mapTile = map.GetTile(tile);
             if (!mapTile)
