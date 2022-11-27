@@ -1,10 +1,10 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Character.Player
+namespace Character
 {
     [Serializable]
-    public class PlayerConfig
+    public class CharacterConfig
     {
         public ThirdPersonController prefab;
         public Vector2Int spawnTile;

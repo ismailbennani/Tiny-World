@@ -17,7 +17,9 @@ namespace Character
     [RequireComponent(typeof(PlayerInput))]
     public class ThirdPersonController : MonoBehaviour
     {
-        [Header("Player")]
+        [Header("Character")]
+        public CharacterState state;
+
         [Tooltip("Move speed of the character in m/s")]
         public float moveSpeed = 2.0f;
 
@@ -136,6 +138,25 @@ namespace Character
             UpdateCamera();
         }
 
+        private void LateUpdate()
+        {
+            if (state == null)
+            {
+                return;
+            }
+            
+            state.position = transform.position;
+
+            GameState gameState = GameStateManager.Current;
+            if (!gameState)
+            {
+                return;
+            }
+            
+            state.playerChunk = gameState.map.GetChunkPositionAt(state.position);
+            state.playerTile = gameState.map.GetTilePositionAt(state.position);
+        }
+
         private void AssignAnimationIDs()
         {
             _animIDSpeed = Animator.StringToHash("Speed");
@@ -167,7 +188,7 @@ namespace Character
                 _isSprinting = _playerControllerInputSource.sprint;
                 _moveInput = _playerControllerInputSource.move;
             }
-            
+
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _isSprinting ? sprintSpeed : moveSpeed;
 
@@ -366,7 +387,7 @@ namespace Character
             {
                 return;
             }
-            
+
             PlayRandomClip(defaultLandingAudioClips, landingByTileType);
         }
 
@@ -379,9 +400,9 @@ namespace Character
 
             AudioClip[] clips = null;
             GameState state = GameStateManager.Current;
-            if (state && state.player != null && state.map != null)
+            if (state && state.character != null && state.map != null)
             {
-                clips = clipsByTileType.FirstOrDefault(f => f.tileType == state.map.GetTile(state.player.playerTile)?.config?.type)?.audioClips;
+                clips = clipsByTileType.FirstOrDefault(f => f.tileType == state.map.GetTile(state.character.playerTile)?.config?.type)?.audioClips;
             }
 
             clips ??= defaultClips;

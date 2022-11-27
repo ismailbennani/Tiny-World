@@ -22,7 +22,7 @@ namespace Character.Player
             TryGetGatherResourceControllerIfNecessary();
 
             GameState state = GameStateManager.Current;
-            if (!state || state.map == null || state.player == null)
+            if (!state || state.map == null || state.character == null)
             {
                 return;
             }
@@ -61,7 +61,7 @@ namespace Character.Player
 
         private void UpdateTileInteract(GameState state)
         {
-            Vector2Int playerPosition = state.player.playerTile;
+            Vector2Int playerPosition = state.character.playerTile;
 
             if (_currentTileTarget == playerPosition)
             {
