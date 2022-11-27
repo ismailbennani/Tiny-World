@@ -54,6 +54,8 @@ namespace Map
         {
             (int chunkX, int chunkY) = GetChunkPosition(itemState.position);
             ChunkState chunk = GetChunk(chunkX, chunkY);
+
+            chunk.items ??= new List<ItemState>();
             
             chunk.items.Add(itemState);
             itemState.chunk = new Vector2Int(chunkX, chunkY);
@@ -68,7 +70,7 @@ namespace Map
         public IEnumerable<ItemState> GetItemsInChunk(int chunkX, int chunkY)
         {
             ChunkState chunk = GetChunk(chunkX, chunkY);
-            return chunk.items;
+            return chunk.items ?? Enumerable.Empty<ItemState>();
         }
 
         private ChunkState GenerateChunk(int chunkX, int chunkY)
