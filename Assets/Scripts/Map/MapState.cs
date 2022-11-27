@@ -93,13 +93,7 @@ namespace Map
 
         public (int, int) GetTilePosition(Vector3 worldPosition)
         {
-            Vector2 halfTile = runtimeConfig.tileSize / 2;
-            Vector3 realOrigin = new(-halfTile.x, 0, -halfTile.y);
-
-            Vector3 delta = worldPosition - realOrigin;
-            Vector2 tileAndGap = runtimeConfig.tileSize;
-
-            return (Mathf.FloorToInt(delta.x / tileAndGap.x), Mathf.FloorToInt(delta.z / tileAndGap.y));
+            return (Mathf.FloorToInt(worldPosition.x / runtimeConfig.tileSize.x), Mathf.FloorToInt(worldPosition.z / runtimeConfig.tileSize.y));
         }
 
         public (int, int) GetChunkPosition(Vector3 worldPosition)

@@ -1,6 +1,5 @@
 ﻿using Character.Player;
 using Map;
-using Map.Chunk;
 using Map.Tile;
 using UnityEngine;
 
@@ -41,13 +40,25 @@ namespace EditorUtils
             }
 
             Vector2Int chunkPosition = player.playerChunk;
-            ChunkState chunk = map.GetChunk(chunkPosition);
+            Rect rect = map.GetChunkRect(chunkPosition);
 
-            Vector3 center = map.GetTileCenterPosition(chunk.gridPosition + chunk.size / 2);
-            Vector2 size = chunk.size * map.runtimeConfig.tileSize;
+            Vector3 center = new(rect.center.x, 1, rect.center.y);
+            Vector3 size = new(rect.size.x, 0, rect.size.y);
             
-            Gizmos.color = Color.white;
-            Gizmos.DrawWireCube(center, new Vector3(size.x, 0, size.y));
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireCube(center, size);
+            
+            for (int x = 0; x < map.initialConfig.chunkSize.x; x++)
+            for (int y = 0; y < map.initialConfig.chunkSize.y; y++)
+            {
+                Rect tileRect = map.GetTileRect(chunkPosition * map.initialConfig.chunkSize + new Vector2Int(x, y));
+                
+                Vector3 tileCenter = new(tileRect.center.x, 1, tileRect.center.y);
+                Vector3 tileSize = new(tileRect.size.x, 0, tileRect.size.y);
+                
+                Gizmos.color = Color.white;
+                Gizmos.DrawWireCube(tileCenter, tileSize);
+            }
         }
 
         private void DrawPlayerState(MapState map, PlayerState state)
@@ -60,8 +71,12 @@ namespace EditorUtils
             Gizmos.color = Color.blue;
             Gizmos.DrawSphere(state.position, 0.2f);
 
-            Vector3 playerTilePosition = map.GetTileCenterPosition(state.playerTile);
-            Gizmos.DrawWireCube(playerTilePosition, new Vector3(map.runtimeConfig.tileSize.x * 0.9f, 0, map.runtimeConfig.tileSize.y * 0.9f));
+            Rect tileRect = map.GetTileRect(state.playerTile);
+            
+            Vector3 tileCenter = new(tileRect.center.x, 1, tileRect.center.y);
+            Vector3 tileSize = new(tileRect.size.x, 0, tileRect.size.y);
+                
+            Gizmos.DrawWireCube(tileCenter, tileSize);
         }
 
         private static Color GetColorFromTileType(TileType type)
