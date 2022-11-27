@@ -64,5 +64,15 @@ namespace Items
         {
             return (guid != null ? guid.GetHashCode() : 0);
         }
+
+        public static bool operator ==(ItemState left, ItemState right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(ItemState left, ItemState right)
+        {
+            return !Equals(left, right);
+        }
     }
 }
