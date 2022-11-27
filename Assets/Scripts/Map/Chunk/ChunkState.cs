@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Items;
 using Map.Tile;
 using UnityEngine;
@@ -40,6 +41,11 @@ namespace Map.Chunk
 
             int index = MyMath.GetIndex(x, y, size);
             return tiles[index];
+        }
+
+        public ItemState GetItem(string guid)
+        {
+            return items.SingleOrDefault(i => i.guid == guid);
         }
     }
 }
