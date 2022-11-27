@@ -56,6 +56,8 @@ namespace Map.Tile
 
         private void OnLoot(Item[] items)
         {
+            PlayLootClip();
+            
             if (items == null || items.Length == 0)
             {
                 return;
@@ -65,8 +67,6 @@ namespace Map.Tile
             {
                 GameMap.Instance.SpawnItem(item, state.position);
             }
-
-            PlayLootClip();
 
             if (_tileResource)
             {
