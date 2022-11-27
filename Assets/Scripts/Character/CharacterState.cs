@@ -8,6 +8,9 @@ namespace Character
     {
         public CharacterConfig config;
         public Vector3 position;
+        public bool sprinting;
+
+        public CharacterInventory inventory;
 
         [Header("Computed state")]
         public Vector2Int chunk;
