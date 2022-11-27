@@ -1,13 +1,17 @@
-﻿using UnityEngine;
+﻿using Map;
+using Map.Chunk;
+using UnityEngine;
 using Utils;
 
 namespace Items
 {
     public class GameItem: MonoBehaviour
     {
-        public ItemState state;
+        public string guid;
         public new Rigidbody rigidbody;
 
+        private Vector2Int _chunk;
+        
         private GameObject _itemObject;
         private HighlightableGameObject _highlightable;
         private bool _hidden;
@@ -19,11 +23,24 @@ namespace Items
         
         void Update()
         {
-            if (state == null)
+            if (guid == null)
             {
                 return;
             }
 
+            GameState gameState = GameStateManager.Current;
+            if (!gameState)
+            {
+                return;
+            }
+
+            ChunkState chunkState = gameState.map.GetChunk(_chunk);
+            ItemState state = chunkState?.GetItem(guid);
+            if (state == null)
+            {
+                return;
+            }
+            
             state.position = transform.position;
 
             if (state.position.y < -10)
@@ -34,12 +51,10 @@ namespace Items
         
         public void Set(ItemState newState)
         {
-            if (!_hidden && newState != null && newState.Equals(state) || newState == null && state == null)
+            if (!_hidden && guid == newState?.guid)
             {
                 return;
             }
-
-            state = newState;
 
             if (newState == null)
             {
@@ -47,6 +62,9 @@ namespace Items
                 _hidden = true;
                 return;
             }
+            
+            guid = newState.guid;
+            _chunk = newState.chunk;
             
             gameObject.SetActive(true);
             _hidden = false;
@@ -90,7 +108,7 @@ namespace Items
             }
             else
             {
-                Debug.LogWarning($"Missing highlight for item {state.item}");
+                Debug.LogWarning($"Missing highlight for item {guid} at {_chunk}");
             }
         }
 
