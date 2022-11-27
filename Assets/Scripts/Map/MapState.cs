@@ -51,6 +51,16 @@ namespace Map
             return chunks.SingleOrDefault(c => c.position.x == chunkX && c.position.y == chunkY) ?? GenerateChunk(chunkX, chunkY);
         }
 
+        public void AddItem(ItemState itemState)
+        {
+            items.Add(itemState);
+        }
+
+        public void RemoveItem(ItemState itemState)
+        {
+            items.Remove(itemState);
+        }
+
         public IEnumerable<ItemState> GetItemsInChunk(int chunkX, int chunkY)
         {
             Rect chunkRect = GetChunkRect(chunkX, chunkY);

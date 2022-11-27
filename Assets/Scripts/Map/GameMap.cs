@@ -57,7 +57,7 @@ namespace Map
             {
                 position = position + new Vector3(Random.Range(-0.5f, 0.5f), 1, Random.Range(-0.5f, 0.5f))
             };
-            gameState.map.items.Add(itemState);
+            gameState.map.AddItem(itemState);
         }
 
         public MapTile GetTile(TileState tile)

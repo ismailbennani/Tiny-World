@@ -18,6 +18,11 @@ namespace Items
             }
 
             state.position = transform.position;
+
+            if (state.position.y < -10)
+            {
+                GameStateManager.Current.map.RemoveItem(state);
+            }
         }
         
         public void Set(ItemState newState)
