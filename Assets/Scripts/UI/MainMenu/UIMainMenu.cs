@@ -1,5 +1,6 @@
 ﻿using UI.Theme;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace UI.MainMenu
 {
@@ -7,6 +8,20 @@ namespace UI.MainMenu
     {
         [Header("Main window")]
         public UIButton[] menuItems;
+
+        protected override void OnOpen()
+        {
+            base.OnOpen();
+
+            if (menuItems.Length > 0)
+            {
+                EventSystem.current.SetSelectedGameObject(menuItems[0].gameObject);
+            }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(closeButton.gameObject);
+            }
+        }
 
         protected override void SetThemeInternal(UITheme theme)
         {

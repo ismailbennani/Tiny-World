@@ -91,7 +91,7 @@ namespace UI
                 OnMenuOpen();
             }
             
-            if (_menuStack.Count > 1)
+            if (_menuStack.Count >= 1)
             {
                 _menuStack[^1].Close();
             }
