@@ -16,3 +16,4 @@ MonoBehaviour:
   mapRuntimeConfig: {fileID: 11400000, guid: 67e9fe4f2ea0ab241a287d17e1647a2c, type: 2}
   player: {fileID: 11400000, guid: 2cff0e3ee850c2a4b8bf0c2b9ff05e47, type: 2}
   items: {fileID: 11400000, guid: e16e916614862b749a047b0656b6ebec, type: 2}
+  theme: {fileID: 11400000, guid: a84e70af7d7abbb4dbbcbc678ccdb21a, type: 2}

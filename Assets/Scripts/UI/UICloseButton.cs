@@ -13,10 +13,7 @@ namespace UI
         {
             base.OnSetTheme(theme);
 
-            if (image)
-            {
-                image.sprite = theme.cursor;
-            }
+            SetImage(theme.closeButtonIcon);
         }
 
         protected override void OnSaveTheme(UITheme theme)

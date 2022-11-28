@@ -101,13 +101,11 @@ namespace UI
         public void OnSelect(BaseEventData eventData)
         {
             SetSelected(true);
-            eventData.Use();
         }
 
         public void OnDeselect(BaseEventData eventData)
         {
             SetSelected(false);
-            eventData.Use();
         }
 
         protected abstract UIButtonTheme GetTheme(UITheme theme);

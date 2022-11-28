@@ -1,4 +1,5 @@
-﻿using UI.Theme;
+﻿using System.Collections;
+using UI.Theme;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace UI
 
         private void Start()
         {
+            StartCoroutine(ApplyThemeWhenReady());
             Close();
         }
 
@@ -72,6 +74,16 @@ namespace UI
         protected abstract void OnClose();
         protected abstract void SetThemeInternal(UITheme theme);
         protected abstract void SaveThemeInternal(UITheme theme);
+        
+        private IEnumerator ApplyThemeWhenReady()
+        {
+            while (!GameStateManager.Config)
+            {
+                yield return null;
+            }
+
+            SetTheme(GameStateManager.Config.theme);
+        }
     }
 
     #if UNITY_EDITOR
