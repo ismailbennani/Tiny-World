@@ -19,6 +19,15 @@ namespace UI
         void OnEnable()
         {
             Instance = this;
+
+            if (_menuStack.Count > 0)
+            {
+                OnMenuOpen();
+            }
+            else
+            {
+                OnMenuClose();
+            }
         }
         
         public void ToggleMenu()
@@ -47,13 +56,13 @@ namespace UI
 
         public void CloseCurrent()
         {
-            if (_menuStack.Count > 1)
+            if (_menuStack.Count >= 1)
             {
                 _menuStack[^1].Close();
                 _menuStack.RemoveAt(_menuStack.Count - 1);
             }
 
-            if (_menuStack.Count > 1)
+            if (_menuStack.Count >= 1)
             {
                 _menuStack[^1].Open();
             }
