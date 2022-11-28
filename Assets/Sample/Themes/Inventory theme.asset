@@ -13,14 +13,16 @@ MonoBehaviour:
   m_Name: Inventory theme
   m_EditorClassIdentifier: 
   panel: {fileID: 21300000, guid: a7021b0d6a62b344895356a5c7a41af6, type: 3}
-  closeButton: {fileID: 21300000, guid: 27719083796382b4d81111d97c65ff5a, type: 3}
-  closeButtonIcon: {fileID: 21300000, guid: 908696fa23bac7e40aa1178e5a41a89f, type: 3}
+  button: {fileID: 21300000, guid: 545ebbab6be005e45bb90298637b4aa5, type: 3}
+  buttonHighlighted: {fileID: 21300000, guid: 3f0d9bd086a7daf428728534b573fd7a, type: 3}
+  buttonSelected: {fileID: 21300000, guid: 8b0b38ed45eff7f4f94828f29907715f, type: 3}
+  buttonDisabled: {fileID: 21300000, guid: adc15fc4c51cf2f4eb9ed15fd4584f9e, type: 3}
   title:
     font: {fileID: 11400000, guid: a31703cebc722654b88d2800852b0bba, type: 2}
     color: {r: 0.78823537, g: 0.6392157, b: 0.4901961, a: 1}
-  gridPanel: {fileID: 21300000, guid: 07d234d0413f7d142af5c6885e7eeb96, type: 3}
-  gridItemPanel: {fileID: 21300000, guid: 545ebbab6be005e45bb90298637b4aa5, type: 3}
-  gridItemSelectedPanel: {fileID: 21300000, guid: 8b0b38ed45eff7f4f94828f29907715f, type: 3}
-  gridItemCount:
-    font: {fileID: 11400000, guid: c6ea08f17dc06134e87266441caa1548, type: 2}
-    color: {r: 0.92549026, g: 0.89019614, b: 0.8078432, a: 1}
+  text:
+    font: {fileID: 0}
+    color: {r: 0, g: 0, b: 0, a: 0}
+  closeButton: {fileID: 21300000, guid: 27719083796382b4d81111d97c65ff5a, type: 3}
+  closeButtonIcon: {fileID: 21300000, guid: 908696fa23bac7e40aa1178e5a41a89f, type: 3}
+  nestedPanel: {fileID: 21300000, guid: 07d234d0413f7d142af5c6885e7eeb96, type: 3}
