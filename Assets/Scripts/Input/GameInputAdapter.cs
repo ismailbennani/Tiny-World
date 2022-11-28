@@ -1,5 +1,5 @@
 ﻿using Character.Player;
-using UI.Menu;
+using UI.MainMenu;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Utils;
@@ -19,6 +19,26 @@ namespace Input
             Instance = this;
 
             playerInput = GetComponent<PlayerInput>();
+        }
+
+        public void SwitchToUi()
+        {
+            if (!playerInput)
+            {
+                return;
+            }
+            
+            playerInput.SwitchCurrentActionMap("UI");
+        }
+
+        public void SwitchToPlayer()
+        {
+            if (!playerInput)
+            {
+                return;
+            }
+            
+            playerInput.SwitchCurrentActionMap("Player");
         }
 
         public void OnMove(InputValue value)
@@ -65,7 +85,7 @@ namespace Input
         {
             if (value.isPressed)
             {
-                UIMenu.Instance.Toggle();
+                UIMainMenu.Instance.Toggle();
             }
         }
 

@@ -1,7 +1,7 @@
 ﻿using Character.Player;
 using Items;
 using Map;
-using UI.Inventory;
+using UI.Theme;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Custom/Game config")]
@@ -18,5 +18,5 @@ public class GameConfig: ScriptableObject
     public ItemsRuntimeConfig items;
 
     [Header("UI")]
-    public UIInventoryTheme inventoryTheme;
+    public UITheme theme;
 }
