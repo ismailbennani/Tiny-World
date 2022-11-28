@@ -5,22 +5,9 @@ namespace UI.Inventory
 {
     public class UIInventoryGridItem : UIButton
     {
-        private Item _item;
-
-        void Start()
-        {
-            SetItem(_item);
-        }
-
-        public void SetItem(Item newItem)
+        public void SetItem(Item newItem, int newCount)
         {
             SetImage(newItem.sprite);
-
-            _item = newItem;
-        }
-
-        public void SetCount(int newCount)
-        {
             SetText(newCount.ToString());
         }
 

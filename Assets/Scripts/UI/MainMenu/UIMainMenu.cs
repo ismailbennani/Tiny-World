@@ -9,18 +9,9 @@ namespace UI.MainMenu
         [Header("Main window")]
         public UIButton[] menuItems;
 
-        protected override void OnOpen()
+        protected override void OnFocus()
         {
-            base.OnOpen();
-
-            if (menuItems.Length > 0)
-            {
-                EventSystem.current.SetSelectedGameObject(menuItems[0].gameObject);
-            }
-            else
-            {
-                EventSystem.current.SetSelectedGameObject(closeButton.gameObject);
-            }
+            EventSystem.current.SetSelectedGameObject(menuItems.Length > 0 ? menuItems[0].gameObject : closeButton.gameObject);
         }
 
         protected override void SetThemeInternal(UITheme theme)

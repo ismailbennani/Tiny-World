@@ -206,8 +206,9 @@ MonoBehaviour:
   panel: {fileID: 6482844186119178344}
   title: {fileID: 1702069419720677196}
   closeButton: {fileID: 8658753417868184489}
+  gridItemPrefab: {fileID: 5560122038448058403}
+  gridRoot: {fileID: 1702069420597769812}
   gridPanel: {fileID: 1702069420597769814}
-  grid: {fileID: 3049147734956131936}
 --- !u!1 &1702069420593385334
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,7 +300,6 @@ GameObject:
   - component: {fileID: 1702069420597769815}
   - component: {fileID: 1702069420597769814}
   - component: {fileID: 1702069420597769813}
-  - component: {fileID: 3049147734956131936}
   m_Layer: 5
   m_Name: Grid
   m_TagString: Untagged
@@ -390,19 +390,6 @@ MonoBehaviour:
   m_Spacing: {x: 10, y: 10}
   m_Constraint: 0
   m_ConstraintCount: 2
---- !u!114 &3049147734956131936
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1702069420597769811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 07bb364c33c045e497c42e1c2b422639, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gridItemPrefab: {fileID: 5560122038448058403}
 --- !u!1 &1702069421489404879
 GameObject:
   m_ObjectHideFlags: 0

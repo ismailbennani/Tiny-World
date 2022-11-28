@@ -37,15 +37,21 @@ namespace UI
 
         public void SetImage(Sprite sprite)
         {
-            image.sprite = sprite;
-            image.gameObject.SetActive(sprite);
+            if (image)
+            {
+                image.sprite = sprite;
+                image.gameObject.SetActive(sprite);
+            }
 
             _image = sprite;
         }
 
         public void SetText(string str)
         {
-            text.text = str;
+            if (text)
+            {
+                text.text = str;
+            }
 
             _text = str;
         }

@@ -1,30 +1,46 @@
-﻿using Character.Inventory;
+﻿using System.Collections.Generic;
+using Character.Inventory;
 using UI.Theme;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Inventory
 {
     public class UIInventory : UIWindow
     {
+        public UIInventoryGridItem gridItemPrefab;
+        public Transform gridRoot;
+
         [Header("Grid")]
         public Image gridPanel;
-        public UIInventoryGrid grid;
 
         private InventoryState _inventoryState;
+        private List<UIInventoryGridItem> _gridItems = new();
 
+        void OnEnable()
+        {
+            gridItemPrefab.gameObject.SetActive(false);
+        }
+        
         protected override void SetThemeInternal(UITheme theme)
         {
             gridPanel.sprite = theme.nestedPanel;
 
-            grid.SetTheme(theme);
+            foreach (UIInventoryGridItem item in _gridItems)
+            {
+                item.SetTheme(theme);
+            }
         }
 
         protected override void SaveThemeInternal(UITheme theme)
         {
             defaultTheme.nestedPanel = gridPanel.sprite;
 
-            grid.SaveTheme(theme);
+            if (_gridItems.Count > 0)
+            {
+                _gridItems[0].SaveTheme(theme);
+            }
         }
 
         protected override void OnOpen()
@@ -32,6 +48,11 @@ namespace UI.Inventory
             UpdateInventory();
 
             _inventoryState?.onChange.AddListener(OnInventoryChange);
+        }
+
+        protected override void OnFocus()
+        {
+            EventSystem.current.SetSelectedGameObject(_gridItems.Count > 0 ? _gridItems[0].gameObject : closeButton.gameObject);
         }
 
         protected override void OnClose()
@@ -55,7 +76,25 @@ namespace UI.Inventory
                 return;
             }
 
-            grid.UpdateItems(_inventoryState);
+            if (_gridItems != null)
+            {
+                foreach (UIInventoryGridItem gridItem in _gridItems)
+                {
+                    Destroy(gridItem.gameObject);
+                }
+            }
+
+            _gridItems = new List<UIInventoryGridItem>();
+
+            foreach (InventoryLine line in _inventoryState.lines)
+            {
+                UIInventoryGridItem newGridItem = Instantiate(gridItemPrefab, gridRoot);
+                newGridItem.SetItem(line.item, line.count);
+
+                newGridItem.gameObject.SetActive(true);
+                
+                _gridItems.Add(newGridItem);
+            }
         }
 
         private void OnInventoryChange(InventoryLine _)

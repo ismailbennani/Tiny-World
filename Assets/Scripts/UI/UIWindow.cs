@@ -69,13 +69,31 @@ namespace UI
             root.SetActive(true);
 
             OnOpen();
+            OnFocus();
+
+            UIMenuManager.Instance.Register(this);
+        }
+
+        public void Stash()
+        {
+            root.SetActive(false);
+            closeButton.SetSelected(false);
+        }
+
+        public void UnStash()
+        {
+            root.SetActive(true);
+            
+            OnFocus();
         }
 
         public void Close()
         {
-            root.SetActive(false);
+            Stash();
 
             OnClose();
+            
+            UIMenuManager.Instance.Unregister(this);
         }
 
         public void OnCancel(BaseEventData eventData)
@@ -88,6 +106,7 @@ namespace UI
         protected abstract void SaveThemeInternal(UITheme theme);
 
         protected virtual void OnOpen() { }
+        protected virtual void OnFocus() { }
 
         protected virtual void OnClose() { }
 

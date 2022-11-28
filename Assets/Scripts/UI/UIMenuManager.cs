@@ -12,7 +12,7 @@ namespace UI
 
         public UIMainMenu mainMenu;
         public UIInventory inventory;
-        
+
         [SerializeField]
         private List<UIWindow> _menuStack = new();
 
@@ -29,47 +29,57 @@ namespace UI
                 OnMenuClose();
             }
         }
-        
+
         public void ToggleMenu()
         {
             if (_menuStack.Count == 0)
             {
-                OpenMainMenu();
+                mainMenu.Open();
             }
             else
             {
                 CloseCurrent();
             }
         }
-        
 
-        public void OpenMainMenu()
+
+        public void Register(UIWindow window)
         {
-            CloseAll();
-            Open(mainMenu);
+            if (_menuStack.Count == 0)
+            {
+                OnMenuOpen();
+            }
+
+            if (_menuStack.Count > 0)
+            {
+                _menuStack[^1].Stash();
+            }
+
+            _menuStack.Add(window);
         }
 
-        public void OpenInventory()
+        public void Unregister(UIWindow window)
         {
-            Open(inventory);
+            bool isCurrent = _menuStack.Count > 0 && window == _menuStack[^1];
+
+            _menuStack.Remove(window);
+
+            if (isCurrent && _menuStack.Count > 0)
+            {
+                _menuStack[^1].UnStash();
+            }
+
+            if (_menuStack.Count == 0)
+            {
+                OnMenuClose();
+            }
         }
 
         public void CloseCurrent()
         {
-            if (_menuStack.Count >= 1)
+            if (_menuStack.Count > 0)
             {
                 _menuStack[^1].Close();
-                _menuStack.RemoveAt(_menuStack.Count - 1);
-            }
-
-            if (_menuStack.Count >= 1)
-            {
-                _menuStack[^1].Open();
-            }
-            
-            if (_menuStack.Count == 0)
-            {
-                OnMenuClose();
             }
         }
 
@@ -84,22 +94,6 @@ namespace UI
             OnMenuClose();
         }
 
-        private void Open(UIWindow window)
-        {
-            if (_menuStack.Count == 0)
-            {
-                OnMenuOpen();
-            }
-            
-            if (_menuStack.Count >= 1)
-            {
-                _menuStack[^1].Close();
-            }
-
-            window.Open();
-            _menuStack.Add(window);
-        }
-        
         private void OnMenuOpen()
         {
             GameInputAdapter gameInputAdapter = GameInputAdapter.Instance;
