@@ -8,6 +8,7 @@ namespace Items
     {
         public string itemName;
         public string itemDescription;
+        public Sprite sprite;
 
         public bool stackable;
 
