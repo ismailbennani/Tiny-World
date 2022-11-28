@@ -12,10 +12,10 @@ namespace UI.MainMenu
 
         [Header("Main window")]
         public Image panel;
-        public Image closeButton;
         public Image closeButtonIcon;
         public TextMeshProUGUI title;
 
+        public UICloseButton closeButton;
         public UIButton[] menuItems;
 
         void OnEnable()
@@ -48,10 +48,11 @@ namespace UI.MainMenu
         protected override void SetThemeInternal(UITheme theme)
         {
             panel.sprite = theme.panel;
-            closeButton.sprite = theme.closeButton;
-            closeButtonIcon.sprite = theme.closeButtonIcon;
+            
             title.font = theme.title.font;
             title.color = theme.title.color;
+
+            closeButton.SetTheme(theme);
 
             if (menuItems != null)
             {
@@ -65,10 +66,11 @@ namespace UI.MainMenu
         protected override void SaveThemeInternal(UITheme theme)
         {
             defaultTheme.panel = panel.sprite;
-            defaultTheme.closeButton = closeButton.sprite;
-            defaultTheme.closeButtonIcon = closeButtonIcon.sprite;
+            
             defaultTheme.title.font = title.font;
             defaultTheme.title.color = title.color;
+
+            closeButton.SaveTheme(theme);
 
             if (menuItems != null && menuItems.Length > 0)
             {

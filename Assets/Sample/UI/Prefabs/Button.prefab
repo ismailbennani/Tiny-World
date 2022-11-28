@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 1075948818721387388}
   - component: {fileID: 1075948818721387389}
   - component: {fileID: 1075948818721387362}
-  - component: {fileID: 1075948818721387363}
   - component: {fileID: 1075948818721387391}
+  - component: {fileID: 6839675550009407520}
   m_Layer: 5
   m_Name: Button
   m_TagString: Untagged
@@ -125,35 +125,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1075948818721387389}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UI.UIWindow, Assembly-CSharp
-        m_MethodName: Open
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &1075948818721387363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1075948818721387361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d2d0118db4e4d7dbdb040220e3e3a69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  button: {fileID: 1075948818721387362}
-  text: {fileID: 1075948819323549387}
-  image: {fileID: 0}
-  cursor: {fileID: 1075948820275780566}
+      m_Calls: []
 --- !u!114 &1075948818721387391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -168,6 +140,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 2
   m_AspectRatio: 1
+--- !u!114 &6839675550009407520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075948818721387361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9647c42be5724107b7803309c496cd69, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 1075948818721387362}
+  text: {fileID: 1075948819323549387}
+  image: {fileID: 9015784119151648806}
+  cursor: {fileID: 1075948820275780566}
 --- !u!1 &1075948819323549385
 GameObject:
   m_ObjectHideFlags: 0

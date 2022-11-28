@@ -13,9 +13,8 @@ namespace UI.Inventory
 
         [Header("Main window")]
         public Image panel;
-        public Image closeButton;
-        public Image closeButtonIcon;
         public TextMeshProUGUI title;
+        public UICloseButton closeButton;
 
         [Header("Grid")]
         public Image gridPanel;
@@ -31,8 +30,6 @@ namespace UI.Inventory
         protected override void SetThemeInternal(UITheme theme)
         {
             panel.sprite = theme.panel;
-            closeButton.sprite = theme.closeButton;
-            closeButtonIcon.sprite = theme.closeButtonIcon;
             title.font = theme.title.font;
             title.color = theme.title.color;
 
@@ -41,13 +38,13 @@ namespace UI.Inventory
             grid.GridItemSelectedPanel = theme.button.pressedSprite;
             grid.GridItemCountFont = theme.text.font;
             grid.GridItemCountColor = theme.text.color;
+            
+            closeButton.SetTheme(theme);
         }
 
         protected override void SaveThemeInternal(UITheme theme)
         {
             defaultTheme.panel = panel.sprite;
-            defaultTheme.closeButton = closeButton.sprite;
-            defaultTheme.closeButtonIcon = closeButtonIcon.sprite;
             defaultTheme.title.font = title.font;
             defaultTheme.title.color = title.color;
 
@@ -56,6 +53,8 @@ namespace UI.Inventory
             defaultTheme.button.pressedSprite = grid.GridItemSelectedPanel;
             defaultTheme.text.font = grid.GridItemCountFont;
             defaultTheme.text.color = grid.GridItemCountColor;
+            
+            closeButton.SaveTheme(theme);
         }
 
         protected override void OnOpen()

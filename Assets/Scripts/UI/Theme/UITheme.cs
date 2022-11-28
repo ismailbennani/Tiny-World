@@ -13,9 +13,7 @@ namespace UI.Theme
         [Header("Interaction")]
         public UIButtonTheme button;
         public Sprite cursor;
-        
-        [Header("Close button")]
-        public Sprite closeButton;
+        public UIButtonTheme closeButton;
         public Sprite closeButtonIcon;
 
         [Header("Nested")]

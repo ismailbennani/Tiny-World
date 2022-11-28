@@ -6,12 +6,12 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public class UIButton : MonoBehaviour, ISelectHandler, IDeselectHandler
+    public abstract class UIButton : MonoBehaviour, ISelectHandler, IDeselectHandler
     {
         public Button button;
         public TextMeshProUGUI text;
         public Image image;
-        
+
         public Image cursor;
 
         private bool _selected;
@@ -29,7 +29,7 @@ namespace UI
             {
                 cursor.gameObject.SetActive(selected);
             }
-            
+
             _selected = selected;
         }
 
@@ -43,15 +43,18 @@ namespace UI
 
         public void SetTheme(UITheme theme)
         {
+            UIButtonTheme buttonTheme = GetTheme(theme);
+
             if (button)
             {
                 button.transition = Selectable.Transition.SpriteSwap;
 
-                button.image.sprite = theme.button.sprite;
+                button.image.sprite = buttonTheme.sprite;
                 button.spriteState = new SpriteState
                 {
-                    highlightedSprite = theme.button.highlightedSprite, selectedSprite = theme.button.highlightedSprite, disabledSprite = theme.button.disabledSprite,
-                    pressedSprite = theme.button.pressedSprite
+                    highlightedSprite = buttonTheme.highlightedSprite, selectedSprite = buttonTheme.highlightedSprite,
+                    disabledSprite = buttonTheme.disabledSprite,
+                    pressedSprite = buttonTheme.pressedSprite
                 };
             }
 
@@ -65,16 +68,20 @@ namespace UI
             {
                 cursor.sprite = theme.cursor;
             }
+
+            OnSetTheme(theme);
         }
 
         public void SaveTheme(UITheme theme)
         {
+            UIButtonTheme buttonTheme = GetTheme(theme);
+
             if (button)
             {
-                theme.button.sprite = button.image.sprite;
-                theme.button.highlightedSprite = button.spriteState.highlightedSprite;
-                theme.button.pressedSprite = button.spriteState.pressedSprite;
-                theme.button.disabledSprite = button.spriteState.disabledSprite;
+                buttonTheme.sprite = button.image.sprite;
+                buttonTheme.highlightedSprite = button.spriteState.highlightedSprite;
+                buttonTheme.pressedSprite = button.spriteState.pressedSprite;
+                buttonTheme.disabledSprite = button.spriteState.disabledSprite;
             }
 
             if (text)
@@ -87,6 +94,8 @@ namespace UI
             {
                 theme.cursor = cursor.sprite;
             }
+
+            OnSaveTheme(theme);
         }
 
         public void OnSelect(BaseEventData eventData)
@@ -99,6 +108,16 @@ namespace UI
         {
             SetSelected(false);
             eventData.Use();
+        }
+
+        protected abstract UIButtonTheme GetTheme(UITheme theme);
+
+        protected virtual void OnSetTheme(UITheme theme)
+        {
+        }
+
+        protected virtual void OnSaveTheme(UITheme theme)
+        {
         }
     }
 }
