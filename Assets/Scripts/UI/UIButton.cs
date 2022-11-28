@@ -47,11 +47,11 @@ namespace UI
             {
                 button.transition = Selectable.Transition.SpriteSwap;
 
-                button.image.sprite = theme.button;
+                button.image.sprite = theme.button.sprite;
                 button.spriteState = new SpriteState
                 {
-                    highlightedSprite = theme.buttonHighlighted, selectedSprite = theme.buttonHighlighted, disabledSprite = theme.buttonDisabled,
-                    pressedSprite = theme.buttonPressed
+                    highlightedSprite = theme.button.highlightedSprite, selectedSprite = theme.button.highlightedSprite, disabledSprite = theme.button.disabledSprite,
+                    pressedSprite = theme.button.pressedSprite
                 };
             }
 
@@ -71,10 +71,10 @@ namespace UI
         {
             if (button)
             {
-                theme.button = button.image.sprite;
-                theme.buttonHighlighted = button.spriteState.highlightedSprite;
-                theme.buttonPressed = button.spriteState.pressedSprite;
-                theme.buttonDisabled = button.spriteState.disabledSprite;
+                theme.button.sprite = button.image.sprite;
+                theme.button.highlightedSprite = button.spriteState.highlightedSprite;
+                theme.button.pressedSprite = button.spriteState.pressedSprite;
+                theme.button.disabledSprite = button.spriteState.disabledSprite;
             }
 
             if (text)

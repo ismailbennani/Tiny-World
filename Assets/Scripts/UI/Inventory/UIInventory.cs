@@ -37,8 +37,8 @@ namespace UI.Inventory
             title.color = theme.title.color;
 
             gridPanel.sprite = theme.nestedPanel;
-            grid.GridItemDefaultPanel = theme.button;
-            grid.GridItemSelectedPanel = theme.buttonPressed;
+            grid.GridItemDefaultPanel = theme.button.sprite;
+            grid.GridItemSelectedPanel = theme.button.pressedSprite;
             grid.GridItemCountFont = theme.text.font;
             grid.GridItemCountColor = theme.text.color;
         }
@@ -52,8 +52,8 @@ namespace UI.Inventory
             defaultTheme.title.color = title.color;
 
             defaultTheme.nestedPanel = gridPanel.sprite;
-            defaultTheme.button = grid.GridItemDefaultPanel;
-            defaultTheme.buttonPressed = grid.GridItemSelectedPanel;
+            defaultTheme.button.sprite = grid.GridItemDefaultPanel;
+            defaultTheme.button.pressedSprite = grid.GridItemSelectedPanel;
             defaultTheme.text.font = grid.GridItemCountFont;
             defaultTheme.text.color = grid.GridItemCountColor;
         }

@@ -9,12 +9,9 @@ namespace UI.Theme
         public Sprite panel;
         public UITextTheme title;
         public UITextTheme text;
-        
+
         [Header("Interaction")]
-        public Sprite button;
-        public Sprite buttonHighlighted;
-        public Sprite buttonPressed;
-        public Sprite buttonDisabled;
+        public UIButtonTheme button;
         public Sprite cursor;
         
         [Header("Close button")]
