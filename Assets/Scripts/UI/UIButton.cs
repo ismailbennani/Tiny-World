@@ -16,11 +16,13 @@ namespace UI
 
         private bool _selected;
         private Sprite _image;
+        private string _text;
 
         void Start()
         {
             SetSelected(_selected);
             SetImage(_image);
+            SetText(_text);
         }
 
         public void SetSelected(bool selected)
@@ -39,6 +41,13 @@ namespace UI
             image.gameObject.SetActive(sprite);
 
             _image = sprite;
+        }
+
+        public void SetText(string str)
+        {
+            text.text = str;
+
+            _text = str;
         }
 
         public void SetTheme(UITheme theme)

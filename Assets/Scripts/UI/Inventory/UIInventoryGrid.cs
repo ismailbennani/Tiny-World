@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using Character.Inventory;
-using TMPro;
+using UI.Theme;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace UI.Inventory
 {
@@ -9,16 +10,23 @@ namespace UI.Inventory
     {
         public UIInventoryGridItem gridItemPrefab;
 
-        public Sprite GridItemDefaultPanel { get => gridItemPrefab.DefaultPanel; set => gridItemPrefab.DefaultPanel = value; }
-        public Sprite GridItemSelectedPanel { get => gridItemPrefab.SelectedPanel; set => gridItemPrefab.SelectedPanel = value; }
-        public TMP_FontAsset GridItemCountFont { get => gridItemPrefab.ItemCountFont; set => gridItemPrefab.ItemCountFont = value; }
-        public Color GridItemCountColor { get => gridItemPrefab.ItemCountColor; set => gridItemPrefab.ItemCountColor = value; }
-
-        private List<UIInventoryGridItem> _gridItems;
+        private List<UIInventoryGridItem> _gridItems = new();
 
         private void OnEnable()
         {
             gridItemPrefab.gameObject.SetActive(false);
+        }
+
+        public void OnFocus()
+        {
+            if (_gridItems.Count > 0)
+            {
+                EventSystem.current.SetSelectedGameObject(_gridItems[0].gameObject);
+            }
+            else
+            {
+                EventSystem.current.SetSelectedGameObject(closeButton.gameObject);
+            }
         }
 
         public void UpdateItems(InventoryState inventoryState)
@@ -42,6 +50,22 @@ namespace UI.Inventory
                 newGridItem.gameObject.SetActive(true);
                 
                 _gridItems.Add(newGridItem);
+            }
+        }
+
+        public void SetTheme(UITheme theme)
+        {
+            foreach (UIInventoryGridItem item in _gridItems)
+            {
+                item.SetTheme(theme);
+            }
+        }
+
+        public void SaveTheme(UITheme theme)
+        {
+            if (_gridItems.Count > 0)
+            {
+                _gridItems[0].SaveTheme(theme);
             }
         }
     }

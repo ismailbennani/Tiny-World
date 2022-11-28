@@ -16,19 +16,15 @@ namespace UI.Inventory
         protected override void SetThemeInternal(UITheme theme)
         {
             gridPanel.sprite = theme.nestedPanel;
-            grid.GridItemDefaultPanel = theme.button.sprite;
-            grid.GridItemSelectedPanel = theme.button.pressedSprite;
-            grid.GridItemCountFont = theme.text.font;
-            grid.GridItemCountColor = theme.text.color;
+
+            grid.SetTheme(theme);
         }
 
         protected override void SaveThemeInternal(UITheme theme)
         {
             defaultTheme.nestedPanel = gridPanel.sprite;
-            defaultTheme.button.sprite = grid.GridItemDefaultPanel;
-            defaultTheme.button.pressedSprite = grid.GridItemSelectedPanel;
-            defaultTheme.text.font = grid.GridItemCountFont;
-            defaultTheme.text.color = grid.GridItemCountColor;
+
+            grid.SaveTheme(theme);
         }
 
         protected override void OnOpen()
