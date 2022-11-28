@@ -12,7 +12,7 @@ namespace UI.Inventory
         public UIInventory Instance { get; private set; }
 
         public GameObject root;
-        
+
         public UIInventoryTheme defaultTheme;
         public UIInventoryTheme currentTheme;
 
@@ -32,7 +32,7 @@ namespace UI.Inventory
         {
             Close();
         }
-        
+
         void OnEnable()
         {
             Instance = this;
@@ -137,7 +137,7 @@ namespace UI.Inventory
 
             GUILayout.Space(10);
 
-            if (GUILayout.Button("Apply default theme"))
+            if (GUILayout.Button("Open"))
             {
                 UIInventory inventory = target as UIInventory;
                 if (!inventory)
@@ -145,12 +145,34 @@ namespace UI.Inventory
                     return;
                 }
 
-                if (!inventory.defaultTheme)
+                inventory.Open();
+            }
+            
+            if (GUILayout.Button("Close"))
+            {
+                UIInventory inventory = target as UIInventory;
+                if (!inventory)
                 {
                     return;
                 }
 
-                inventory.SetTheme(inventory.defaultTheme);
+                inventory.Close();
+            }
+
+            if (GUILayout.Button("Apply theme"))
+            {
+                UIInventory inventory = target as UIInventory;
+                if (!inventory)
+                {
+                    return;
+                }
+
+                if (!inventory.currentTheme)
+                {
+                    return;
+                }
+
+                inventory.SetTheme(inventory.currentTheme);
             }
 
             if (GUILayout.Button("Save current to default theme"))

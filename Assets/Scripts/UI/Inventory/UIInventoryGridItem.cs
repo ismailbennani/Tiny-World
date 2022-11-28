@@ -9,65 +9,69 @@ namespace UI.Inventory
     {
         public Image defaultPanel;
         public Image selectedPanel;
-        public Transform itemViewParent;
+        public Image itemImage;
         public TextMeshProUGUI itemCount;
+
+        public Item item;
+        public int count;
+        public bool selected;
 
         public Sprite DefaultPanel { get => defaultPanel.sprite; set => defaultPanel.sprite = value; }
         public Sprite SelectedPanel { get => selectedPanel.sprite; set => selectedPanel.sprite = value; }
         public TMP_FontAsset ItemCountFont { get => itemCount.font; set => itemCount.font = value; }
         public Color ItemCountColor { get => itemCount.color; set => itemCount.color = value; }
 
-        private GameObject _itemPrefab;
-
-        void Start()
+        void Awake()
         {
-            SetItem(null);
-            Unselect();
+            SetItem(item);
+            SetCount(count);
+            
+            if (selected)
+            {
+                Select();
+            }
+            else
+            {
+                Unselect();
+            }
         }
         
         public void Select()
         {
             defaultPanel.gameObject.SetActive(false);
             selectedPanel.gameObject.SetActive(true);
+
+            selected = true;
         }
         
         public void Unselect()
         {
-            defaultPanel.gameObject.SetActive(false);
-            selectedPanel.gameObject.SetActive(true);
+            defaultPanel.gameObject.SetActive(true);
+            selectedPanel.gameObject.SetActive(false);
+
+            selected = false;
         }
 
-        public void SetItem(Item item)
+        public void SetItem(Item newItem)
         {
-            if (_itemPrefab)
+            if (newItem && newItem.sprite)
             {
-                Destroy(_itemPrefab);
+                itemImage.sprite = newItem.sprite;
+                itemImage.gameObject.SetActive(true);
+            }
+            else
+            {
+                itemImage.gameObject.SetActive(false);
             }
 
-            GameState gameState = GameStateManager.Current;
-            if (!gameState)
-            {
-                return;
-            }
-
-            ItemsRuntimeConfig itemsConfig = gameState.itemsConfig;
-            if (!itemsConfig)
-            {
-                return;
-            }
-            
-            GameObject itemPrefab = itemsConfig.GetPrefab(item);
-            if (!itemPrefab)
-            {
-                return;
-            }
-            
-            _itemPrefab = Instantiate(itemPrefab, itemViewParent);
+            item = newItem;
         }
 
-        public void SetCount(int lineCount)
+        public void SetCount(int newCount)
         {
-            itemCount.SetText(lineCount.ToString("N0"));
+            itemCount.SetText(newCount.ToString("N0"));
+
+            count = newCount;
         }
     }
 }

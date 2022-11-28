@@ -39,6 +39,8 @@ namespace UI.Inventory
                 newGridItem.SetItem(line.item);
                 newGridItem.SetCount(line.count);
 
+                newGridItem.gameObject.SetActive(true);
+                
                 _gridItems.Add(newGridItem);
             }
         }
