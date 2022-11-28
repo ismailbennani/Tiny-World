@@ -23,11 +23,21 @@ namespace Input
 
         public void SwitchToUi()
         {
+            if (!playerInput)
+            {
+                return;
+            }
+            
             playerInput.SwitchCurrentActionMap("UI");
         }
 
         public void SwitchToPlayer()
         {
+            if (!playerInput)
+            {
+                return;
+            }
+            
             playerInput.SwitchCurrentActionMap("Player");
         }
 
