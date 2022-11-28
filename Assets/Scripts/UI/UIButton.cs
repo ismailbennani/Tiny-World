@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace UI
 {
-    public abstract class UIButton : MonoBehaviour, ISelectHandler, IDeselectHandler
+    public abstract class UIButton : MonoBehaviour, ISelectHandler, IDeselectHandler, ICancelHandler
     {
         public Button button;
         public TextMeshProUGUI text;
@@ -24,7 +24,7 @@ namespace UI
             SetImage(_image);
             SetText(_text);
         }
-
+        
         public void SetSelected(bool selected)
         {
             if (cursor)
@@ -131,6 +131,11 @@ namespace UI
 
         protected virtual void OnSaveTheme(UITheme theme)
         {
+        }
+
+        public void OnCancel(BaseEventData eventData)
+        {
+            UIMenuManager.Instance.CloseCurrent();
         }
     }
 }
