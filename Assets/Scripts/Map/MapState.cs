@@ -61,10 +61,16 @@ namespace Map
             itemState.chunk = new Vector2Int(chunkX, chunkY);
         }
 
-        public void RemoveItem(ItemState itemState)
+        public bool RemoveItem(ItemState itemState)
         {
             ChunkState chunk = GetChunk(itemState.chunk.x, itemState.chunk.y);
+            if (chunk.GetItem(itemState.guid) == null)
+            {
+                return false;
+            }
+            
             chunk.items.Remove(itemState);
+            return true;
         }
 
         public IEnumerable<ItemState> GetItemsInChunk(int chunkX, int chunkY)

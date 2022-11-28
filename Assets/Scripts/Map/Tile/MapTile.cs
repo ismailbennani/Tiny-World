@@ -72,7 +72,7 @@ namespace Map.Tile
 
             foreach (Item item in items)
             {
-                GameMap.Instance.SpawnItem(item, tilePosition);
+                GameMap.Instance.SpawnItem(item, transform.position);
             }
 
             if (_tileResource)

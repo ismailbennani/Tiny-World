@@ -8,13 +8,13 @@ namespace Items
     public class GameItem: MonoBehaviour
     {
         public string guid;
+        public Vector2Int chunk;
+        public bool hidden;
+        
         public new Rigidbody rigidbody;
 
-        private Vector2Int _chunk;
-        
         private GameObject _itemObject;
         private HighlightableGameObject _highlightable;
-        private bool _hidden;
 
         void Start()
         {
@@ -34,7 +34,7 @@ namespace Items
                 return;
             }
 
-            ChunkState chunkState = gameState.map.GetChunk(_chunk);
+            ChunkState chunkState = gameState.map.GetChunk(chunk);
             ItemState state = chunkState?.GetItem(guid);
             if (state == null)
             {
@@ -51,7 +51,7 @@ namespace Items
         
         public void Set(ItemState newState)
         {
-            if (!_hidden && guid == newState?.guid)
+            if (!hidden && guid == newState?.guid)
             {
                 return;
             }
@@ -59,15 +59,15 @@ namespace Items
             if (newState == null)
             {
                 gameObject.SetActive(false);
-                _hidden = true;
+                hidden = true;
                 return;
             }
             
             guid = newState.guid;
-            _chunk = newState.chunk;
+            chunk = newState.chunk;
             
             gameObject.SetActive(true);
-            _hidden = false;
+            hidden = false;
             
             if (_itemObject)
             {
@@ -108,7 +108,7 @@ namespace Items
             }
             else
             {
-                Debug.LogWarning($"Missing highlight for item {guid} at {_chunk}");
+                Debug.LogWarning($"Missing highlight for item {guid} at {chunk}");
             }
         }
 

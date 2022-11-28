@@ -1,4 +1,5 @@
 ﻿using Input;
+using Items;
 using Map;
 using Map.Tile;
 using UnityEngine;
@@ -33,30 +34,31 @@ namespace Character.Player
 
         private void UpdateItemInteract()
         {
-            if (_playerItemsDetector && _playerItemsDetector.closestItem)
+            GameState gameState = GameStateManager.Current;
+            if (_playerItemsDetector && _playerItemsDetector.closestItem && gameState && gameState.player?.inventoryState != null)
             {
                 if (_currentItemTarget == _playerItemsDetector.closestItem.guid)
                 {
                     return;
                 }
 
-                GameInputCallbackManager.Instance.Register(
-                    GameInputType.Interact,
-                    this,
-                    new GameInputCallback(
-                        $"Take {_playerItemsDetector.closestItem.guid}",
-                        () => Debug.Log($"TAKE {_playerItemsDetector.closestItem.guid}"),
-                        10
-                    ),
-                    TakeItemChannel
-                );
+                ItemState itemState = gameState.map.GetChunk(_playerItemsDetector.closestItem.chunk)?.GetItem(_playerItemsDetector.closestItem.guid);
+                if (itemState != null)
+                {
+                    GameInputCallbackManager.Instance.Register(
+                        GameInputType.Interact,
+                        this,
+                        new GameInputCallback($"Take {itemState.item.itemName}", () => Inventory.Inventory.Take(gameState.player.inventoryState, itemState), 10),
+                        TakeItemChannel
+                    );
 
-                _currentItemTarget = _playerItemsDetector.closestItem.guid;
+                    _currentItemTarget = _playerItemsDetector.closestItem.guid;
+                    return;
+                }
             }
-            else
-            {
-                GameInputCallbackManager.Instance.Unregister(GameInputType.Interact, this, TakeItemChannel);
-            }
+
+            _currentItemTarget = null;
+            GameInputCallbackManager.Instance.Unregister(GameInputType.Interact, this, TakeItemChannel);
         }
 
         private void UpdateTileInteract(GameState state)
@@ -99,7 +101,7 @@ namespace Character.Player
                     return;
                 }
             }
-            
+
             _currentTileTarget = playerPosition;
 
             UnregisterLootInteract();

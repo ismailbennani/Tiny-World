@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Pebbles
   itemDescription: 
+  sprite: {fileID: 21300000, guid: 7b9263ae5828eac4d92fc893761fc719, type: 3}
+  stackable: 1
