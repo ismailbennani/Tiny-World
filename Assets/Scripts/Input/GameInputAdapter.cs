@@ -85,7 +85,7 @@ namespace Input
         {
             if (value.isPressed)
             {
-                UIMenuManager.Instance.ToggleMenu();
+                UIManager.Instance.Toggle();
             }
         }
 
