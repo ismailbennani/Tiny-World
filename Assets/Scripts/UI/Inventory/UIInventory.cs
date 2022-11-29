@@ -1,96 +1,65 @@
-﻿using System.Collections;
+﻿using System.Collections.Generic;
 using Character.Inventory;
-using TMPro;
-using UnityEditor;
+using UI.Theme;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace UI.Inventory
 {
-    public class UIInventory : MonoBehaviour
+    public class UIInventory : UIWindow
     {
-        public UIInventory Instance { get; private set; }
-
-        public GameObject root;
-
-        public UIInventoryTheme defaultTheme;
-        public UIInventoryTheme currentTheme;
-
-        [Header("Main window")]
-        public Image panel;
-        public Image closeButton;
-        public Image closeButtonIcon;
-        public TextMeshProUGUI title;
+        public UIInventoryGridItem gridItemPrefab;
+        public Transform gridRoot;
 
         [Header("Grid")]
         public Image gridPanel;
-        public UIInventoryGrid grid;
 
         private InventoryState _inventoryState;
-
-        void Start()
-        {
-            Close();
-        }
+        private List<UIInventoryGridItem> _gridItems = new();
 
         void OnEnable()
         {
-            Instance = this;
+            gridItemPrefab.gameObject.SetActive(false);
         }
-
-        public void SetTheme(UIInventoryTheme theme)
+        
+        protected override void SetThemeInternal(UITheme theme)
         {
-            if (!theme)
+            gridPanel.sprite = theme.nestedPanel;
+
+            foreach (UIInventoryGridItem item in _gridItems)
             {
-                if (defaultTheme)
-                {
-                    SetTheme(defaultTheme);
-                }
-
-                return;
+                item.SetTheme(theme);
             }
-
-            panel.sprite = theme.panel;
-            closeButton.sprite = theme.closeButton;
-            closeButtonIcon.sprite = theme.closeButtonIcon;
-            title.font = theme.title.font;
-            title.color = theme.title.color;
-
-            gridPanel.sprite = theme.gridPanel;
-            grid.GridItemDefaultPanel = theme.gridItemPanel;
-            grid.GridItemSelectedPanel = theme.gridItemSelectedPanel;
-            grid.GridItemCountFont = theme.gridItemCount.font;
-            grid.GridItemCountColor = theme.gridItemCount.color;
-
-            currentTheme = theme;
         }
 
-        public void Open()
+        protected override void SaveThemeInternal(UITheme theme)
         {
-            root.SetActive(true);
+            defaultTheme.nestedPanel = gridPanel.sprite;
 
+            if (_gridItems.Count > 0)
+            {
+                _gridItems[0].SaveTheme(theme);
+            }
+        }
+
+        protected override void OnOpen()
+        {
             UpdateInventory();
 
             _inventoryState?.onChange.AddListener(OnInventoryChange);
         }
 
-        public void Close()
+        protected override void OnFocus()
+        {
+            EventSystem.current.SetSelectedGameObject(_gridItems.Count > 0 ? _gridItems[0].gameObject : closeButton.gameObject);
+        }
+
+        protected override void OnClose()
         {
             root.SetActive(false);
 
             _inventoryState?.onChange.RemoveListener(OnInventoryChange);
-        }
-
-        public void Toggle()
-        {
-            if (gameObject.activeInHierarchy)
-            {
-                Close();
-            }
-            else
-            {
-                Open();
-            }
         }
 
         private void UpdateInventory()
@@ -107,102 +76,30 @@ namespace UI.Inventory
                 return;
             }
 
-            grid.UpdateItems(_inventoryState);
+            if (_gridItems != null)
+            {
+                foreach (UIInventoryGridItem gridItem in _gridItems)
+                {
+                    Destroy(gridItem.gameObject);
+                }
+            }
+
+            _gridItems = new List<UIInventoryGridItem>();
+
+            foreach (InventoryLine line in _inventoryState.lines)
+            {
+                UIInventoryGridItem newGridItem = Instantiate(gridItemPrefab, gridRoot);
+                newGridItem.SetItem(line.item, line.count);
+
+                newGridItem.gameObject.SetActive(true);
+                
+                _gridItems.Add(newGridItem);
+            }
         }
 
         private void OnInventoryChange(InventoryLine _)
         {
             UpdateInventory();
         }
-
-        private IEnumerator ApplyThemeWhenReady()
-        {
-            while (!GameStateManager.Config)
-            {
-                yield return null;
-            }
-
-            SetTheme(GameStateManager.Config.inventoryTheme);
-        }
     }
-
-    #if UNITY_EDITOR
-
-    [CustomEditor(typeof(UIInventory))]
-    public class UIInventoryEditor : Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            DrawDefaultInspector();
-
-            GUILayout.Space(10);
-
-            if (GUILayout.Button("Open"))
-            {
-                UIInventory inventory = target as UIInventory;
-                if (!inventory)
-                {
-                    return;
-                }
-
-                inventory.Open();
-            }
-            
-            if (GUILayout.Button("Close"))
-            {
-                UIInventory inventory = target as UIInventory;
-                if (!inventory)
-                {
-                    return;
-                }
-
-                inventory.Close();
-            }
-
-            if (GUILayout.Button("Apply theme"))
-            {
-                UIInventory inventory = target as UIInventory;
-                if (!inventory)
-                {
-                    return;
-                }
-
-                if (!inventory.currentTheme)
-                {
-                    return;
-                }
-
-                inventory.SetTheme(inventory.currentTheme);
-            }
-
-            if (GUILayout.Button("Save current to default theme"))
-            {
-                UIInventory inventory = target as UIInventory;
-                if (!inventory)
-                {
-                    return;
-                }
-
-                UIInventoryTheme defaultTheme = inventory.defaultTheme;
-                if (!defaultTheme)
-                {
-                    return;
-                }
-
-                defaultTheme.panel = inventory.panel.sprite;
-                defaultTheme.closeButton = inventory.closeButton.sprite;
-                defaultTheme.closeButtonIcon = inventory.closeButtonIcon.sprite;
-                defaultTheme.title.font = inventory.title.font;
-                defaultTheme.title.color = inventory.title.color;
-
-                defaultTheme.gridPanel = inventory.gridPanel.sprite;
-                defaultTheme.gridItemPanel = inventory.grid.GridItemDefaultPanel;
-                defaultTheme.gridItemSelectedPanel = inventory.grid.GridItemSelectedPanel;
-                defaultTheme.gridItemCount.font = inventory.grid.GridItemCountFont;
-                defaultTheme.gridItemCount.color = inventory.grid.GridItemCountColor;
-            }
-        }
-    }
-
-    #endif
 }
