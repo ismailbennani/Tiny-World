@@ -21,16 +21,20 @@ namespace UI
 
         [SerializeField]
         private List<UIWindow> windowStack = new();
+        private bool _registered;
 
         void Start()
         {
             GetElements();
+            RegisterCallbacks();
+            
             CloseAll();
         }
 
         void OnEnable()
         {
             GetElements();
+            RegisterCallbacks();
 
             HideAll();
             if (windowStack.Any())
@@ -101,7 +105,6 @@ namespace UI
             if (windowElement != null)
             {
                 windowElement.visible = show;
-                windowElement.SetEnabled(show);
             }
             
             OnShow(window);
@@ -197,6 +200,30 @@ namespace UI
 
             _mainMenu = root.rootVisualElement.Q<VisualElement>("MainMenu");
             _inventory = root.rootVisualElement.Q<VisualElement>("Inventory");
+        }
+
+        private void RegisterCallbacks()
+        {
+            if (_registered)
+            {
+                return;
+            }
+            
+            root.rootVisualElement.RegisterCallback<NavigationCancelEvent>(evt =>
+            {
+                CloseCurrent();
+                evt.StopPropagation();
+            });
+            
+            foreach (Button closeButton in root.rootVisualElement.Query<Button>("CloseButton").ToList())
+            {
+                closeButton.clicked += CloseCurrent;
+            }
+            
+            Button inventoryMenuButton = _mainMenu.Q<Button>("InventoryMenuButton");
+            inventoryMenuButton.clicked += () => Debug.Log("Open inventory");
+
+            _registered = true;
         }
 
         private IEnumerator DelayedFocus(Func<VisualElement> getter)

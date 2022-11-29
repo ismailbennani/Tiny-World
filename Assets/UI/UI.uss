@@ -36,7 +36,7 @@
     bottom: 0;
 }
 
-.button:hover > .cursor, .button:focus > .cursor {
+.button:focus > .cursor {
     visibility: visible;
 }
 

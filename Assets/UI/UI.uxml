@@ -3,7 +3,7 @@
     <Style src="project://database/Assets/UI/UI.uss?fileID=7433441132597879392&amp;guid=e7518e61de47d7940959345b9900c3f4&amp;type=3#UI" />
     <ui:VisualElement name="GameMenu" style="flex-grow: 1; flex-shrink: 0; align-items: center; justify-content: center;">
         <ui:VisualElement name="MainMenu" class="panel" style="height: 200px;">
-            <ui:Button class="button close-button">
+            <ui:Button name="CloseButton" class="button close-button">
                 <ui:VisualElement class="icon" />
                 <ui:VisualElement class="cursor" style="right: -10px; bottom: -10px;" />
             </ui:Button>
