@@ -66,10 +66,9 @@ namespace UI
 
         public void Open()
         {
-            root.SetActive(true);
-
             OnOpen();
-            OnFocus();
+            
+            UnStash();
 
             UIMenuManager.Instance.Register(this);
         }
