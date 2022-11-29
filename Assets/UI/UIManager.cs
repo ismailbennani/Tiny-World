@@ -219,9 +219,9 @@ namespace UI
             {
                 closeButton.clicked += CloseCurrent;
             }
-            
+
             Button inventoryMenuButton = _mainMenu.Q<Button>("InventoryMenuButton");
-            inventoryMenuButton.clicked += () => Debug.Log("Open inventory");
+            inventoryMenuButton.clicked += () => Debug.Log($"Open inventory");
 
             _registered = true;
         }

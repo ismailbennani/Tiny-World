@@ -41,65 +41,65 @@ namespace Input
             playerInput.SwitchCurrentActionMap("Player");
         }
 
-        public void OnMove(InputValue value)
+        public void OnMove(InputAction.CallbackContext value)
         {
             if (!GetPlayerController())
             {
                 return;
             }
 
-            _playerControllerInputSource.MoveInput(value.Get<Vector2>());
+            _playerControllerInputSource.MoveInput(value.ReadValue<Vector2>());
         }
 
-        public void OnJump(InputValue value)
+        public void OnJump(InputAction.CallbackContext value)
         {
             if (!GetPlayerController())
             {
                 return;
             }
 
-            _playerControllerInputSource.JumpInput(value.isPressed);
+            _playerControllerInputSource.JumpInput(value.ReadValueAsButton());
         }
 
-        public void OnLook(InputValue value)
+        public void OnLook(InputAction.CallbackContext value)
         {
             if (!GetPlayerController())
             {
                 return;
             }
 
-            _playerControllerInputSource.LookInput(value.Get<float>());
+            _playerControllerInputSource.LookInput(value.ReadValue<float>());
         }
 
-        public void OnZoom(InputValue value)
+        public void OnZoom(InputAction.CallbackContext value)
         {
             if (!GetPlayerController())
             {
                 return;
             }
 
-            _playerControllerInputSource.ZoomInput(value.Get<float>());
+            _playerControllerInputSource.ZoomInput(value.ReadValue<float>());
         }
 
-        public void OnMenu(InputValue value)
+        public void OnMenu(InputAction.CallbackContext value)
         {
-            if (value.isPressed)
+            if (value.ReadValueAsButton())
             {
                 UIManager.Instance.Toggle();
             }
         }
 
-        public void OnSprint(InputValue value)
+        public void OnSprint(InputAction.CallbackContext value)
         {
-            if (value.isPressed)
+            if (value.ReadValueAsButton())
             {
                 Trigger(GameInputType.ToggleSprint);
             }
         }
 
-        public void OnInteract(InputValue value)
+        public void OnInteract(InputAction.CallbackContext value)
         {
-            if (value.isPressed)
+            if (value.ReadValueAsButton())
             {
                 Trigger(GameInputType.Interact);
             }
