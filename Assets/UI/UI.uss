@@ -19,7 +19,7 @@
     -unity-font-definition: none;
     -unity-font: url('project://database/Assets/Imported/Kenney/Fonts/Kenney%20Mini%20Square.ttf?fileID=12800000&guid=c1d8e15535258914fb55dd2b5913f72f&type=3#Kenney Mini Square');
     font-size: 32px;
-    color: rgba(201, 163, 125, 255);
+    color: rgb(201, 163, 125);
     -unity-text-align: middle-center;
 }
 
@@ -36,7 +36,7 @@
     bottom: 0;
 }
 
-.button:hover > .cursor {
+.button:hover > .cursor, .button:focus > .cursor {
     visibility: visible;
 }
 
@@ -69,7 +69,7 @@
 .menu-button .icon {
     width: 50px;
     height: 50px;
-    -unity-background-image-tint-color: rgba(233, 224, 199, 255);
+    -unity-background-image-tint-color: rgb(233, 224, 199);
 }
 
 .close-button {
