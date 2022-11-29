@@ -1,15 +1,23 @@
 ﻿using System.Collections;
+using TMPro;
 using UI.Theme;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace UI
 {
-    public abstract class UIWindow : MonoBehaviour
+    public abstract class UIWindow : MonoBehaviour, ICancelHandler
     {
         public GameObject root;
         public UITheme defaultTheme;
         public UITheme currentTheme;
+        
+        [Header("Main window")]
+        public Image panel;
+        public TextMeshProUGUI title;
+        public UICloseButton closeButton;
 
         private void Start()
         {
@@ -30,6 +38,12 @@ namespace UI
             }
 
             SetThemeInternal(theme);
+            
+            panel.sprite = theme.panel;
+            title.font = theme.title.font;
+            title.color = theme.title.color;
+            
+            closeButton.SetTheme(theme);
 
             currentTheme = theme;
         }
@@ -41,40 +55,60 @@ namespace UI
                 return;
             }
 
+            defaultTheme.panel = panel.sprite;
+            defaultTheme.title.font = title.font;
+            defaultTheme.title.color = title.color;
+            
+            closeButton.SaveTheme(theme);
+            
             SaveThemeInternal(theme);
         }
 
         public void Open()
         {
-            root.SetActive(true);
-
             OnOpen();
+            
+            UnStash();
+
+            UIMenuManager.Instance.Register(this);
+        }
+
+        public void Stash()
+        {
+            root.SetActive(false);
+            closeButton.SetSelected(false);
+        }
+
+        public void UnStash()
+        {
+            root.SetActive(true);
+            
+            OnFocus();
         }
 
         public void Close()
         {
-            root.SetActive(false);
+            Stash();
 
             OnClose();
+            
+            UIMenuManager.Instance.Unregister(this);
         }
 
-        public void Toggle()
+        public void OnCancel(BaseEventData eventData)
         {
-            if (root.activeInHierarchy)
-            {
-                Close();
-            }
-            else
-            {
-                Open();
-            }
+            UIMenuManager.Instance.CloseCurrent();
         }
 
-        protected abstract void OnOpen();
-        protected abstract void OnClose();
         protected abstract void SetThemeInternal(UITheme theme);
+
         protected abstract void SaveThemeInternal(UITheme theme);
-        
+
+        protected virtual void OnOpen() { }
+        protected virtual void OnFocus() { }
+
+        protected virtual void OnClose() { }
+
         private IEnumerator ApplyThemeWhenReady()
         {
             while (!GameStateManager.Config)
@@ -148,7 +182,7 @@ namespace UI
                 {
                     return;
                 }
-                
+
                 inventory.SaveTheme(currentTheme);
             }
         }

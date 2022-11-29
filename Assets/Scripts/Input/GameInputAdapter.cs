@@ -1,5 +1,5 @@
 ﻿using Character.Player;
-using UI.MainMenu;
+using UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Utils;
@@ -85,7 +85,7 @@ namespace Input
         {
             if (value.isPressed)
             {
-                UIMainMenu.Instance.Toggle();
+                UIMenuManager.Instance.ToggleMenu();
             }
         }
 
