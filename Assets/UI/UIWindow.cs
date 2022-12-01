@@ -24,6 +24,13 @@ namespace UI
             {
                 throw new InvalidOperationException("Root UIDocument is null");
             }
+
+            root.rootVisualElement.style.position = new StyleEnum<Position>(Position.Absolute);
+            root.rootVisualElement.style.top = new StyleLength(0f);
+            root.rootVisualElement.style.right = new StyleLength(0f);
+            root.rootVisualElement.style.bottom = new StyleLength(0f);
+            root.rootVisualElement.style.left = new StyleLength(0f);
+            
             
             StartCoroutine(RegisterCallbacksWhenReady());
         }
@@ -67,7 +74,7 @@ namespace UI
                 evt =>
                 {
                     uiManager.CloseCurrent();
-                    evt.StopPropagation();
+                    evt.StopImmediatePropagation();
                 }
             );
 
