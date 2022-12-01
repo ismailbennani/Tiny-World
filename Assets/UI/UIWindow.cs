@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,6 +10,7 @@ namespace UI
         public UIDocument root;
 
         [NonSerialized]
+        private bool _registering;
         private bool _registered;
         
         void Start()
@@ -23,7 +25,7 @@ namespace UI
                 throw new InvalidOperationException("Root UIDocument is null");
             }
             
-            RegisterCallbacks();
+            StartCoroutine(RegisterCallbacksWhenReady());
         }
 
         protected abstract void RegisterAdditionalCallbacks();
@@ -45,13 +47,21 @@ namespace UI
             OnFocus();
         }
 
-        private void RegisterCallbacks()
+        private IEnumerator RegisterCallbacksWhenReady()
         {
-            UIManager uiManager = UIManager.Instance;
-            if (_registered || !uiManager)
+            if (_registering || _registered)
             {
-                return;
+                yield break;
             }
+
+            _registering = true;
+            
+            while (!UIManager.Instance)
+            {
+                yield return null;
+            }
+            
+            UIManager uiManager = UIManager.Instance;
             
             root.rootVisualElement.RegisterCallback<NavigationCancelEvent>(
                 evt =>
@@ -65,6 +75,7 @@ namespace UI
             
             RegisterAdditionalCallbacks();
 
+            _registering = false;
             _registered = true;
         }
     }
