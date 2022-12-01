@@ -1,10 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Input;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace UI
 {
@@ -12,12 +10,11 @@ namespace UI
     {
         public static UIManager Instance { get; private set; }
 
-        public UIDocument root;
+        public UIWindow mainMenu;
+        public UIWindow inventory;
 
         public bool Visible => windowStack.Count > 0;
 
-        private VisualElement _mainMenu;
-        private VisualElement _inventory;
 
         [SerializeField]
         private List<UIWindow> windowStack = new();
@@ -25,17 +22,11 @@ namespace UI
 
         void Start()
         {
-            GetElements();
-            RegisterCallbacks();
-            
             CloseAll();
         }
 
         void OnEnable()
         {
-            GetElements();
-            RegisterCallbacks();
-
             HideAll();
             if (windowStack.Any())
             {
@@ -58,7 +49,7 @@ namespace UI
             }
             else
             {
-                Open(UIWindow.MainMenu);
+                Open(mainMenu);
             }
         }
 
@@ -100,42 +91,25 @@ namespace UI
 
         private void Show(UIWindow window, bool show)
         {
-            VisualElement windowElement = GetWindowElement(window);
-
-            if (windowElement != null)
+            if (!window)
             {
-                windowElement.visible = show;
+                return;
             }
             
-            OnShow(window);
-        }
-
-        private VisualElement GetWindowElement(UIWindow window)
-        {
-            VisualElement windowElement = window switch
+            if (show)
             {
-                UIWindow.MainMenu => _mainMenu,
-                UIWindow.Inventory => _inventory,
-                _ => throw new ArgumentOutOfRangeException(nameof(window), window, null)
-            };
-
-            return windowElement;
+                window.Show();
+                OnShow(window);
+            }
+            else
+            {
+                window.Hide();
+            }
         }
 
         private void OnShow(UIWindow window)
         {
-            switch (window)
-            {
-                case UIWindow.MainMenu:
-                    StartCoroutine(DelayedFocus(() => root.rootVisualElement.Q<Button>("InventoryMenuButton")));
-                    
-                    root.rootVisualElement.Q<Button>("InventoryMenuButton").Focus();
-                    break;
-                case UIWindow.Inventory:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(window), window, null);
-            }
+            StartCoroutine(DelayedFocus(window));
         }
 
         private void CloseAll()
@@ -146,10 +120,8 @@ namespace UI
 
         private void HideAll()
         {
-            foreach (UIWindow window in Enum.GetValues(typeof(UIWindow)).OfType<UIWindow>())
-            {
-                Show(window, false);
-            }
+            Show(mainMenu, false);
+            Show(inventory, false);
         }
 
         private void ResetState()
@@ -191,53 +163,11 @@ namespace UI
             gameInputAdapter.SwitchToPlayer();
         }
 
-        private void GetElements()
-        {
-            if (!root)
-            {
-                root = GetComponent<UIDocument>();
-            }
-
-            _mainMenu = root.rootVisualElement.Q<VisualElement>("MainMenu");
-            _inventory = root.rootVisualElement.Q<VisualElement>("Inventory");
-        }
-
-        private void RegisterCallbacks()
-        {
-            if (_registered)
-            {
-                return;
-            }
-            
-            root.rootVisualElement.RegisterCallback<NavigationCancelEvent>(evt =>
-            {
-                CloseCurrent();
-                evt.StopPropagation();
-            });
-            
-            foreach (Button closeButton in root.rootVisualElement.Query<Button>("CloseButton").ToList())
-            {
-                closeButton.clicked += CloseCurrent;
-            }
-
-            Button inventoryMenuButton = _mainMenu.Q<Button>("InventoryMenuButton");
-            inventoryMenuButton.clicked += () => Debug.Log($"Open inventory");
-
-            _registered = true;
-        }
-
-        private IEnumerator DelayedFocus(Func<VisualElement> getter)
+        private IEnumerator DelayedFocus(UIWindow window)
         {
             yield return null;
 
-            VisualElement element = getter();
-            element?.Focus();
+            window.Focus();
         }
-    }
-
-    public enum UIWindow
-    {
-        MainMenu,
-        Inventory,
     }
 }
