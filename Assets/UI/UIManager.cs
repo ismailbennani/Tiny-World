@@ -53,20 +53,9 @@ namespace UI
             }
         }
 
-        public void Open(UIWindow window)
+        public void OpenInventory()
         {
-            if (windowStack.Count == 0)
-            {
-                OnMenuOpen();
-            }
-
-            if (windowStack.Count > 0)
-            {
-                Show(windowStack.Last(), false);
-            }
-
-            Show(window, true);
-            windowStack.Add(window);
+            Open(inventory);
         }
 
         public void CloseCurrent()
@@ -87,6 +76,22 @@ namespace UI
             {
                 OnMenuClose();
             }
+        }
+
+        private void Open(UIWindow window)
+        {
+            if (windowStack.Count == 0)
+            {
+                OnMenuOpen();
+            }
+
+            if (windowStack.Count > 0)
+            {
+                Show(windowStack.Last(), false);
+            }
+
+            Show(window, true);
+            windowStack.Add(window);
         }
 
         private void Show(UIWindow window, bool show)

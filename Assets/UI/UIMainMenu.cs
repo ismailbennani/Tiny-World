@@ -27,7 +27,8 @@ namespace UI
         private void OpenInventory()
         {
             _currentSelection = InventoryButtonName;
-            Debug.Log("INVENTORY");
+
+            UIManager.Instance.OpenInventory();
         }
     }
 }
