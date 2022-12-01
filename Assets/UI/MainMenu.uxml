@@ -1,0 +1,26 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements"
+         editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/UI.uss?fileID=7433441132597879392&amp;guid=e7518e61de47d7940959345b9900c3f4&amp;type=3#UI" />
+    <ui:VisualElement name="GameMenu" class="main-container">
+        <ui:VisualElement name="MainMenu" class="panel" style="height: 200px;">
+            <ui:Button name="CloseButton" display-tooltip-when-elided="true" class="button close-button">
+                <ui:VisualElement class="icon" />
+                <ui:VisualElement class="cursor" style="right: -10px; bottom: -10px;" />
+            </ui:Button>
+            <ui:VisualElement style="align-items: center; justify-content: center; flex-direction: row;">
+                <ui:VisualElement name="Icon" class="title-icon" style="background-image: url(&apos;project://database/Assets/Imported/Kenney/gameicons-expansion/Game%20icons%20(base)/PNG/White/2x/home.png?fileID=21300000&amp;guid=b07e8145d4e3ec943acb510505a801d6&amp;type=3#home&apos;);" />
+                <ui:Label text="Main menu" display-tooltip-when-elided="true" name="Title" class="title" />
+            </ui:VisualElement>
+            <ui:VisualElement style="flex-direction: row; flex-grow: 1; flex-shrink: 0; align-items: center; justify-content: center;">
+                <ui:Button name="InventoryMenuButton" tooltip="Inventory" tabindex="1" display-tooltip-when-elided="true" class="button menu-button">
+                    <ui:VisualElement class="icon" style="background-image: url(&apos;project://database/Assets/Imported/Kenney/gameicons-expansion/Game%20icons%20(base)/PNG/White/2x/menuGrid.png?fileID=21300000&amp;guid=5d158ee432144824486de0558b8c7440&amp;type=3#menuGrid&apos;);" />
+                    <ui:VisualElement class="cursor" />
+                </ui:Button>
+                <ui:Button name="SettingsMenuButton" tooltip="Settings" display-tooltip-when-elided="true" class="button menu-button">
+                    <ui:VisualElement class="icon" style="background-image: url(&apos;project://database/Assets/Imported/Kenney/gameicons-expansion/Game%20icons%20(base)/PNG/White/2x/gear.png?fileID=21300000&amp;guid=4b90bded9cb9eda43a1956cd91caa650&amp;type=3#gear&apos;);" />
+                    <ui:VisualElement class="cursor" />
+                </ui:Button>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

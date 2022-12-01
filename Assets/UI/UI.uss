@@ -1,3 +1,13 @@
+.main-container {
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+}
+
 .panel {
     margin-left: 0;
     margin-right: 0;
@@ -7,12 +17,7 @@
     padding-right: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
-    background-image: url('project://database/Assets/Imported/Kenney/uipack-rpg/PNG/panel_brown.png?fileID=2800000&guid=a7021b0d6a62b344895356a5c7a41af6&type=3#panel_brown');
-    -unity-slice-left: 8;
-    -unity-slice-top: 8;
-    -unity-slice-right: 8;
-    -unity-slice-bottom: 8;
-    -unity-background-scale-mode: stretch-to-fill;
+    background-image: url('project://database/Assets/Imported/Kenney/uipack-rpg/PNG/panel_brown.png?fileID=21300000&guid=a7021b0d6a62b344895356a5c7a41af6&type=3#panel_brown');
 }
 
 .title {
@@ -23,7 +28,16 @@
     -unity-text-align: middle-center;
 }
 
-.button {
+.title-icon {
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+    -unity-background-image-tint-color: rgb(201, 163, 125);
+}
+
+.small-text {
+    -unity-font: url('project://database/Assets/Imported/Kenney/Fonts/Kenney%20Mini%20Square.ttf?fileID=12800000&guid=c1d8e15535258914fb55dd2b5913f72f&type=3#Kenney Mini Square');
+    -unity-font-definition: none;
 }
 
 .cursor {
@@ -36,34 +50,37 @@
     bottom: 0;
 }
 
+.button {
+    background-image: url('project://database/Assets/Imported/Kenney/uipack-rpg/PNG/buttonSquare_beige.png?fileID=21300000&guid=8b0b38ed45eff7f4f94828f29907715f&type=3#buttonSquare_beige');
+    padding-bottom: 4px;
+    align-items: center;
+    justify-content: center;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    background-color: rgba(0, 0, 0, 0);
+}
+
 .button:focus > .cursor {
     visibility: visible;
 }
 
-.menu-button:active {
+.button:active {
     background-image: url('project://database/Assets/Imported/Kenney/uipack-rpg/PNG/buttonSquare_beige_pressed.png?fileID=21300000&guid=545ebbab6be005e45bb90298637b4aa5&type=3#buttonSquare_beige_pressed');
-    -unity-slice-left: 8;
-    -unity-slice-top: 8;
-    -unity-slice-right: 8;
-    -unity-slice-bottom: 8;
 }
 
 .menu-button {
     width: 100px;
     height: 100px;
-    background-image: url('project://database/Assets/Imported/Kenney/uipack-rpg/PNG/buttonSquare_beige.png?fileID=21300000&guid=8b0b38ed45eff7f4f94828f29907715f&type=3#buttonSquare_beige');
-    -unity-slice-left: 8;
-    -unity-slice-top: 8;
-    -unity-slice-right: 8;
-    -unity-slice-bottom: 12;
     border-left-width: 0;
     border-right-width: 0;
     border-top-width: 0;
     border-bottom-width: 0;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 4px;
-    background-color: rgba(0, 0, 0, 0);
 }
 
 .menu-button .icon {
@@ -101,8 +118,42 @@
     overflow: visible;
 }
 
+.close-button:active {
+    background-image: url('project://database/Assets/Imported/Kenney/uipack-rpg/PNG/buttonRound_brown.png?fileID=21300000&guid=9ffe617a62c2f214098852e00f96a5d3&type=3#buttonRound_brown');
+}
+
 .close-button .icon {
     background-image: url('project://database/Assets/Imported/Kenney/uipack-rpg/PNG/iconCross_beige.png?fileID=21300000&guid=908696fa23bac7e40aa1178e5a41a89f&type=3#iconCross_beige');
     width: 16px;
     height: 15px;
+}
+
+.inner-panel {
+    background-image: url('project://database/Assets/Imported/Kenney/uipack-rpg/PNG/panelInset_beige.png?fileID=21300000&guid=07d234d0413f7d142af5c6885e7eeb96&type=3#panelInset_beige');
+}
+
+.inventory-grid-item {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 45px;
+    height: 49px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 12px;
+}
+
+.inventory-grid-item .cursor {
+    right: -10px;
+    bottom: -10px;
+}
+
+.inventory-grid-item .image {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    right: 8px;
+    bottom: 12px;
 }
