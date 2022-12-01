@@ -14,6 +14,7 @@ namespace UI
 
         [NonSerialized]
         private bool _registering;
+        [NonSerialized]
         private bool _registered;
         
         void Start()
@@ -33,8 +34,7 @@ namespace UI
             root.rootVisualElement.style.right = new StyleLength(0f);
             root.rootVisualElement.style.bottom = new StyleLength(0f);
             root.rootVisualElement.style.left = new StyleLength(0f);
-            
-            
+
             StartCoroutine(RegisterCallbacksWhenReady());
         }
 
