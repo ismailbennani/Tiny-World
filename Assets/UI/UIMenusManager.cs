@@ -8,17 +8,18 @@ namespace UI
 {
     public class UIMenusManager : MonoBehaviour
     {
+        private const float OpenCloseDelay = 0.5f;
+        
         public static UIMenusManager Instance { get; private set; }
 
         public UIWindow mainMenu;
         public UIWindow inventory;
 
         public bool Visible => windowStack.Count > 0;
-
-
+        
         [SerializeField]
         private List<UIWindow> windowStack = new();
-        private bool _registered;
+        private static float _lastOpenCloseTime;
 
         void Start()
         {
@@ -60,6 +61,11 @@ namespace UI
 
         public void Open(UIWindow window)
         {
+            if (!CanOpenClose())
+            {
+                return;
+            }
+            
             if (windowStack.Count == 0)
             {
                 OnMenuOpen();
@@ -81,6 +87,11 @@ namespace UI
 
         public void Close(UIWindow uiWindow)
         {
+            if (!CanOpenClose())
+            {
+                return;
+            }
+            
             if (windowStack.Count == 0 || windowStack.Last() != uiWindow)
             {
                 return;
@@ -178,6 +189,19 @@ namespace UI
             yield return null;
 
             window.Focus();
+        }
+
+        private bool CanOpenClose()
+        {
+            float now = Time.time;
+                    
+            if (_lastOpenCloseTime > now - OpenCloseDelay)
+            {
+                return false;
+            }
+
+            _lastOpenCloseTime = now;
+            return true;
         }
     }
 }

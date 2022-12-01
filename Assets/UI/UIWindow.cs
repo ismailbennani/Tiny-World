@@ -7,10 +7,6 @@ namespace UI
 {
     public abstract class UIWindow: MonoBehaviour
     {
-        private const float CloseDelay = 0.1f;
-        
-        private static float _lastCloseTime;
-        
         public UIDocument root;
 
         protected Button CloseButton;
@@ -80,15 +76,6 @@ namespace UI
             root.rootVisualElement.RegisterCallback<NavigationCancelEvent>(
                 evt =>
                 {
-                    float now = Time.time;
-                    
-                    if (_lastCloseTime > now - CloseDelay)
-                    {
-                        return;
-                    }
-
-                    _lastCloseTime = now;
-                    
                     UIMenusManager.Instance.Close(this);
                     evt.StopImmediatePropagation();
                 }
