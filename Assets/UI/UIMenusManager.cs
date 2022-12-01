@@ -58,14 +58,35 @@ namespace UI
             Open(inventory);
         }
 
-        public void CloseCurrent()
+        public void Open(UIWindow window)
         {
             if (windowStack.Count == 0)
+            {
+                OnMenuOpen();
+            }
+
+            if (windowStack.Count > 0)
+            {
+                if (windowStack.Last() == window)
+                {
+                    return;
+                }
+
+                Show(windowStack.Last(), false);
+            }
+
+            Show(window, true);
+            windowStack.Add(window);
+        }
+
+        public void Close(UIWindow uiWindow)
+        {
+            if (windowStack.Count == 0 || windowStack.Last() != uiWindow)
             {
                 return;
             }
 
-            Show(windowStack.Last(), false);
+            Show(uiWindow, false);
             windowStack.RemoveAt(windowStack.Count - 1);
 
             if (windowStack.Count > 0)
@@ -78,29 +99,13 @@ namespace UI
             }
         }
 
-        private void Open(UIWindow window)
-        {
-            if (windowStack.Count == 0)
-            {
-                OnMenuOpen();
-            }
-
-            if (windowStack.Count > 0)
-            {
-                Show(windowStack.Last(), false);
-            }
-
-            Show(window, true);
-            windowStack.Add(window);
-        }
-
         private void Show(UIWindow window, bool show)
         {
             if (!window)
             {
                 return;
             }
-            
+
             if (show)
             {
                 window.Show();

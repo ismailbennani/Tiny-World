@@ -7,6 +7,9 @@ namespace UI
 {
     public abstract class UIWindow: MonoBehaviour
     {
+        private static float _lastCloseTime;
+        private const float _closeDelay = 0.5f;
+        
         public UIDocument root;
 
         [NonSerialized]
@@ -67,18 +70,25 @@ namespace UI
             {
                 yield return null;
             }
-            
-            UIMenusManager uiMenusManager = UIMenusManager.Instance;
-            
+
             root.rootVisualElement.RegisterCallback<NavigationCancelEvent>(
                 evt =>
                 {
-                    uiMenusManager.CloseCurrent();
+                    float now = Time.time;
+                    
+                    if (_lastCloseTime > now - _closeDelay)
+                    {
+                        return;
+                    }
+
+                    _lastCloseTime = now;
+                    
+                    UIMenusManager.Instance.Close(this);
                     evt.StopImmediatePropagation();
                 }
             );
 
-            root.rootVisualElement.Q<Button>("CloseButton").clicked += uiMenusManager.CloseCurrent;
+            root.rootVisualElement.Q<Button>("CloseButton").clicked += () => UIMenusManager.Instance.Close(this);
             
             RegisterAdditionalCallbacks();
 
