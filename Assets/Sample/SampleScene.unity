@@ -197,7 +197,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
@@ -658,6 +657,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   root: {fileID: 1022165316}
+  gridItemTemplate: {fileID: 9197481963319205126, guid: 413a135fbf06026418d62971ff460c9c, type: 3}
 --- !u!114 &1061737787
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -7,22 +7,25 @@ namespace UI
 {
     public abstract class UIWindow: MonoBehaviour
     {
+        private const float CloseDelay = 0.5f;
+        
         private static float _lastCloseTime;
-        private const float _closeDelay = 0.5f;
         
         public UIDocument root;
 
+        protected Button CloseButton;
+        
         [NonSerialized]
         private bool _registering;
         [NonSerialized]
         private bool _registered;
-        
+
         void Start()
         {
             Hide();
         }
 
-        void OnEnable()
+        protected virtual void OnEnable()
         {
             if (!root)
             {
@@ -35,15 +38,18 @@ namespace UI
             root.rootVisualElement.style.bottom = new StyleLength(0f);
             root.rootVisualElement.style.left = new StyleLength(0f);
 
+            CloseButton = root.rootVisualElement.Q<Button>("CloseButton");
+
             StartCoroutine(RegisterCallbacksWhenReady());
         }
 
         protected abstract void RegisterAdditionalCallbacks();
-
+        protected abstract void Load();
         protected abstract void OnFocus();
 
         public void Show()
         {
+            Load();
             root.rootVisualElement.visible = true;
         }
 
@@ -76,7 +82,7 @@ namespace UI
                 {
                     float now = Time.time;
                     
-                    if (_lastCloseTime > now - _closeDelay)
+                    if (_lastCloseTime > now - CloseDelay)
                     {
                         return;
                     }
@@ -88,8 +94,11 @@ namespace UI
                 }
             );
 
-            root.rootVisualElement.Q<Button>("CloseButton").clicked += () => UIMenusManager.Instance.Close(this);
-            
+            if (CloseButton != null)
+            {
+                CloseButton.clicked += () => UIMenusManager.Instance.Close(this);
+            }
+
             RegisterAdditionalCallbacks();
 
             _registering = false;

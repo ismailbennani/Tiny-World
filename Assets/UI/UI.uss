@@ -137,9 +137,23 @@
     margin-right: 5px;
     margin-top: 5px;
     margin-bottom: 5px;
+    width: 45px;
+    height: 49px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 12px;
 }
 
 .inventory-grid-item .cursor {
     right: -10px;
     bottom: -10px;
+}
+
+.inventory-grid-item .image {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    right: 8px;
+    bottom: 12px;
 }

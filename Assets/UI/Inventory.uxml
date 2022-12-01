@@ -2,7 +2,7 @@
          editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
     <Style src="project://database/Assets/UI/UI.uss?fileID=7433441132597879392&amp;guid=e7518e61de47d7940959345b9900c3f4&amp;type=3#UI" />
     <ui:VisualElement name="GameMenu" class="main-container">
-        <ui:VisualElement name="InventoryMenu" class="panel" style="min-width: 250px; min-height: 500px;">
+        <ui:VisualElement name="InventoryMenu" class="panel" style="height: 500px; width: 250px;">
             <ui:Button name="CloseButton" display-tooltip-when-elided="true" class="button close-button">
                 <ui:VisualElement class="icon" />
                 <ui:VisualElement class="cursor" style="right: -10px; bottom: -10px;" />
@@ -11,13 +11,9 @@
                 <ui:VisualElement name="Icon" class="title-icon" style="background-image: url(&apos;project://database/Assets/Imported/Kenney/gameicons-expansion/Game%20icons%20(base)/PNG/White/2x/menuGrid.png?fileID=21300000&amp;guid=5d158ee432144824486de0558b8c7440&amp;type=3#menuGrid&apos;);" />
                 <ui:Label text="Inventory" display-tooltip-when-elided="true" name="Title" class="title" />
             </ui:VisualElement>
-            <ui:VisualElement class="inner-panel" style="flex-direction: row; flex-grow: 1; flex-shrink: 0; align-items: flex-start; justify-content: flex-start; flex-wrap: wrap; padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px;">
-                <ui:Button display-tooltip-when-elided="true" name="InventoryGridItem" class="button inventory-grid-item" style="width: 50px; height: 50px; overflow: visible;">
-                    <ui:VisualElement class="cursor" />
-                    <ui:VisualElement name="Image" style="flex-grow: 1;" />
-                    <ui:Label text="2000" display-tooltip-when-elided="true" name="Count" class="small-text" style="position: absolute; top: 0; right: 0; padding-left: 0; padding-right: 5px; padding-top: 1px; color: rgb(236, 227, 206);" />
-                </ui:Button>
-            </ui:VisualElement>
+            <ui:ScrollView scroll-deceleration-rate="0,135" elasticity="0,1" class="inner-panel" style="flex-grow: 1;">
+                <ui:VisualElement name="InventoryItemContainer" style="padding-left: 5px; padding-right: 5px; padding-top: 5px; padding-bottom: 5px; flex-direction: row; flex-wrap: wrap;" />
+            </ui:ScrollView>
         </ui:VisualElement>
     </ui:VisualElement>
 </ui:UXML>

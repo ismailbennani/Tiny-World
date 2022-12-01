@@ -8,7 +8,7 @@ namespace UI
         private const string InventoryButtonName = "InventoryMenuButton";
         
         [SerializeField]
-        private string _currentSelection;
+        private string currentSelection;
 
         protected override void RegisterAdditionalCallbacks()
         {
@@ -16,9 +16,13 @@ namespace UI
             inventoryMenuButton.clicked += OpenInventory;
         }
 
+        protected override void Load()
+        {
+        }
+
         protected override void OnFocus()
         {
-            Button toFocus = root.rootVisualElement.Query<Button>(_currentSelection).First()
+            Button toFocus = root.rootVisualElement.Query<Button>(currentSelection).First()
                              ?? root.rootVisualElement.Query<Button>().Enabled().First();
 
             toFocus?.Focus();
@@ -26,7 +30,7 @@ namespace UI
 
         private void OpenInventory()
         {
-            _currentSelection = InventoryButtonName;
+            currentSelection = InventoryButtonName;
 
             UIMenusManager.Instance.OpenInventory();
         }
