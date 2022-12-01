@@ -85,7 +85,7 @@ namespace Input
         {
             if (value.ReadValueAsButton())
             {
-                UIManager.Instance.Toggle();
+                UIMenusManager.Instance.Toggle();
             }
         }
 

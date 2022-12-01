@@ -302,7 +302,6 @@ GameObject:
   m_Component:
   - component: {fileID: 284619037}
   - component: {fileID: 284619039}
-  - component: {fileID: 284619038}
   m_Layer: 0
   m_Name: UI
   m_TagString: Untagged
@@ -326,21 +325,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &284619038
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 284619035}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6f9567ca2a25fe48ae4a1b9cf9c8041, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mainMenu: {fileID: 108029825}
-  inventory: {fileID: 1022165317}
-  windowStack: []
 --- !u!114 &284619039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -711,6 +695,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1180145042}
+  - component: {fileID: 1180145043}
   m_Layer: 0
   m_Name: Menus
   m_TagString: Untagged
@@ -735,6 +720,21 @@ Transform:
   m_Father: {fileID: 284619037}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1180145043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180145041}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6f9567ca2a25fe48ae4a1b9cf9c8041, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainMenu: {fileID: 108029825}
+  inventory: {fileID: 1022165317}
+  windowStack: []
 --- !u!114 &1524312528
 MonoBehaviour:
   m_ObjectHideFlags: 0

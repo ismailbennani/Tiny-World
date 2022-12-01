@@ -63,22 +63,22 @@ namespace UI
 
             _registering = true;
             
-            while (!UIManager.Instance)
+            while (!UIMenusManager.Instance)
             {
                 yield return null;
             }
             
-            UIManager uiManager = UIManager.Instance;
+            UIMenusManager uiMenusManager = UIMenusManager.Instance;
             
             root.rootVisualElement.RegisterCallback<NavigationCancelEvent>(
                 evt =>
                 {
-                    uiManager.CloseCurrent();
+                    uiMenusManager.CloseCurrent();
                     evt.StopImmediatePropagation();
                 }
             );
 
-            root.rootVisualElement.Q<Button>("CloseButton").clicked += uiManager.CloseCurrent;
+            root.rootVisualElement.Q<Button>("CloseButton").clicked += uiMenusManager.CloseCurrent;
             
             RegisterAdditionalCallbacks();
 

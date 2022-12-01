@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace UI
 {
-    public class UIManager : MonoBehaviour
+    public class UIMenusManager : MonoBehaviour
     {
-        public static UIManager Instance { get; private set; }
+        public static UIMenusManager Instance { get; private set; }
 
         public UIWindow mainMenu;
         public UIWindow inventory;

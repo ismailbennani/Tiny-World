@@ -28,7 +28,7 @@ namespace UI
         {
             _currentSelection = InventoryButtonName;
 
-            UIManager.Instance.OpenInventory();
+            UIMenusManager.Instance.OpenInventory();
         }
     }
 }
