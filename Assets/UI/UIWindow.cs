@@ -7,7 +7,7 @@ namespace UI
 {
     public abstract class UIWindow: MonoBehaviour
     {
-        private const float CloseDelay = 0.5f;
+        private const float CloseDelay = 0.1f;
         
         private static float _lastCloseTime;
         
