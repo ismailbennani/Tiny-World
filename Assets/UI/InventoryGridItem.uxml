@@ -1,0 +1,8 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/UI.uss?fileID=7433441132597879392&amp;guid=e7518e61de47d7940959345b9900c3f4&amp;type=3#UI" />
+    <ui:Button display-tooltip-when-elided="true" name="InventoryGridItem" class="button inventory-grid-item" style="overflow: visible;">
+        <ui:VisualElement class="cursor" />
+        <ui:VisualElement name="Image" class="inventory-grid-item-image image" />
+        <ui:Label text="2000" display-tooltip-when-elided="true" name="Count" class="small-text" style="position: absolute; top: 0; right: 0; padding-left: 0; padding-right: 5px; padding-top: 1px; color: rgb(236, 227, 206);" />
+    </ui:Button>
+</ui:UXML>
