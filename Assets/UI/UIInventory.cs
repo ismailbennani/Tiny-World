@@ -36,8 +36,10 @@ namespace UI
         {
         }
 
-        protected override void Load()
+        protected override void OnOpen()
         {
+            _descriptionRoot.visible = false;
+            
             GameState gameState = GameStateManager.Current;
             if (!gameState)
             {
@@ -82,11 +84,6 @@ namespace UI
                 _itemContainer.Add(newInventoryItemTemplate);
                 _inventoryItems.Add(newInventoryItemTemplate);
             }
-        }
-
-        protected override void OnFocus()
-        {
-            _descriptionRoot.visible = false;
 
             if (_inventoryItems.Count > 0)
             {
@@ -96,6 +93,11 @@ namespace UI
             {
                 CloseButton.Focus();
             }
+        }
+
+        protected override void OnClose()
+        {
+            _descriptionRoot.visible = false;
         }
     }
 }
