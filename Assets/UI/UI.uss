@@ -40,6 +40,20 @@
     -unity-font-definition: none;
 }
 
+.inner-title {
+    -unity-font-definition: none;
+    -unity-font: url('project://database/Assets/Imported/Kenney/Fonts/Kenney%20Mini.ttf?fileID=12800000&guid=b145f73d069993244a643cea28901539&type=3#Kenney Mini');
+    font-size: 16px;
+    color: rgba(72, 54, 35, 255);
+}
+
+.inner-text {
+    -unity-font-definition: none;
+    -unity-font: url('project://database/Assets/Imported/Kenney/Fonts/Kenney%20Mini%20Square.ttf?fileID=12800000&guid=c1d8e15535258914fb55dd2b5913f72f&type=3#Kenney Mini Square');
+    color: rgb(151, 113, 74);
+    white-space: normal;
+}
+
 .cursor {
     visibility: hidden;
     background-image: url('project://database/Assets/Imported/Kenney/uipack-rpg/PNG/cursorGauntlet_grey.png?fileID=21300000&guid=1dfd2a0c7a531f24fa72116debe95b21&type=3#cursorGauntlet_grey');

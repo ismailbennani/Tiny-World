@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Input;
@@ -120,17 +119,11 @@ namespace UI
             if (show)
             {
                 window.Show();
-                OnShow(window);
             }
             else
             {
                 window.Hide();
             }
-        }
-
-        private void OnShow(UIWindow window)
-        {
-            StartCoroutine(DelayedFocus(window));
         }
 
         private void CloseAll()
@@ -182,13 +175,6 @@ namespace UI
             }
 
             gameInputAdapter.SwitchToPlayer();
-        }
-
-        private IEnumerator DelayedFocus(UIWindow window)
-        {
-            yield return null;
-
-            window.Focus();
         }
 
         private bool CanOpenClose()

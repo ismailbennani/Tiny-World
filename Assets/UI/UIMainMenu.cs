@@ -16,16 +16,16 @@ namespace UI
             inventoryMenuButton.clicked += OpenInventory;
         }
 
-        protected override void Load()
-        {
-        }
-
-        protected override void OnFocus()
+        protected override void OnOpen()
         {
             Button toFocus = root.rootVisualElement.Query<Button>(currentSelection).First()
                              ?? root.rootVisualElement.Query<Button>().Enabled().First();
 
             toFocus?.Focus();
+        }
+
+        protected override void OnClose()
+        {
         }
 
         private void OpenInventory()
