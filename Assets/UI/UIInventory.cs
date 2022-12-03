@@ -17,7 +17,8 @@ namespace UI
         private Label _descriptionTitle;
         private Label _descriptionBody;
 
-        private int _currentFocus;
+        [SerializeField]
+        private int currentFocus;
 
         protected override void OnEnable()
         {
@@ -78,7 +79,7 @@ namespace UI
                         _descriptionTitle.text = line.item.itemName;
                         _descriptionBody.text = line.item.itemDescription;
 
-                        _currentFocus = indexCopy;
+                        currentFocus = indexCopy;
                     }
                 );
                 button.clicked += () => UIMenusManager.Instance.OpenDropdown(
@@ -107,8 +108,8 @@ namespace UI
         {
             if (_inventoryItems.Count > 0)
             {
-                _currentFocus = Mathf.Clamp(_currentFocus, 0, _inventoryItems.Count);
-                _itemContainer.Query<Button>().AtIndex(_currentFocus).Focus();
+                currentFocus = Mathf.Clamp(currentFocus, 0, _inventoryItems.Count);
+                _itemContainer.Query<Button>().AtIndex(currentFocus).Focus();
             }
             else if (CloseButton != null)
             {
