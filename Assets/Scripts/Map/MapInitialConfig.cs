@@ -40,8 +40,13 @@ namespace Map
     public class ResourceWithWeight
     {
         public TileResourceType resource;
+        public float weight = 1;
+
+        [Header("Constraints")]
+        public TileType compatibleTiles;
+        
+        [Header("Loot")]
         public LootTable lootTable;
         public Vector2Int nLoots;
-        public float weight = 1;
     }
 }

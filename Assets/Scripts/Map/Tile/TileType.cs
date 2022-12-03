@@ -1,5 +1,8 @@
-﻿namespace Map.Tile
+﻿using System;
+
+namespace Map.Tile
 {
+    [Flags]
     public enum TileType
     {
         None = 0,
