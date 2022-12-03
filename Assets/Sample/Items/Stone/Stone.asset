@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Stone
   m_EditorClassIdentifier: 
   itemName: Stone
-  itemDescription: 
+  itemDescription: Hard material
+  sprite: {fileID: 0}
   stackable: 1
