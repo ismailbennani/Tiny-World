@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Character.Inventory;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UI
@@ -64,13 +65,22 @@ namespace UI
             foreach (InventoryLine line in inventory.lines)
             {
                 TemplateContainer newInventoryItemTemplate = gridItemTemplate.CloneTree();
-                newInventoryItemTemplate.Q<Button>().RegisterCallback<FocusEvent>(
+                Button button = newInventoryItemTemplate.Q<Button>();
+                button.RegisterCallback<FocusEvent>(
                     _ =>
                     {
                         _descriptionRoot.visible = true;
                         _descriptionTitle.text = line.item.itemName;
                         _descriptionBody.text = line.item.itemDescription;
                     }
+                );
+                button.clicked += () => UIMenusManager.Instance.OpenDropdown(
+                    new[]
+                    {
+                        new UIDropdownChoice("HEY THERE", () => Debug.Log("hey there!!")),
+                        new UIDropdownChoice("HEY THEEERE", () => Debug.Log("hey theeere!!")),
+                    },
+                    new Vector2(button.layout.x, button.layout.y)
                 );
 
                 newInventoryItemTemplate.Q<Label>("Count").text = line.count.ToString();

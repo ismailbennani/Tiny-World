@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,18 +9,21 @@ namespace UI
 {
     public class UIMenusManager : MonoBehaviour
     {
-        private const float OpenCloseDelay = 0.5f;
-        
+        private const float MenuActionDelay = 0.5f;
+
         public static UIMenusManager Instance { get; private set; }
 
         public UIWindow mainMenu;
         public UIWindow inventory;
 
-        public bool Visible => windowStack.Count > 0;
-        
+        [Space(10)]
+        public UIDropdown dropdown;
+
+        [Header("Runtime")]
         [SerializeField]
         private List<UIWindow> windowStack = new();
-        private static float _lastOpenCloseTime;
+
+        private static float _lastMenuAction;
 
         void Start()
         {
@@ -61,11 +65,11 @@ namespace UI
 
         public void Open(UIWindow window)
         {
-            if (!CanOpenClose())
+            if (!CanPerformAction())
             {
                 return;
             }
-            
+
             if (windowStack.Count == 0)
             {
                 OnMenuOpen();
@@ -87,11 +91,11 @@ namespace UI
 
         public void Close(UIWindow uiWindow)
         {
-            if (!CanOpenClose())
+            if (!CanPerformAction())
             {
                 return;
             }
-            
+
             if (windowStack.Count == 0 || windowStack.Last() != uiWindow)
             {
                 return;
@@ -110,6 +114,22 @@ namespace UI
             }
         }
 
+        public void OpenDropdown(IEnumerable<UIDropdownChoice> choices, Vector2 position)
+        {
+            if (!CanPerformAction())
+            {
+                return;
+            }
+            
+            dropdown.Show(choices.Select(c => new UIDropdownChoice(c.Label, () => DropdownCallback(c))).ToList(), position);
+            StartCoroutine(Delay(dropdown.Focus));
+        }
+
+        public void CloseDropdown()
+        {
+            dropdown.Hide();
+        }
+
         private void Show(UIWindow window, bool show)
         {
             if (!window)
@@ -120,7 +140,7 @@ namespace UI
             if (show)
             {
                 window.Show();
-                StartCoroutine(DelayedFocus(window));
+                StartCoroutine(Delay(window.Focus));
             }
             else
             {
@@ -179,24 +199,35 @@ namespace UI
             gameInputAdapter.SwitchToPlayer();
         }
 
-        private bool CanOpenClose()
+        private void DropdownCallback(UIDropdownChoice c)
+        {
+            if (!CanPerformAction())
+            {
+                return;
+            }
+            
+            c.Callback?.Invoke();
+            CloseDropdown();
+        }
+
+        private bool CanPerformAction()
         {
             float now = Time.time;
-                    
-            if (_lastOpenCloseTime > now - OpenCloseDelay)
+
+            if (_lastMenuAction > now - MenuActionDelay)
             {
                 return false;
             }
 
-            _lastOpenCloseTime = now;
+            _lastMenuAction = now;
             return true;
         }
-        
-        private IEnumerator DelayedFocus(UIWindow window)
+
+        private static IEnumerator Delay(Action action)
         {
             yield return null;
 
-            window.Focus();
+            action?.Invoke();
         }
     }
 }
