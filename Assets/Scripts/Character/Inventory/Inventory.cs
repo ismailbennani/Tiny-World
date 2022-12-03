@@ -28,30 +28,34 @@ namespace Character.Inventory
             return true;
         }
         
-        public static bool Drop(InventoryState inventoryState, Item item, int indexHint = -1)
+        public static int Drop(InventoryState inventoryState, Item item, int count = 1, int indexHint = -1)
         {
             GameState gameState = GameStateManager.Current;
             if (!gameState)
             {
-                return false;
+                return -1;
             }
 
             PlayerState player = gameState.player;
             if (player == null)
             {
-                return false;
+                return -1;
             }
             
             GameMap map = GameMap.Instance;
             if (!map)
             {
-                return false;
+                return -1;
             }
 
-            inventoryState.DropItem(item, indexHint);
-            map.SpawnItem(item, player.position);
+            int actualCount = inventoryState.DropItem(item, count, indexHint);
 
-            return true;
+            for (int i = 0; i < actualCount; i++)
+            {
+                map.SpawnItem(item, player.position);
+            }
+
+            return count;
         }
     }
 }

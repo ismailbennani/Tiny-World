@@ -97,7 +97,8 @@ namespace UI
                     UIMenusManager.Instance.OpenDropdown(
                         new[]
                         {
-                            new UIDropdownChoice("Drop", () => Inventory.Drop(_inventory, line.item, indexCopy)),
+                            new UIDropdownChoice("Drop", () => Inventory.Drop(_inventory, line.item, 1, indexCopy)),
+                            new UIDropdownChoice("Drop all", () => Inventory.Drop(_inventory, line.item, line.count, indexCopy)),
                         },
                         new Vector2(rect.x + rect.width, rect.y - rect.height / 2)
                     );

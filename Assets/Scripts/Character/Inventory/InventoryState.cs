@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Items;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace Character.Inventory
@@ -30,7 +31,7 @@ namespace Character.Inventory
         /// <param name="item"></param>
         /// <param name="position"></param>
         /// <param name="indexHint">If positive, and if item at that index is the same as item, will drop that one instead of the first one</param>
-        public void DropItem(Item item, int indexHint = -1)
+        public int DropItem(Item item, int count = 1, int indexHint = -1)
         {
             InventoryLine matchingLine;
             if (indexHint > 0 && lines[indexHint].item == item)
@@ -47,13 +48,17 @@ namespace Character.Inventory
                 throw new InvalidOperationException($"Cannot find item {item}");
             }
 
-            matchingLine.count--;
+            int actualCount = Mathf.Min(count, matchingLine.count);
+            
+            matchingLine.count -= actualCount;
             if (matchingLine.count <= 0)
             {
                 lines.Remove(matchingLine);
             }
 
             onChange.Invoke(matchingLine);
+
+            return actualCount;
         }
     }
 
