@@ -17,6 +17,8 @@ namespace UI
         private Label _descriptionTitle;
         private Label _descriptionBody;
 
+        private int _currentFocus;
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -62,8 +64,11 @@ namespace UI
 
             _inventoryItems.Clear();
 
-            foreach (InventoryLine line in inventory.lines)
+            for (int index = 0; index < inventory.lines.Count; index++)
             {
+                int indexCopy = index;
+                
+                InventoryLine line = inventory.lines[index];
                 TemplateContainer newInventoryItemTemplate = gridItemTemplate.CloneTree();
                 Button button = newInventoryItemTemplate.Q<Button>();
                 button.RegisterCallback<FocusEvent>(
@@ -72,6 +77,8 @@ namespace UI
                         _descriptionRoot.visible = true;
                         _descriptionTitle.text = line.item.itemName;
                         _descriptionBody.text = line.item.itemDescription;
+
+                        _currentFocus = indexCopy;
                     }
                 );
                 button.clicked += () => UIMenusManager.Instance.OpenDropdown(
@@ -100,7 +107,8 @@ namespace UI
         {
             if (_inventoryItems.Count > 0)
             {
-                _itemContainer.Query<Button>().First().Focus();
+                _currentFocus = Mathf.Clamp(_currentFocus, 0, _inventoryItems.Count);
+                _itemContainer.Query<Button>().AtIndex(_currentFocus).Focus();
             }
             else if (CloseButton != null)
             {
