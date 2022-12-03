@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Items;
-using Map;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -23,19 +22,20 @@ namespace Character.Inventory
                 matchingLine = new InventoryLine { item = item.item, count = 0 };
                 lines.Add(matchingLine);
             }
-            
-            onChange.Invoke(matchingLine);
 
             matchingLine.count++;
+
+            matchingLine.onChange?.Invoke();
+            onChange.Invoke(matchingLine);
         }
 
         /// <param name="item"></param>
         /// <param name="position"></param>
         /// <param name="indexHint">If positive, and if item at that index is the same as item, will drop that one instead of the first one</param>
-        public void DropItem(Item item, Vector3 position, int indexHint = -1)
+        public int DropItem(Item item, int count = 1, int indexHint = -1)
         {
             InventoryLine matchingLine;
-            if (indexHint > 0 && lines[indexHint].item == item)
+            if (indexHint >= 0 && indexHint < lines.Count && lines[indexHint].item == item)
             {
                 matchingLine = lines[indexHint];
             }
@@ -49,21 +49,18 @@ namespace Character.Inventory
                 throw new InvalidOperationException($"Cannot find item {item}");
             }
 
-            matchingLine.count--;
+            int actualCount = Mathf.Min(count, matchingLine.count);
+
+            matchingLine.count -= actualCount;
             if (matchingLine.count <= 0)
             {
                 lines.Remove(matchingLine);
             }
 
+            matchingLine.onChange?.Invoke();
             onChange.Invoke(matchingLine);
 
-            GameMap map = GameMap.Instance;
-            if (!map)
-            {
-                return;
-            }
-
-            map.SpawnItem(item, position);
+            return actualCount;
         }
     }
 
@@ -72,5 +69,6 @@ namespace Character.Inventory
     {
         public Item item;
         public int count;
+        public UnityEvent onChange = new();
     }
 }

@@ -201,13 +201,13 @@ MonoBehaviour:
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
   m_ActionsAsset: {fileID: -944628639613478452, guid: 2f5d5373fbc7a014599708e825e43e8e, type: 3}
-  m_PointAction: {fileID: 1061737787}
+  m_PointAction: {fileID: 0}
   m_MoveAction: {fileID: 1978737696}
   m_SubmitAction: {fileID: 583107859}
   m_CancelAction: {fileID: 559398208}
-  m_LeftClickAction: {fileID: 2027308201}
-  m_MiddleClickAction: {fileID: 1127385769}
-  m_RightClickAction: {fileID: 1524312528}
+  m_LeftClickAction: {fileID: 0}
+  m_MiddleClickAction: {fileID: 0}
+  m_RightClickAction: {fileID: 0}
   m_ScrollWheelAction: {fileID: 267048525}
   m_TrackedDevicePositionAction: {fileID: 408187247}
   m_TrackedDeviceOrientationAction: {fileID: 20125802}
@@ -660,20 +660,6 @@ MonoBehaviour:
   gridItemTemplate: {fileID: 9197481963319205126, guid: 413a135fbf06026418d62971ff460c9c, type: 3}
   currentFocus: 0
   saveFocusedButton: 0
---- !u!114 &1061737787
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: UI/Point
-  m_EditorClassIdentifier: 
-  m_Asset: {fileID: -944628639613478452, guid: 2f5d5373fbc7a014599708e825e43e8e, type: 3}
-  m_ActionId: ef42c102-e82d-4391-b1e9-b268613e09b5
 --- !u!1 &1068083304
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,20 +723,6 @@ MonoBehaviour:
   m_ParentUI: {fileID: 284619039}
   sourceAsset: {fileID: 9197481963319205126, guid: 77551b1f228708248b7459c3bd08922e, type: 3}
   m_SortingOrder: 100
---- !u!114 &1127385769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: UI/MiddleClick
-  m_EditorClassIdentifier: 
-  m_Asset: {fileID: -944628639613478452, guid: 2f5d5373fbc7a014599708e825e43e8e, type: 3}
-  m_ActionId: db2a30ce-6d39-4cc7-b95c-52148a6415d1
 --- !u!1 &1180145041
 GameObject:
   m_ObjectHideFlags: 0
@@ -802,20 +774,6 @@ MonoBehaviour:
   inventory: {fileID: 1022165317}
   dropdown: {fileID: 1068083306}
   windowStack: []
---- !u!114 &1524312528
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: UI/RightClick
-  m_EditorClassIdentifier: 
-  m_Asset: {fileID: -944628639613478452, guid: 2f5d5373fbc7a014599708e825e43e8e, type: 3}
-  m_ActionId: 379f6a74-c97e-4913-84ed-4bec8e27ed18
 --- !u!1 &1654901616
 GameObject:
   m_ObjectHideFlags: 0
@@ -1320,17 +1278,3 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Asset: {fileID: -944628639613478452, guid: 2f5d5373fbc7a014599708e825e43e8e, type: 3}
   m_ActionId: d1df0a3c-e0f5-445c-b02e-9b785293f867
---- !u!114 &2027308201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc1515ab76e54f068e2f2207940fab32, type: 3}
-  m_Name: UI/Click
-  m_EditorClassIdentifier: 
-  m_Asset: {fileID: -944628639613478452, guid: 2f5d5373fbc7a014599708e825e43e8e, type: 3}
-  m_ActionId: c1839872-b5f2-4260-a085-5c6114b3c008
