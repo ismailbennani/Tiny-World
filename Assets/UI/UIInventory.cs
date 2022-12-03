@@ -82,14 +82,18 @@ namespace UI
                         currentFocus = indexCopy;
                     }
                 );
-                button.clicked += () => UIMenusManager.Instance.OpenDropdown(
-                    new[]
-                    {
-                        new UIDropdownChoice("HEY THERE", () => Debug.Log("hey there!!")),
-                        new UIDropdownChoice("HEY THEEERE", () => Debug.Log("hey theeere!!")),
-                    },
-                    new Vector2(button.layout.x, button.layout.y)
-                );
+                button.clicked += () =>
+                {
+                    Rect rect = button.worldBound;
+                    UIMenusManager.Instance.OpenDropdown(
+                        new[]
+                        {
+                            new UIDropdownChoice("HEY THERE", () => Debug.Log("hey there!!")),
+                            new UIDropdownChoice("HEY THEEERE", () => Debug.Log("hey theeere!!")),
+                        },
+                        new Vector2(rect.x + rect.width, rect.y - rect.height / 2)
+                    );
+                };
 
                 newInventoryItemTemplate.Q<Label>("Count").text = line.count.ToString();
 
