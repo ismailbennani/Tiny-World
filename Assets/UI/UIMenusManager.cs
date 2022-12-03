@@ -128,6 +128,7 @@ namespace UI
         public void CloseDropdown()
         {
             dropdown.Hide();
+            StartCoroutine(Delay(windowStack.Last().Focus));
         }
 
         private void Show(UIWindow window, bool show)
