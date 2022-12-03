@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Items;
-using Map;
-using UnityEngine;
 using UnityEngine.Events;
 
 namespace Character.Inventory
@@ -32,7 +30,7 @@ namespace Character.Inventory
         /// <param name="item"></param>
         /// <param name="position"></param>
         /// <param name="indexHint">If positive, and if item at that index is the same as item, will drop that one instead of the first one</param>
-        public void DropItem(Item item, Vector3 position, int indexHint = -1)
+        public void DropItem(Item item, int indexHint = -1)
         {
             InventoryLine matchingLine;
             if (indexHint > 0 && lines[indexHint].item == item)
@@ -56,14 +54,6 @@ namespace Character.Inventory
             }
 
             onChange.Invoke(matchingLine);
-
-            GameMap map = GameMap.Instance;
-            if (!map)
-            {
-                return;
-            }
-
-            map.SpawnItem(item, position);
         }
     }
 

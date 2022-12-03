@@ -23,6 +23,7 @@ namespace UI
 
         [SerializeField]
         private bool saveFocusedButton;
+        private InventoryState _inventory;
 
         protected override void OnEnable()
         {
@@ -54,8 +55,8 @@ namespace UI
                 return;
             }
 
-            InventoryState inventory = gameState.player?.inventoryState;
-            if (inventory == null)
+            _inventory = gameState.player?.inventoryState;
+            if (_inventory == null)
             {
                 return;
             }
@@ -69,11 +70,11 @@ namespace UI
 
             _inventoryItems.Clear();
 
-            for (int index = 0; index < inventory.lines.Count; index++)
+            for (int index = 0; index < _inventory.lines.Count; index++)
             {
                 int indexCopy = index;
                 
-                InventoryLine line = inventory.lines[index];
+                InventoryLine line = _inventory.lines[index];
                 TemplateContainer newInventoryItemTemplate = gridItemTemplate.CloneTree();
                 Button button = newInventoryItemTemplate.Q<Button>();
                 button.RegisterCallback<FocusEvent>(
@@ -92,11 +93,11 @@ namespace UI
                 button.clicked += () =>
                 {
                     Rect rect = button.worldBound;
+                    
                     UIMenusManager.Instance.OpenDropdown(
                         new[]
                         {
-                            new UIDropdownChoice("HEY THERE", () => Debug.Log("hey there!!")),
-                            new UIDropdownChoice("HEY THEEERE", () => Debug.Log("hey theeere!!")),
+                            new UIDropdownChoice("Drop", () => Inventory.Drop(_inventory, line.item, indexCopy)),
                         },
                         new Vector2(rect.x + rect.width, rect.y - rect.height / 2)
                     );

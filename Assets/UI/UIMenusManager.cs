@@ -133,7 +133,7 @@ namespace UI
                 windowStack.Last().FocusOut();
             }
             
-            dropdown.Show(choices.Select(c => new UIDropdownChoice(c.Label, () => DropdownCallback(c))).ToList(), position);
+            dropdown.Show(choices.Select(c => new UIDropdownChoice(c.Label, CreateDropdownCallback(c))).ToList(), position);
             StartCoroutine(Delay(dropdown.Focus));
 
             return true;
@@ -225,14 +225,17 @@ namespace UI
             gameInputAdapter.SwitchToPlayer();
         }
 
-        private void DropdownCallback(UIDropdownChoice c)
+        private Action CreateDropdownCallback(UIDropdownChoice c)
         {
-            if (!CloseDropdown())
+            return () =>
             {
-                return;
-            }
+                if (!CloseDropdown())
+                {
+                    return;
+                }
 
-            c.Callback?.Invoke();
+                c.Callback?.Invoke();
+            };
         }
 
         private bool CanPerformAction()
