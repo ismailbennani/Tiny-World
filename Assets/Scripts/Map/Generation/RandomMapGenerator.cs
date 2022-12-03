@@ -7,7 +7,8 @@ namespace Map.Generation
     public class RandomMapGenerator : IMapGenerator
     {
         private Random _random;
-        private IWeightedSelector<TileWithWeight> _selector;
+        private IWeightedSelector<TileWithWeight> _tileSelector;
+        private MapInitialConfig _config;
 
         public void SetConfiguration(MapInitialConfig config)
         {
@@ -22,12 +23,22 @@ namespace Map.Generation
             }
             
             _random = new Random(config.seed);
-            _selector = config.tiles.ToWeightedSelector(t => t.weight, WeightedSelectMethod.Alias);
+            _config = config;
+            _tileSelector = config.tiles.ToWeightedSelector(t => t.weight, WeightedSelectMethod.Alias);
         }
 
         public TileConfig GenerateTile(int x, int y)
         {
-            return _selector.SelectItem((float)_random.NextDouble()).tileConfig;
+            TileWithWeight tile = _tileSelector.SelectItem((float)_random.NextDouble());
+            ResourceWithWeight resource = _config.resources.ToWeightedSelector(r => r.weight).SelectItem((float)_random.NextDouble());
+            
+            return new TileConfig
+            {
+                type = tile.type,
+                tileResource = resource.resource,
+                lootTable = resource.lootTable,
+                nLoots = resource.nLoots
+            };
         }
     }
 }
