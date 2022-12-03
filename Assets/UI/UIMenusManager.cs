@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Input;
@@ -119,6 +120,7 @@ namespace UI
             if (show)
             {
                 window.Show();
+                StartCoroutine(DelayedFocus(window));
             }
             else
             {
@@ -188,6 +190,13 @@ namespace UI
 
             _lastOpenCloseTime = now;
             return true;
+        }
+        
+        private IEnumerator DelayedFocus(UIWindow window)
+        {
+            yield return null;
+
+            window.Focus();
         }
     }
 }

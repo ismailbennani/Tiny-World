@@ -6,7 +6,7 @@ namespace UI
     public class UIMainMenu : UIWindow
     {
         private const string InventoryButtonName = "InventoryMenuButton";
-        
+
         [SerializeField]
         private string currentSelection;
 
@@ -18,8 +18,11 @@ namespace UI
 
         protected override void OnOpen()
         {
-            Button toFocus = root.rootVisualElement.Query<Button>(currentSelection).First()
-                             ?? root.rootVisualElement.Query<Button>().Enabled().First();
+        }
+
+        protected override void OnFocus()
+        {
+            Button toFocus = root.rootVisualElement.Query<Button>(currentSelection).First() ?? root.rootVisualElement.Query<Button>().Enabled().First();
 
             toFocus?.Focus();
         }

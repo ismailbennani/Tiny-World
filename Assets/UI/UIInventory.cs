@@ -39,7 +39,7 @@ namespace UI
         protected override void OnOpen()
         {
             _descriptionRoot.visible = false;
-            
+
             GameState gameState = GameStateManager.Current;
             if (!gameState)
             {
@@ -84,7 +84,10 @@ namespace UI
                 _itemContainer.Add(newInventoryItemTemplate);
                 _inventoryItems.Add(newInventoryItemTemplate);
             }
+        }
 
+        protected override void OnFocus()
+        {
             if (_inventoryItems.Count > 0)
             {
                 _itemContainer.Query<Button>().First().Focus();

@@ -41,12 +41,18 @@ namespace UI
 
         protected abstract void RegisterAdditionalCallbacks();
         protected abstract void OnOpen();
+        protected abstract void OnFocus();
         protected abstract void OnClose();
 
         public void Show()
         {
             OnOpen();
             root.rootVisualElement.visible = true;
+        }
+        
+        public void Focus()
+        {
+            OnFocus();
         }
 
         public void Hide()
