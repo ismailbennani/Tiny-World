@@ -77,8 +77,7 @@ MonoBehaviour:
     tile: -1
     prefabs:
     - {fileID: 6724582270491821290, guid: cbcb020fe17c5374587e77ec29113673, type: 3}
-    - {fileID: 6724582270491821290, guid: 3321745939e1d2c42a36e32c4a1ab3c3, type: 3}
-    - {fileID: 6724582270491821290, guid: 1a390875c908cda4aa852adc1c0171d0, type: 3}
+    - {fileID: 6724582270491821290, guid: 6fc1febf1ca31f44fa7bb3e37fd16580, type: 3}
     lootAudioClips:
     - {fileID: 8300000, guid: 2696ef4f847e05f47bef797d7bdaaa40, type: 3}
     - {fileID: 8300000, guid: 3c283dedc9406ef45ae7696bb3201103, type: 3}
@@ -100,6 +99,9 @@ MonoBehaviour:
     tile: -1
     prefabs:
     - {fileID: 8628220915447311663, guid: 42f96111dab7708488135c473bf834f5, type: 3}
+    - {fileID: 8628220915447311663, guid: fc6362b5908a65a46a84a0d26c2c2b95, type: 3}
+    - {fileID: 8628220915447311663, guid: 564e6c273bd5c4d4bb30e2860a70cb71, type: 3}
+    - {fileID: 8628220915447311663, guid: 2ba6f8114b7eb134c83acfeeb95323ba, type: 3}
     lootAudioClips:
     - {fileID: 8300000, guid: eec53751c4e79a7469fc34e774360128, type: 3}
     - {fileID: 8300000, guid: dbe4405baeea2404ba3d422430b5fd3b, type: 3}

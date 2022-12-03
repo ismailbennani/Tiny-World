@@ -1136,7 +1136,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   virtualCamera: {fileID: 1685384483}
-  minOffset: {x: 0, y: 5, z: -5}
+  minOffset: {x: 0, y: 6, z: -6}
   maxOffset: {x: 0, y: 20, z: -20}
 --- !u!1 &1693850812
 GameObject:

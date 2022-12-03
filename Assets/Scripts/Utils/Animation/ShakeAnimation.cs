@@ -8,14 +8,20 @@ using Random = UnityEngine.Random;
 
 namespace Utils.Animation
 {
-    public class ShakeAnimation : MonoBehaviour
+    public class ShakeAnimation : MonoBehaviour, IAnimation
     {
         public ShakeAnimationParameters xAxisShake;
         public ShakeAnimationParameters yAxisShake;
         public ShakeAnimationParameters zAxisShake;
+        public float duration;
 
-        public IEnumerator Shake(float duration)
+        public IEnumerator Animate()
         {
+            if (duration == 0)
+            {
+                duration = 0.1f;
+            }
+            
             float startTime = Time.time;
             float endTime = startTime + duration;
 
@@ -79,9 +85,7 @@ namespace Utils.Animation
         {
             VisualElement container = new();
 
-            container.Add(new PropertyField(serializedObject.FindProperty("xAxisShake")));
-            container.Add(new PropertyField(serializedObject.FindProperty("yAxisShake")));
-            container.Add(new PropertyField(serializedObject.FindProperty("zAxisShake")));
+            InspectorElement.FillDefaultInspector(container, serializedObject, this);
 
             return container;
         }

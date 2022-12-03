@@ -1,6 +1,6 @@
 ﻿using System.Collections;
-using Map.Tile.Animation;
 using UnityEngine;
+using Utils.Animation;
 
 namespace Map.Tile
 {
@@ -8,7 +8,7 @@ namespace Map.Tile
     {
         private Vector2Int _position;
 
-        private IMapTileResourceAnimation _animation;
+        private IAnimation _animation;
 
         void OnEnable()
         {
@@ -23,7 +23,12 @@ namespace Map.Tile
 
         public void OnLoot()
         {
-            _animation?.OnLoot();
+            if (_animation == null)
+            {
+                return;
+            }
+            
+            StartCoroutine(_animation.Animate());
         }
 
         private IEnumerator UpdateWhenGameStateReady()
