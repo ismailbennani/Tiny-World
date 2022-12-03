@@ -22,10 +22,11 @@ namespace Character.Inventory
                 matchingLine = new InventoryLine { item = item.item, count = 0 };
                 lines.Add(matchingLine);
             }
-            
-            onChange.Invoke(matchingLine);
 
             matchingLine.count++;
+
+            matchingLine.onChange?.Invoke();
+            onChange.Invoke(matchingLine);
         }
 
         /// <param name="item"></param>
@@ -34,7 +35,7 @@ namespace Character.Inventory
         public int DropItem(Item item, int count = 1, int indexHint = -1)
         {
             InventoryLine matchingLine;
-            if (indexHint > 0 && lines[indexHint].item == item)
+            if (indexHint >= 0 && indexHint < lines.Count && lines[indexHint].item == item)
             {
                 matchingLine = lines[indexHint];
             }
@@ -49,13 +50,14 @@ namespace Character.Inventory
             }
 
             int actualCount = Mathf.Min(count, matchingLine.count);
-            
+
             matchingLine.count -= actualCount;
             if (matchingLine.count <= 0)
             {
                 lines.Remove(matchingLine);
             }
 
+            matchingLine.onChange?.Invoke();
             onChange.Invoke(matchingLine);
 
             return actualCount;
@@ -67,5 +69,6 @@ namespace Character.Inventory
     {
         public Item item;
         public int count;
+        public UnityEvent onChange = new();
     }
 }

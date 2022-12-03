@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Character.Inventory;
+using Items;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,7 +13,7 @@ namespace UI
         public VisualTreeAsset gridItemTemplate;
 
         private VisualElement _itemContainer;
-        private readonly List<VisualElement> _inventoryItems = new();
+        private readonly List<InventoryItemElement> _inventoryItems = new();
 
         private VisualElement _descriptionRoot;
         private Label _descriptionTitle;
@@ -62,76 +64,38 @@ namespace UI
             }
 
             // RESET
-            // TODO: don't destroy and recreate elements
-            foreach (VisualElement inventoryItem in _inventoryItems)
+            foreach (InventoryItemElement inventoryItem in _inventoryItems.ToList())
             {
-                inventoryItem.RemoveFromHierarchy();
+                inventoryItem.Remove();
             }
-
-            _inventoryItems.Clear();
 
             for (int index = 0; index < _inventory.lines.Count; index++)
             {
-                int indexCopy = index;
-                
                 InventoryLine line = _inventory.lines[index];
-                TemplateContainer newInventoryItemTemplate = gridItemTemplate.CloneTree();
-                Button button = newInventoryItemTemplate.Q<Button>();
-                button.RegisterCallback<FocusEvent>(
-                    _ =>
-                    {
-                        _descriptionRoot.visible = true;
-                        _descriptionTitle.text = line.item.itemName;
-                        _descriptionBody.text = line.item.itemDescription;
+                TemplateContainer itemElement = gridItemTemplate.CloneTree();
 
-                        if (saveFocusedButton)
-                        {
-                            currentFocus = indexCopy;
-                        }
-                    }
-                );
-                button.clicked += () =>
-                {
-                    Rect rect = button.worldBound;
-                    
-                    UIMenusManager.Instance.OpenDropdown(
-                        new[]
-                        {
-                            new UIDropdownChoice("Drop", () => Inventory.Drop(_inventory, line.item, 1, indexCopy)),
-                            new UIDropdownChoice("Drop all", () => Inventory.Drop(_inventory, line.item, line.count, indexCopy)),
-                        },
-                        new Vector2(rect.x + rect.width, rect.y - rect.height / 2)
-                    );
-                };
+                InventoryItemElement inventoryItemElement = InventoryItemElement.Create(this, line, itemElement, index);
 
-                newInventoryItemTemplate.Q<Label>("Count").text = line.count.ToString();
-
-                if (line.item.sprite)
-                {
-                    VisualElement image = newInventoryItemTemplate.Q<VisualElement>("Image");
-                    image.style.backgroundImage = new StyleBackground(line.item.sprite);
-                }
-
-                _itemContainer.Add(newInventoryItemTemplate);
-                _inventoryItems.Add(newInventoryItemTemplate);
+                _itemContainer.Add(itemElement);
+                _inventoryItems.Add(inventoryItemElement);
             }
         }
 
         protected override void OnFocusIn()
         {
             saveFocusedButton = true;
-            
+
             if (_inventoryItems.Count > 0)
             {
                 currentFocus = Mathf.Clamp(currentFocus, 0, _inventoryItems.Count - 1);
-                _itemContainer.Query<Button>().AtIndex(currentFocus).Focus();
+                _itemContainer.Query<Button>().AtIndex(currentFocus)?.Focus();
             }
             else if (CloseButton != null)
             {
                 CloseButton.Focus();
             }
         }
-        
+
         protected override void OnFocusOut()
         {
             saveFocusedButton = false;
@@ -140,6 +104,99 @@ namespace UI
         protected override void OnClose()
         {
             _descriptionRoot.visible = false;
+        }
+
+        private void ShowDescription(Item item)
+        {
+            _descriptionRoot.visible = true;
+            _descriptionTitle.text = item.itemName;
+            _descriptionBody.text = item.itemDescription;
+        }
+
+        private void SetCurrentFocus(int index)
+        {
+            if (saveFocusedButton)
+            {
+                currentFocus = index;
+            }
+        }
+
+        private void RemoveItem(InventoryItemElement item)
+        {
+            _inventoryItems.Remove(item);
+        }
+
+        private class InventoryItemElement
+        {
+            public readonly UIInventory Inventory;
+            public readonly VisualElement Element;
+            public readonly InventoryLine Line;
+
+            private InventoryItemElement(UIInventory inventory, InventoryLine line, VisualElement element)
+            {
+                Inventory = inventory;
+                Element = element;
+                Line = line;
+            }
+
+            private void Update()
+            {
+                if (Line.count <= 0)
+                {
+                    Remove();
+                }
+                else
+                {
+                    Label label = Element.Q<Label>("Count");
+                    label.text = Line.count.ToString();
+                }
+            }
+
+            public void Remove()
+            {
+                Element.RemoveFromHierarchy();
+                Line.onChange.RemoveListener(Update);
+                Inventory.RemoveItem(this);
+            }
+
+            public static InventoryItemElement Create(UIInventory inventory, InventoryLine line, TemplateContainer itemElement, int index)
+            {
+                InventoryItemElement result = new(inventory, line, itemElement);
+
+                line.onChange.AddListener(result.Update);
+
+                Button button = itemElement.Q<Button>();
+                button.RegisterCallback<FocusEvent>(
+                    _ =>
+                    {
+                        inventory.ShowDescription(line.item);
+                        inventory.SetCurrentFocus(index);
+                    }
+                );
+                button.clicked += () =>
+                {
+                    Rect rect = button.worldBound;
+
+                    UIMenusManager.Instance.OpenDropdown(
+                        new[]
+                        {
+                            new UIDropdownChoice("Drop", () => Character.Inventory.Inventory.Drop(inventory._inventory, line.item, 1, index)),
+                            new UIDropdownChoice("Drop all", () => Character.Inventory.Inventory.Drop(inventory._inventory, line.item, line.count, index)),
+                        },
+                        new Vector2(rect.x + rect.width, rect.y - rect.height / 2)
+                    );
+                };
+
+                itemElement.Q<Label>("Count").text = line.count.ToString();
+
+                if (line.item.sprite)
+                {
+                    VisualElement image = itemElement.Q<VisualElement>("Image");
+                    image.style.backgroundImage = new StyleBackground(line.item.sprite);
+                }
+
+                return result;
+            }
         }
     }
 }
