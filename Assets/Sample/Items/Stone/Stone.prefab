@@ -37,6 +37,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 6069137046001145447}
     m_Modifications:
     - target: {fileID: 5992263570571240811, guid: b9ef6f3ef3be0934e83f5d8def14797a, type: 3}
@@ -88,6 +89,10 @@ PrefabInstance:
       value: Base item
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5992263570571240811, guid: b9ef6f3ef3be0934e83f5d8def14797a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8185854316251100704}
   m_SourcePrefab: {fileID: 100100000, guid: b9ef6f3ef3be0934e83f5d8def14797a, type: 3}
 --- !u!4 &5862474850085999685 stripped
 Transform:
@@ -99,6 +104,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 2
     m_TransformParent: {fileID: 5862474850085999685}
     m_Modifications:
     - target: {fileID: 5443217996720745930, guid: e28778454982a164c94414a4acfabda4, type: 3}
@@ -116,6 +122,18 @@ PrefabInstance:
     - target: {fileID: 8783306491909106419, guid: e28778454982a164c94414a4acfabda4, type: 3}
       propertyPath: m_RootOrder
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8783306491909106419, guid: e28778454982a164c94414a4acfabda4, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8783306491909106419, guid: e28778454982a164c94414a4acfabda4, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8783306491909106419, guid: e28778454982a164c94414a4acfabda4, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8783306491909106419, guid: e28778454982a164c94414a4acfabda4, type: 3}
       propertyPath: m_LocalPosition.x
@@ -157,5 +175,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8783306491909106419, guid: e28778454982a164c94414a4acfabda4, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: e28778454982a164c94414a4acfabda4, type: 3}
+--- !u!4 &8185854316251100704 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8783306491909106419, guid: e28778454982a164c94414a4acfabda4, type: 3}
+  m_PrefabInstance: {fileID: 611765618166815955}
+  m_PrefabAsset: {fileID: 0}
