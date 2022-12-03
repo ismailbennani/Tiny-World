@@ -122,7 +122,7 @@ namespace UI
             
             if (_inventoryItems.Count > 0)
             {
-                currentFocus = Mathf.Clamp(currentFocus, 0, _inventoryItems.Count);
+                currentFocus = Mathf.Clamp(currentFocus, 0, _inventoryItems.Count - 1);
                 _itemContainer.Query<Button>().AtIndex(currentFocus).Focus();
             }
             else if (CloseButton != null)
