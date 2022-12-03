@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements">
+    <ui:Button text="Drop" display-tooltip-when-elided="true" class="menu-dropdown-button" style="-unity-text-align: middle-left; overflow: visible;">
+        <ui:VisualElement class="cursor" style="bottom: -20px;" />
+    </ui:Button>
+</ui:UXML>
