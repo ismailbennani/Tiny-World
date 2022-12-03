@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,18 +9,21 @@ namespace UI
 {
     public class UIMenusManager : MonoBehaviour
     {
-        private const float OpenCloseDelay = 0.5f;
-        
+        private const float MenuActionDelay = 0.5f;
+
         public static UIMenusManager Instance { get; private set; }
 
         public UIWindow mainMenu;
         public UIWindow inventory;
 
-        public bool Visible => windowStack.Count > 0;
-        
+        [Space(10)]
+        public UIDropdown dropdown;
+
+        [Header("Runtime")]
         [SerializeField]
         private List<UIWindow> windowStack = new();
-        private static float _lastOpenCloseTime;
+
+        private static float _lastMenuAction;
 
         void Start()
         {
@@ -29,15 +33,22 @@ namespace UI
         void OnEnable()
         {
             HideAll();
-            if (windowStack.Any())
-            {
-                Show(windowStack.Last(), true);
-                SwitchToUi();
-            }
-            else
-            {
-                SwitchToPlayer();
-            }
+            StartCoroutine(
+                Delay(
+                    () =>
+                    {
+                        if (windowStack.Any())
+                        {
+                            Show(windowStack.Last(), true);
+                            SwitchToUi();
+                        }
+                        else
+                        {
+                            SwitchToPlayer();
+                        }
+                    }
+                )
+            );
 
             Instance = this;
         }
@@ -61,11 +72,11 @@ namespace UI
 
         public void Open(UIWindow window)
         {
-            if (!CanOpenClose())
+            if (!CanPerformAction())
             {
                 return;
             }
-            
+
             if (windowStack.Count == 0)
             {
                 OnMenuOpen();
@@ -87,11 +98,11 @@ namespace UI
 
         public void Close(UIWindow uiWindow)
         {
-            if (!CanOpenClose())
+            if (!CanPerformAction())
             {
                 return;
             }
-            
+
             if (windowStack.Count == 0 || windowStack.Last() != uiWindow)
             {
                 return;
@@ -110,6 +121,41 @@ namespace UI
             }
         }
 
+        public bool OpenDropdown(IEnumerable<UIDropdownChoice> choices, Vector2 position)
+        {
+            if (!CanPerformAction())
+            {
+                return false;
+            }
+
+            if (windowStack.Count > 0)
+            {
+                windowStack.Last().FocusOut();
+            }
+            
+            dropdown.Show(choices.Select(c => new UIDropdownChoice(c.Label, () => DropdownCallback(c))).ToList(), position);
+            StartCoroutine(Delay(dropdown.Focus));
+
+            return true;
+        }
+
+        public bool CloseDropdown()
+        {
+            if (!CanPerformAction())
+            {
+                return false;
+            }
+            
+            dropdown.Hide();
+
+            if (windowStack.Count > 0)
+            {
+                StartCoroutine(Delay(windowStack.Last().FocusIn));
+            }
+
+            return true;
+        }
+
         private void Show(UIWindow window, bool show)
         {
             if (!window)
@@ -120,7 +166,7 @@ namespace UI
             if (show)
             {
                 window.Show();
-                StartCoroutine(DelayedFocus(window));
+                StartCoroutine(Delay(window.FocusIn));
             }
             else
             {
@@ -179,24 +225,34 @@ namespace UI
             gameInputAdapter.SwitchToPlayer();
         }
 
-        private bool CanOpenClose()
+        private void DropdownCallback(UIDropdownChoice c)
+        {
+            if (!CloseDropdown())
+            {
+                return;
+            }
+
+            c.Callback?.Invoke();
+        }
+
+        private bool CanPerformAction()
         {
             float now = Time.time;
-                    
-            if (_lastOpenCloseTime > now - OpenCloseDelay)
+
+            if (_lastMenuAction > now - MenuActionDelay)
             {
                 return false;
             }
 
-            _lastOpenCloseTime = now;
+            _lastMenuAction = now;
             return true;
         }
-        
-        private IEnumerator DelayedFocus(UIWindow window)
+
+        private static IEnumerator Delay(Action action)
         {
             yield return null;
 
-            window.Focus();
+            action?.Invoke();
         }
     }
 }

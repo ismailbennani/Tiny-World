@@ -187,3 +187,36 @@
     margin-left: 4px;
     margin-right: 4px;
 }
+
+.menu-dropdown-container {
+}
+
+.menu-dropdown-button {
+    -unity-font-definition: none;
+    -unity-font: url('project://database/Assets/Imported/Kenney/Fonts/Kenney%20Mini%20Square.ttf?fileID=12800000&guid=c1d8e15535258914fb55dd2b5913f72f&type=3#Kenney Mini Square');
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    padding-left: 28px;
+    padding-right: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: rgb(210, 210, 210);
+    -unity-text-align: middle-left;
+    overflow: visible;
+    background-color: rgba(65, 65, 65, 255);
+    justify-content: center;
+}
+
+.menu-dropdown-button:focus > .cursor {
+    visibility: visible;
+}

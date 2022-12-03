@@ -41,7 +41,8 @@ namespace UI
 
         protected abstract void RegisterAdditionalCallbacks();
         protected abstract void OnOpen();
-        protected abstract void OnFocus();
+        protected abstract void OnFocusIn();
+        protected abstract void OnFocusOut();
         protected abstract void OnClose();
 
         public void Show()
@@ -49,10 +50,15 @@ namespace UI
             OnOpen();
             root.rootVisualElement.visible = true;
         }
-        
-        public void Focus()
+
+        public void FocusIn()
         {
-            OnFocus();
+            OnFocusIn();
+        }
+
+        public void FocusOut()
+        {
+            OnFocusOut();
         }
 
         public void Hide()

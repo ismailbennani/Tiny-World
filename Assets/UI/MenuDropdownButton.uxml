@@ -1,0 +1,7 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/UI.uss?fileID=7433441132597879392&amp;guid=e7518e61de47d7940959345b9900c3f4&amp;type=3#UI" />
+    <ui:Button text="&#10;" display-tooltip-when-elided="true" name="DropdownButton" class="menu-dropdown-button text-ellipsis" style="flex-grow: 1; flex-shrink: 0; flex-direction: row; justify-content: flex-start; align-items: center;">
+        <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="DropdownButtonLabel" />
+        <ui:VisualElement class="cursor" style="position: absolute; left: 4px; width: 20px; background-image: url(&apos;project://database/Assets/Imported/Kenney/uipack-rpg/PNG/arrowBlue_right.png?fileID=21300000&amp;guid=de079abd382b0644b9c9f37d82be15de&amp;type=3#arrowBlue_right&apos;); -unity-background-scale-mode: scale-to-fit; height: auto; top: 0; bottom: 0;" />
+    </ui:Button>
+</ui:UXML>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Character.Inventory;
+using UnityEngine;
 using UnityEngine.UIElements;
 
 namespace UI
@@ -15,6 +16,13 @@ namespace UI
         private VisualElement _descriptionRoot;
         private Label _descriptionTitle;
         private Label _descriptionBody;
+
+        [Header("Runtime")]
+        [SerializeField]
+        private int currentFocus;
+
+        [SerializeField]
+        private bool saveFocusedButton;
 
         protected override void OnEnable()
         {
@@ -61,17 +69,38 @@ namespace UI
 
             _inventoryItems.Clear();
 
-            foreach (InventoryLine line in inventory.lines)
+            for (int index = 0; index < inventory.lines.Count; index++)
             {
+                int indexCopy = index;
+                
+                InventoryLine line = inventory.lines[index];
                 TemplateContainer newInventoryItemTemplate = gridItemTemplate.CloneTree();
-                newInventoryItemTemplate.Q<Button>().RegisterCallback<FocusEvent>(
+                Button button = newInventoryItemTemplate.Q<Button>();
+                button.RegisterCallback<FocusEvent>(
                     _ =>
                     {
                         _descriptionRoot.visible = true;
                         _descriptionTitle.text = line.item.itemName;
                         _descriptionBody.text = line.item.itemDescription;
+
+                        if (saveFocusedButton)
+                        {
+                            currentFocus = indexCopy;
+                        }
                     }
                 );
+                button.clicked += () =>
+                {
+                    Rect rect = button.worldBound;
+                    UIMenusManager.Instance.OpenDropdown(
+                        new[]
+                        {
+                            new UIDropdownChoice("HEY THERE", () => Debug.Log("hey there!!")),
+                            new UIDropdownChoice("HEY THEEERE", () => Debug.Log("hey theeere!!")),
+                        },
+                        new Vector2(rect.x + rect.width, rect.y - rect.height / 2)
+                    );
+                };
 
                 newInventoryItemTemplate.Q<Label>("Count").text = line.count.ToString();
 
@@ -86,16 +115,24 @@ namespace UI
             }
         }
 
-        protected override void OnFocus()
+        protected override void OnFocusIn()
         {
+            saveFocusedButton = true;
+            
             if (_inventoryItems.Count > 0)
             {
-                _itemContainer.Query<Button>().First().Focus();
+                currentFocus = Mathf.Clamp(currentFocus, 0, _inventoryItems.Count);
+                _itemContainer.Query<Button>().AtIndex(currentFocus).Focus();
             }
             else if (CloseButton != null)
             {
                 CloseButton.Focus();
             }
+        }
+        
+        protected override void OnFocusOut()
+        {
+            saveFocusedButton = false;
         }
 
         protected override void OnClose()
