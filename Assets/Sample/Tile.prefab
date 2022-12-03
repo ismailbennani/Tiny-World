@@ -77,6 +77,8 @@ MonoBehaviour:
     tile: -1
     prefabs:
     - {fileID: 6724582270491821290, guid: cbcb020fe17c5374587e77ec29113673, type: 3}
+    - {fileID: 6724582270491821290, guid: 3321745939e1d2c42a36e32c4a1ab3c3, type: 3}
+    - {fileID: 6724582270491821290, guid: 1a390875c908cda4aa852adc1c0171d0, type: 3}
     lootAudioClips:
     - {fileID: 8300000, guid: 2696ef4f847e05f47bef797d7bdaaa40, type: 3}
     - {fileID: 8300000, guid: 3c283dedc9406ef45ae7696bb3201103, type: 3}
