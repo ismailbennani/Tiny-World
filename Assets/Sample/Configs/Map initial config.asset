@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chunkSize: {x: 5, y: 5}
   initialChunks: {x: 5, y: 5}
-  seed: 0
+  seed: 542120449
   tiles:
   - type: 1
     weight: 5
@@ -23,17 +23,17 @@ MonoBehaviour:
   resources:
   - resource: 0
     weight: 10
-    compatibleTiles: -1
+    expectedTile: -1
     lootTable: {fileID: 0}
     nLoots: {x: 0, y: 0}
   - resource: 1
-    weight: 1
-    compatibleTiles: 1
+    weight: 2
+    expectedTile: 1
     lootTable: {fileID: 11400000, guid: bf433141645f0f74cbbe5d5352448254, type: 2}
     nLoots: {x: 3, y: 3}
   - resource: 2
-    weight: 1
-    compatibleTiles: 2
+    weight: 2
+    expectedTile: 2
     lootTable: {fileID: 11400000, guid: b5494eb9db399aa42ba4981199934982, type: 2}
-    nLoots: {x: 3, y: 3}
+    nLoots: {x: 5, y: 5}
   mapGenerationAlgorithm: 0

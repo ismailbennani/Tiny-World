@@ -1,19 +1,18 @@
 ﻿using System.Collections;
 using UnityEngine;
+using Utils.Animation;
 
 namespace Map.Tile
 {
     public class MapTileResource: MonoBehaviour
     {
         private Vector2Int _position;
-        
-        private Animator _animator;
-        private int _animatorGatherId;
-        
+
+        private IAnimation _animation;
+
         void OnEnable()
         {
-            _animator = GetComponent<Animator>();
-            _animatorGatherId = Animator.StringToHash("Consume");
+            TryGetComponent(out _animation);
         }
 
         public void SetTile(TileState state)
@@ -24,11 +23,12 @@ namespace Map.Tile
 
         public void OnLoot()
         {
-            if (_animator)
+            if (_animation == null)
             {
-                _animator.ResetTrigger(_animatorGatherId);
-                _animator.SetTrigger(_animatorGatherId);
+                return;
             }
+            
+            StartCoroutine(_animation.Animate());
         }
 
         private IEnumerator UpdateWhenGameStateReady()
