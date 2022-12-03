@@ -44,7 +44,7 @@
     -unity-font-definition: none;
     -unity-font: url('project://database/Assets/Imported/Kenney/Fonts/Kenney%20Mini.ttf?fileID=12800000&guid=b145f73d069993244a643cea28901539&type=3#Kenney Mini');
     font-size: 16px;
-    color: rgba(72, 54, 35, 255);
+    color: rgb(72, 54, 35);
 }
 
 .inner-text {
@@ -170,4 +170,20 @@
     top: 8px;
     right: 8px;
     bottom: 12px;
+}
+
+.menu-control-icon {
+    width: 25px;
+    height: 25px;
+}
+
+.menu-control-label {
+    -unity-font-definition: none;
+    -unity-font: url('project://database/Assets/Imported/Kenney/Fonts/Kenney%20Mini%20Square.ttf?fileID=12800000&guid=c1d8e15535258914fb55dd2b5913f72f&type=3#Kenney Mini Square');
+    font-size: 12px;
+}
+
+.menu-control-container {
+    margin-left: 4px;
+    margin-right: 4px;
 }

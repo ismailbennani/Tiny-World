@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/UI.uss?fileID=7433441132597879392&amp;guid=e7518e61de47d7940959345b9900c3f4&amp;type=3#UI" />
+    <ui:VisualElement style="flex-direction: row; justify-content: space-between; flex-wrap: wrap;">
+        <ui:VisualElement class="menu-control-container" style="flex-direction: row; align-items: center;">
+            <ui:VisualElement class="menu-control-icon" style="background-image: url(&apos;project://database/Assets/Imported/Controller&amp;Key%20Prompts/Keyboard%20&amp;%20Mouse/Light/E_Key_Light.png?fileID=21300000&amp;guid=b602983b061376543a367b5df77692a0&amp;type=3#E_Key_Light&apos;);" />
+            <ui:Label tabindex="-1" text="Select" display-tooltip-when-elided="true" class="menu-control-label" style="color: rgb(210, 210, 210);" />
+        </ui:VisualElement>
+        <ui:VisualElement class="menu-control-container" style="flex-direction: row; align-items: center;">
+            <ui:VisualElement class="menu-control-icon" style="background-image: url(&apos;project://database/Assets/Imported/Controller&amp;Key%20Prompts/Keyboard%20&amp;%20Mouse/Light/Esc_Key_Light.png?fileID=21300000&amp;guid=0999a578cc48b8949a9de6695bbb411f&amp;type=3#Esc_Key_Light&apos;);" />
+            <ui:Label tabindex="-1" text="Cancel" display-tooltip-when-elided="true" class="menu-control-label" style="color: rgb(210, 210, 210);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>
