@@ -1,10 +1,13 @@
-﻿using Map.Generation;
+﻿using System;
+using Items;
+using Map.Generation;
+using Map.Tile;
 using UnityEngine;
 
 namespace Map
 {
     [CreateAssetMenu(menuName = "Custom/Map initial config")]
-    public class MapInitialConfig: ScriptableObject
+    public class MapInitialConfig : ScriptableObject
     {
         [Header("Map generation")]
         [Tooltip("Chunk size in tiles")]
@@ -18,8 +21,32 @@ namespace Map
 
         [Tooltip("Tile configs to sample from")]
         public TileWithWeight[] tiles;
+        
+        [Tooltip("Resource configs to sample from")]
+        public ResourceWithWeight[] resources;
 
         [Tooltip("What algorithm to use to generate the map")]
         public MapGenerationAlgorithm mapGenerationAlgorithm;
+    }
+
+    [Serializable]
+    public class TileWithWeight
+    {
+        public TileType type;
+        public float weight = 1;
+    }
+
+    [Serializable]
+    public class ResourceWithWeight
+    {
+        public TileResourceType resource;
+        public float weight = 1;
+
+        [Header("Constraints")]
+        public TileType expectedTile;
+        
+        [Header("Loot")]
+        public LootTable lootTable;
+        public Vector2Int nLoots;
     }
 }
