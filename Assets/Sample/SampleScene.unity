@@ -276,7 +276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   root: {fileID: 108029824}
-  currentSelection: 
+  currentFocus: 0
 --- !u!114 &267048525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -658,6 +658,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   root: {fileID: 1022165316}
   gridItemTemplate: {fileID: 9197481963319205126, guid: 413a135fbf06026418d62971ff460c9c, type: 3}
+  currentFocus: 0
+  saveFocusedButton: 0
 --- !u!114 &1061737787
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -734,7 +736,7 @@ MonoBehaviour:
   m_PanelSettings: {fileID: 11400000, guid: d6020b418f7f7be4098fc33cfce0c92f, type: 2}
   m_ParentUI: {fileID: 284619039}
   sourceAsset: {fileID: 9197481963319205126, guid: 77551b1f228708248b7459c3bd08922e, type: 3}
-  m_SortingOrder: 0
+  m_SortingOrder: 100
 --- !u!114 &1127385769
 MonoBehaviour:
   m_ObjectHideFlags: 0

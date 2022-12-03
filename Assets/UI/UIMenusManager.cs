@@ -33,15 +33,22 @@ namespace UI
         void OnEnable()
         {
             HideAll();
-            if (windowStack.Any())
-            {
-                Show(windowStack.Last(), true);
-                SwitchToUi();
-            }
-            else
-            {
-                SwitchToPlayer();
-            }
+            StartCoroutine(
+                Delay(
+                    () =>
+                    {
+                        if (windowStack.Any())
+                        {
+                            Show(windowStack.Last(), true);
+                            SwitchToUi();
+                        }
+                        else
+                        {
+                            SwitchToPlayer();
+                        }
+                    }
+                )
+            );
 
             Instance = this;
         }
@@ -114,21 +121,39 @@ namespace UI
             }
         }
 
-        public void OpenDropdown(IEnumerable<UIDropdownChoice> choices, Vector2 position)
+        public bool OpenDropdown(IEnumerable<UIDropdownChoice> choices, Vector2 position)
         {
             if (!CanPerformAction())
             {
-                return;
+                return false;
+            }
+
+            if (windowStack.Count > 0)
+            {
+                windowStack.Last().FocusOut();
             }
             
             dropdown.Show(choices.Select(c => new UIDropdownChoice(c.Label, () => DropdownCallback(c))).ToList(), position);
             StartCoroutine(Delay(dropdown.Focus));
+
+            return true;
         }
 
-        public void CloseDropdown()
+        public bool CloseDropdown()
         {
+            if (!CanPerformAction())
+            {
+                return false;
+            }
+            
             dropdown.Hide();
-            StartCoroutine(Delay(windowStack.Last().Focus));
+
+            if (windowStack.Count > 0)
+            {
+                StartCoroutine(Delay(windowStack.Last().FocusIn));
+            }
+
+            return true;
         }
 
         private void Show(UIWindow window, bool show)
@@ -141,7 +166,7 @@ namespace UI
             if (show)
             {
                 window.Show();
-                StartCoroutine(Delay(window.Focus));
+                StartCoroutine(Delay(window.FocusIn));
             }
             else
             {
@@ -202,13 +227,12 @@ namespace UI
 
         private void DropdownCallback(UIDropdownChoice c)
         {
-            if (!CanPerformAction())
+            if (!CloseDropdown())
             {
                 return;
             }
-            
+
             c.Callback?.Invoke();
-            CloseDropdown();
         }
 
         private bool CanPerformAction()

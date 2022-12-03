@@ -29,12 +29,16 @@ namespace UI
         {
         }
 
-        protected override void OnFocus()
+        protected override void OnFocusIn()
         {
             UQueryBuilder<Button> buttons = root.rootVisualElement.Query<Button>();
             Button toFocus = buttons.AtIndex(currentFocus) ?? buttons.Enabled().First();
 
             toFocus?.Focus();
+        }
+
+        protected override void OnFocusOut()
+        {
         }
 
         protected override void OnClose()

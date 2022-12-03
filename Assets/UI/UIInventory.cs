@@ -17,8 +17,12 @@ namespace UI
         private Label _descriptionTitle;
         private Label _descriptionBody;
 
+        [Header("Runtime")]
         [SerializeField]
         private int currentFocus;
+
+        [SerializeField]
+        private bool saveFocusedButton;
 
         protected override void OnEnable()
         {
@@ -79,7 +83,10 @@ namespace UI
                         _descriptionTitle.text = line.item.itemName;
                         _descriptionBody.text = line.item.itemDescription;
 
-                        currentFocus = indexCopy;
+                        if (saveFocusedButton)
+                        {
+                            currentFocus = indexCopy;
+                        }
                     }
                 );
                 button.clicked += () =>
@@ -108,8 +115,10 @@ namespace UI
             }
         }
 
-        protected override void OnFocus()
+        protected override void OnFocusIn()
         {
+            saveFocusedButton = true;
+            
             if (_inventoryItems.Count > 0)
             {
                 currentFocus = Mathf.Clamp(currentFocus, 0, _inventoryItems.Count);
@@ -119,6 +128,11 @@ namespace UI
             {
                 CloseButton.Focus();
             }
+        }
+        
+        protected override void OnFocusOut()
+        {
+            saveFocusedButton = false;
         }
 
         protected override void OnClose()

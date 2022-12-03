@@ -23,7 +23,7 @@ namespace UI
             {
                 TemplateContainer newButton = dropdownButtonTemplate.CloneTree();
                 container.Add(newButton);
-                
+
                 _dropdownButtons.Add(newButton);
             }
 
@@ -35,12 +35,66 @@ namespace UI
             for (int i = 0; i < choices.Count; i++)
             {
                 UIDropdownChoice choice = choices[i];
-                
+
                 Label label = _dropdownButtons[i].Q<Label>("DropdownButtonLabel");
                 label.text = choice.Label;
-                
+
                 Button button = _dropdownButtons[i].Q<Button>("DropdownButton");
                 button.clicked += choice.Callback;
+
+                // Close dropdown on cancel
+                button.RegisterCallback<NavigationCancelEvent>(
+                    evt =>
+                    {
+                        if (!UIMenusManager.Instance.CloseDropdown())
+                        {
+                            evt.PreventDefault();
+                            evt.StopImmediatePropagation();
+                        }
+                    }
+                );
+
+                button.RegisterCallback<NavigationMoveEvent>(
+                    evt =>
+                    {
+                        if (evt.direction is NavigationMoveEvent.Direction.Left or NavigationMoveEvent.Direction.Right)
+                        {
+                            if (!UIMenusManager.Instance.CloseDropdown())
+                            {
+                                evt.PreventDefault();
+                                evt.StopImmediatePropagation();
+                            }
+                        }
+                    }
+                );
+
+                // Prevent UP on first element and DOWN on last element
+                if (i == 0)
+                {
+                    button.RegisterCallback<NavigationMoveEvent>(
+                        evt =>
+                        {
+                            if (evt.direction == NavigationMoveEvent.Direction.Up)
+                            {
+                                evt.PreventDefault();
+                                evt.StopImmediatePropagation();
+                            }
+                        }
+                    );
+                }
+                else if (i == choices.Count - 1)
+                {
+                    button.RegisterCallback<NavigationMoveEvent>(
+                        evt =>
+                        {
+                            if (evt.direction == NavigationMoveEvent.Direction.Down)
+                            {
+                                evt.PreventDefault();
+                                evt.StopImmediatePropagation();
+                            }
+                        }
+                    );
+                }
             }
 
             root.rootVisualElement.visible = true;
