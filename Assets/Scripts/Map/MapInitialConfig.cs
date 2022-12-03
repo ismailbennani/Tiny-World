@@ -43,7 +43,7 @@ namespace Map
         public float weight = 1;
 
         [Header("Constraints")]
-        public TileType expectedTile;
+        public TileTypeMask expectedTile;
         
         [Header("Loot")]
         public LootTable lootTable;

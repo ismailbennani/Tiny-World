@@ -74,9 +74,10 @@ MonoBehaviour:
     - {fileID: 3107741431747107348, guid: 376af96b76c23f54fbd191f04b659fce, type: 3}
   resourcesParams:
   - tileResource: 1
+    tile: -1
     prefabs:
     - {fileID: 6724582270491821290, guid: cbcb020fe17c5374587e77ec29113673, type: 3}
-    consumeAudioClips:
+    lootAudioClips:
     - {fileID: 8300000, guid: 2696ef4f847e05f47bef797d7bdaaa40, type: 3}
     - {fileID: 8300000, guid: 3c283dedc9406ef45ae7696bb3201103, type: 3}
     - {fileID: 8300000, guid: df51b4ea9641412409b4c2dd35244af3, type: 3}
@@ -90,37 +91,22 @@ MonoBehaviour:
     - {fileID: 8300000, guid: 711322da2b59c1d4aa1dd16fb11d01e4, type: 3}
     - {fileID: 8300000, guid: b91291054573ae943ba29a6e8c7929cf, type: 3}
     - {fileID: 8300000, guid: c138629412cdcf349b5909d101f149b5, type: 3}
-    consumeAudioVolume: 1
+    lootAudioVolume: 1
     depletedAudioClips: []
     depletedAudioVolume: 1
   - tileResource: 2
+    tile: -1
     prefabs:
     - {fileID: 8628220915447311663, guid: 42f96111dab7708488135c473bf834f5, type: 3}
-    consumeAudioClips:
+    lootAudioClips:
     - {fileID: 8300000, guid: eec53751c4e79a7469fc34e774360128, type: 3}
     - {fileID: 8300000, guid: dbe4405baeea2404ba3d422430b5fd3b, type: 3}
     - {fileID: 8300000, guid: c8657061120b2da4fb645654b16201f6, type: 3}
     - {fileID: 8300000, guid: 8ff53086d637af8478c1408b78b3dd05, type: 3}
     - {fileID: 8300000, guid: b662731f964d624449b092d4198147de, type: 3}
-    consumeAudioVolume: 1
+    lootAudioVolume: 1
     depletedAudioClips: []
     depletedAudioVolume: 1
-  state:
-    onLoot:
-      m_PersistentCalls:
-        m_Calls: []
-    onDepleted:
-      m_PersistentCalls:
-        m_Calls: []
-    config:
-      type: 0
-      tileResource: 0
-      lootTable: {fileID: 0}
-      nLoots: {x: 1, y: 1}
-    generationConfig:
-      platformRotation: 0
-      platformVariant: 0
-      resourceRotation: 0
-      resourceVariant: 0
-    position: {x: 0, y: 0}
-    remainingLootAttempts: 0
+  gameState: {fileID: 0}
+  hasPosition: 0
+  tilePosition: {x: 0, y: 0}
