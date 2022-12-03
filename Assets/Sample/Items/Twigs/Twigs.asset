@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Twigs
   m_EditorClassIdentifier: 
   itemName: Twigs
-  itemDescription: 
+  itemDescription: Small pieces of wood
+  sprite: {fileID: 0}
   stackable: 1
