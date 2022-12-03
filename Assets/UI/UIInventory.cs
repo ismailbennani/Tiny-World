@@ -183,7 +183,7 @@ namespace UI
                             new UIDropdownChoice("Drop", () => Character.Inventory.Inventory.Drop(inventory._inventory, line.item, 1, index)),
                             new UIDropdownChoice("Drop all", () => Character.Inventory.Inventory.Drop(inventory._inventory, line.item, line.count, index)),
                         },
-                        new Vector2(rect.x + rect.width, rect.y - rect.height / 2)
+                        new Vector2(rect.x + rect.width, rect.y - 10)
                     );
                 };
 

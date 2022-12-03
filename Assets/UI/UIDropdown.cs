@@ -21,15 +21,15 @@ namespace UI
             foreach (VisualElement button in _dropdownButtons)
             {
                 button.RemoveFromHierarchy();
-            }   
-            
+            }
+
             _dropdownButtons.Clear();
-            
+
             VisualElement container = root.rootVisualElement.Q("ButtonsContainer");
             for (int i = 0; i < choices.Count; i++)
             {
                 UIDropdownChoice choice = choices[i];
-                
+
                 TemplateContainer newButton = dropdownButtonTemplate.CloneTree();
                 container.Add(newButton);
                 _dropdownButtons.Add(newButton);
@@ -52,53 +52,39 @@ namespace UI
                     }
                 );
 
+                int index = i;
                 button.RegisterCallback<NavigationMoveEvent>(
                     evt =>
                     {
+                        evt.PreventDefault();
+                        evt.StopImmediatePropagation();
+
                         if (evt.direction is NavigationMoveEvent.Direction.Left or NavigationMoveEvent.Direction.Right)
                         {
-                            if (!UIMenusManager.Instance.CloseDropdown())
+                            UIMenusManager.Instance.CloseDropdown();
+                        }
+                        else if (evt.direction is NavigationMoveEvent.Direction.Up)
+                        {
+                            if (index > 0)
                             {
-                                evt.PreventDefault();
-                                evt.StopImmediatePropagation();
+                                _dropdownButtons[index - 1].Q<Button>().Focus();
+                            }
+                        }
+                        else if (evt.direction is NavigationMoveEvent.Direction.Down)
+                        {
+                            if (index < _dropdownButtons.Count - 1)
+                            {
+                                _dropdownButtons[index + 1].Q<Button>().Focus();
                             }
                         }
                     }
                 );
-
-                // Prevent UP on first element and DOWN on last element
-                if (i == 0)
-                {
-                    button.RegisterCallback<NavigationMoveEvent>(
-                        evt =>
-                        {
-                            if (evt.direction == NavigationMoveEvent.Direction.Up)
-                            {
-                                evt.PreventDefault();
-                                evt.StopImmediatePropagation();
-                            }
-                        }
-                    );
-                }
-                else if (i == choices.Count - 1)
-                {
-                    button.RegisterCallback<NavigationMoveEvent>(
-                        evt =>
-                        {
-                            if (evt.direction == NavigationMoveEvent.Direction.Down)
-                            {
-                                evt.PreventDefault();
-                                evt.StopImmediatePropagation();
-                            }
-                        }
-                    );
-                }
             }
 
             root.rootVisualElement.visible = true;
             root.rootVisualElement.style.position = new StyleEnum<Position>(Position.Absolute);
             root.rootVisualElement.style.left = position.x;
-            root.rootVisualElement.style.bottom = position.y;
+            root.rootVisualElement.style.bottom = position.y - root.rootVisualElement.layout.height / 2;
         }
 
         public void Focus()
