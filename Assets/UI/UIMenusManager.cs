@@ -9,7 +9,7 @@ namespace UI
 {
     public class UIMenusManager : MonoBehaviour
     {
-        private const float MenuActionDelay = 0.5f;
+        private const float MenuActionDelay = 0.1f;
 
         public static UIMenusManager Instance { get; private set; }
 
