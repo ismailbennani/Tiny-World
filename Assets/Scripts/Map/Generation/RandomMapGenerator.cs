@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using MackySoft.Choice;
+using Map.Generation.RandomGenerator;
 using Map.Tile;
 using UnityEngine;
-using Random = System.Random;
 
 namespace Map.Generation
 {
     public class RandomMapGenerator : IMapGenerator
     {
-        private Random _random;
+        private IRandomGenerator _randomTile;
+        private IRandomGenerator _randomResource;
         private IWeightedSelector<TileWithWeight> _tileSelector;
         private Dictionary<TileType, IWeightedSelector<ResourceWithWeight>> _resourcesSelectors;
 
@@ -44,7 +45,14 @@ namespace Map.Generation
                 )
             );
 
-            _random = new Random(config.seed);
+            _randomTile = config.mapGenerationAlgorithm switch
+            {
+                MapGenerationAlgorithm.UniformRandom => new UniformRandomGenerator(config.seed),
+                MapGenerationAlgorithm.Perlin => new PerlinRandomGenerator(config.seed, config.scale, config.offset),
+                _ => new UniformRandomGenerator(config.seed)
+            };
+            _randomResource = new UniformRandomGenerator(config.seed);
+            
             _tileSelector = config.tiles.ToWeightedSelector(t => t.weight, WeightedSelectMethod.Alias);
             _resourcesSelectors = resourcesPerTileType.ToDictionary(
                 tr => tr.Type,
@@ -54,12 +62,12 @@ namespace Map.Generation
 
         public TileConfig GenerateTile(int x, int y)
         {
-            TileWithWeight tile = _tileSelector.SelectItem((float)_random.NextDouble());
+            TileWithWeight tile = _tileSelector.SelectItem(_randomTile.Get(x, y));
 
             ResourceWithWeight resource = null;
             if (_resourcesSelectors.ContainsKey(tile.type))
             {
-                resource = _resourcesSelectors[tile.type].SelectItem((float)_random.NextDouble());
+                resource = _resourcesSelectors[tile.type].SelectItem(_randomResource.Get(x, y));
             }
 
             return new TileConfig

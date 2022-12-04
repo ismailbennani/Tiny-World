@@ -159,11 +159,14 @@ namespace Map
 
         private IMapGenerator GetMapGenerator(MapGenerationAlgorithm algorithm)
         {
-            return algorithm switch
+            switch (algorithm)
             {
-                MapGenerationAlgorithm.Random => new RandomMapGenerator(),
-                _ => throw new ArgumentOutOfRangeException(nameof(algorithm), algorithm, null)
-            };
+                case MapGenerationAlgorithm.UniformRandom:
+                case MapGenerationAlgorithm.Perlin:
+                    return new RandomMapGenerator();
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(algorithm), algorithm, null);
+            }
         }
     }
 }

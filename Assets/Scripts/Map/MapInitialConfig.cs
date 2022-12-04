@@ -27,6 +27,8 @@ namespace Map
 
         [Tooltip("What algorithm to use to generate the map")]
         public MapGenerationAlgorithm mapGenerationAlgorithm;
+        public Vector2 scale;
+        public Vector2 offset;
     }
 
     [Serializable]
