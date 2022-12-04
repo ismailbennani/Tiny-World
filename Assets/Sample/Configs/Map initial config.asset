@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chunkSize: {x: 5, y: 5}
   initialChunks: {x: 5, y: 5}
-  seed: 542120449
+  seed: 385448701
   tiles:
   - type: 1
     weight: 5
@@ -36,4 +36,6 @@ MonoBehaviour:
     expectedTile: 2
     lootTable: {fileID: 11400000, guid: b5494eb9db399aa42ba4981199934982, type: 2}
     nLoots: {x: 5, y: 5}
-  mapGenerationAlgorithm: 0
+  mapGenerationAlgorithm: 1
+  scale: {x: 10, y: 10}
+  offset: {x: 0, y: 0}

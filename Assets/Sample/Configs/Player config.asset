@@ -15,7 +15,7 @@ MonoBehaviour:
   prefab: {fileID: 4151355903617304371, guid: 6bf3c41e8827c90449b243c1c78de49f, type: 3}
   spawnTile: {x: 0, y: 0}
   moveSpeed: 2
-  sprintSpeed: 5.335
+  sprintSpeed: 50
   rotationSmoothTime: 0.12
   speedChangeRate: 10
   jumpHeight: 1.2

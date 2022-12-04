@@ -2,6 +2,7 @@
 {
     public enum MapGenerationAlgorithm
     {
-        Random
+        UniformRandom,
+        Perlin,
     }
 }
