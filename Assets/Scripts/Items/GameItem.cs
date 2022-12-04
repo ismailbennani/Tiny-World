@@ -78,6 +78,8 @@ namespace Items
 
             if (newState.newlySpawned && rigidbody)
             {
+                transform.rotation = Quaternion.Euler(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360));
+                
                 Vector3 force = Random.onUnitSphere;
                 force.y = 1;
                 rigidbody.AddForce(force, ForceMode.Impulse);

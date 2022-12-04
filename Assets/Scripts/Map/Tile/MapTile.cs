@@ -96,14 +96,14 @@ namespace Map.Tile
             {
                 return;
             }
-            
+
             MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.tileResource == tileState.config.tileResource);
             if (resourceParams == null)
             {
                 return;
             }
 
-            PlayClip(resourceParams.consumeAudioClips, resourceParams.consumeAudioVolume);
+            PlayClip(resourceParams.lootAudioClips, resourceParams.lootAudioVolume);
         }
 
         public void PlayDepletedClip()
@@ -113,7 +113,7 @@ namespace Map.Tile
             {
                 return;
             }
-            
+
             MapTileResourceParams resourceParams = resourcesParams.FirstOrDefault(p => p.tileResource == tileState.config.tileResource);
             if (resourceParams == null)
             {
@@ -200,7 +200,8 @@ namespace Map.Tile
                 return;
             }
 
-            MapTileResource[] prefabs = resourcesParams.SingleOrDefault(m => m.tileResource == newState.config.tileResource)?.prefabs;
+            MapTileResource[] prefabs = resourcesParams
+                .SingleOrDefault(m => m.tileResource == newState.config.tileResource && m.tile.Check(newState.config.type))?.prefabs;
             if (prefabs == null || prefabs.Length <= 0)
             {
                 return;
@@ -264,6 +265,7 @@ namespace Map.Tile
     public class MapTileResourceParams
     {
         public TileResourceType tileResource;
+        public TileTypeMask tile;
 
         [Header("Prefabs")]
         [Tooltip("Available variants for this resource, see TileState.resourceVariant")]
@@ -271,8 +273,8 @@ namespace Map.Tile
 
         [Header("Audio")]
         [Tooltip("One of these will be chosen randomly and played on each resource consumption")]
-        public AudioClip[] consumeAudioClips;
-        public float consumeAudioVolume;
+        public AudioClip[] lootAudioClips;
+        public float lootAudioVolume;
 
         [Tooltip("One of these will be chosen randomly and played when resource is depleted")]
         public AudioClip[] depletedAudioClips;

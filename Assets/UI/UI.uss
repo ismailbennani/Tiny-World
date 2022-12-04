@@ -40,6 +40,20 @@
     -unity-font-definition: none;
 }
 
+.inner-title {
+    -unity-font-definition: none;
+    -unity-font: url('project://database/Assets/Imported/Kenney/Fonts/Kenney%20Mini.ttf?fileID=12800000&guid=b145f73d069993244a643cea28901539&type=3#Kenney Mini');
+    font-size: 16px;
+    color: rgb(72, 54, 35);
+}
+
+.inner-text {
+    -unity-font-definition: none;
+    -unity-font: url('project://database/Assets/Imported/Kenney/Fonts/Kenney%20Mini%20Square.ttf?fileID=12800000&guid=c1d8e15535258914fb55dd2b5913f72f&type=3#Kenney Mini Square');
+    color: rgb(151, 113, 74);
+    white-space: normal;
+}
+
 .cursor {
     visibility: hidden;
     background-image: url('project://database/Assets/Imported/Kenney/uipack-rpg/PNG/cursorGauntlet_grey.png?fileID=21300000&guid=1dfd2a0c7a531f24fa72116debe95b21&type=3#cursorGauntlet_grey');
@@ -156,4 +170,53 @@
     top: 8px;
     right: 8px;
     bottom: 12px;
+}
+
+.menu-control-icon {
+    width: 25px;
+    height: 25px;
+}
+
+.menu-control-label {
+    -unity-font-definition: none;
+    -unity-font: url('project://database/Assets/Imported/Kenney/Fonts/Kenney%20Mini%20Square.ttf?fileID=12800000&guid=c1d8e15535258914fb55dd2b5913f72f&type=3#Kenney Mini Square');
+    font-size: 12px;
+}
+
+.menu-control-container {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.menu-dropdown-container {
+}
+
+.menu-dropdown-button {
+    -unity-font-definition: none;
+    -unity-font: url('project://database/Assets/Imported/Kenney/Fonts/Kenney%20Mini%20Square.ttf?fileID=12800000&guid=c1d8e15535258914fb55dd2b5913f72f&type=3#Kenney Mini Square');
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    padding-left: 28px;
+    padding-right: 4px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: rgb(210, 210, 210);
+    -unity-text-align: middle-left;
+    overflow: visible;
+    background-color: rgba(65, 65, 65, 255);
+    justify-content: center;
+}
+
+.menu-dropdown-button:focus > .cursor {
+    visibility: visible;
 }

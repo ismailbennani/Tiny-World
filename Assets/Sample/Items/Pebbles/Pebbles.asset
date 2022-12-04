@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Pebbles
   m_EditorClassIdentifier: 
   itemName: Pebbles
-  itemDescription: 
+  itemDescription: Small rocks
   sprite: {fileID: 0}
   stackable: 1

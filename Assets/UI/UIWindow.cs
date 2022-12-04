@@ -40,23 +40,31 @@ namespace UI
         }
 
         protected abstract void RegisterAdditionalCallbacks();
-        protected abstract void Load();
-        protected abstract void OnFocus();
+        protected abstract void OnOpen();
+        protected abstract void OnFocusIn();
+        protected abstract void OnFocusOut();
+        protected abstract void OnClose();
 
         public void Show()
         {
-            Load();
+            OnOpen();
             root.rootVisualElement.visible = true;
+        }
+
+        public void FocusIn()
+        {
+            OnFocusIn();
+        }
+
+        public void FocusOut()
+        {
+            OnFocusOut();
         }
 
         public void Hide()
         {
+            OnClose();
             root.rootVisualElement.visible = false;
-        }
-
-        public void Focus()
-        {
-            OnFocus();
         }
 
         private IEnumerator RegisterCallbacksWhenReady()
